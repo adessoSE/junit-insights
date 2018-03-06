@@ -69,7 +69,14 @@ dependencies {
     compile('com.fasterxml.jackson.module:jackson-module-kotlin')
     compile('org.jetbrains.kotlin:kotlin-stdlib-jdk8')
     compile('org.jetbrains.kotlin:kotlin-reflect')
-    runtime('org.springframework.boot:spring-boot-devtools')
+    compile('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'junit', module: 'junit'
+    }
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.junit.jupiter:junit-jupiter-api')
+    compile('org.junit.jupiter:junit-jupiter-engine')
+    compile('org.junit.platform:junit-platform-engine')
+    compile('org.junit.platform:junit-platform-launcher:1.0.0')
     testCompile('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'junit', module: 'junit'
     }
@@ -77,4 +84,6 @@ dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-engine')
     testCompile('org.junit.platform:junit-platform-engine')
     testCompile('org.junit.platform:junit-platform-launcher:1.0.0')
+    runtime('org.springframework.boot:spring-boot-devtools')
+    runtime('com.h2database:h2')
 }
