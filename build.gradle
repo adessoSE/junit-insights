@@ -18,6 +18,29 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven-publish'
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
+			pom.withXml {
+				asNode().dependencies.'*'.findAll() {
+					it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+						dep.name == it.artifactId.text()
+					}
+				}.each() {
+					it.scope*.value = 'compile'
+				}
+			}
+		}
+	}
+}
+model {
+	tasks.generatePomFileForMavenPublication {
+		destination = file("$buildDir/libs/junit-insights-0.0.1.pom")
+	}
+}
 
 group = 'de.adesso'
 version = '0.0.1-SNAPSHOT'
