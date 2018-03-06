@@ -1,3 +1,10 @@
+[![GitHub issues](https://img.shields.io/github/issues/adessoAG/junit-insights.svg?style=flat-square)](https://github.com/adessoAG/junit-insights/issues)
+[![GitHub forks](https://img.shields.io/github/forks/adessoAG/junit-insights.svg?style=flat-square)](https://github.com/adessoAG/junit-insights/network)
+[![GitHub stars](https://img.shields.io/github/stars/adessoAG/junit-insights.svg?style=flat-square)](https://github.com/adessoAG/junit-insights/stargazers)
+[![GitHub license](https://img.shields.io/github/license/adessoAG/junit-insights.svg?style=flat-square)](https://github.com/adessoAG/junit-insights)
+![](https://img.shields.io/badge/Nice-100%25-brightgreen.svg)
+
+
 # JUnit-Insigths for Spring
 
 JUnit5-Insights ist eine Erweiterung für Spring, die
