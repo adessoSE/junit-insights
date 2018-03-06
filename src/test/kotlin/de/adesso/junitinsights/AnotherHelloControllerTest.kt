@@ -4,6 +4,8 @@ import de.adesso.junitinsights.extensions.SpringInsightExtension
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -19,12 +21,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 @AutoConfigureMockMvc
 class AnotherHelloControllerTest {
 
+    companion object {
+        var logger : Logger = LoggerFactory.getLogger(this::class.java)
+    }
+
     @Autowired
     lateinit var mvc : MockMvc
 
     @Test
     fun getHello() {
-        println("### Test 1 started ###")
+        logger.info("### Test 1 started ###")
         mvc.perform(MockMvcRequestBuilders
                 .get("/")
                 .accept(MediaType.APPLICATION_JSON))
@@ -34,7 +40,7 @@ class AnotherHelloControllerTest {
 
     @Test
     fun getAnotherHello() {
-        println("### Test 2 started ###")
+        logger.info("### Test 2 started ###")
         mvc.perform(MockMvcRequestBuilders
                 .get("/")
                 .accept(MediaType.APPLICATION_JSON))
