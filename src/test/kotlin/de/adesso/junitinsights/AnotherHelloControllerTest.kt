@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 @ExtendWith(SpringInsightExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class HelloControllerTest {
+class AnotherHelloControllerTest {
 
     @Autowired
     lateinit var mvc : MockMvc
