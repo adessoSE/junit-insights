@@ -13,32 +13,38 @@ open class SpringInsightExtension : SpringExtension() {
 
     override fun beforeAll(context: ExtensionContext) {
         super.beforeAll(context)
-        logger.info("### beforeAll called ###")
+        logger.info("### beforeAll: class - " + context.testClass + " ###"
+                + " method - " + context.testMethod + " ###")
     }
 
     override fun afterAll(context: ExtensionContext) {
         super.afterAll(context)
-        logger.info("### afterAll called ###")
+        logger.info("### afterAll: class - " + context.testClass + " ###"
+                + " method - " + context.testMethod + " ###")
     }
 
     override fun beforeEach(context: ExtensionContext) {
         super.beforeEach(context)
-        logger.info("### beforeEach called ###")
+        logger.info("### beforeEach: class - " + context.testClass + " ###"
+                + " method - " + context.testMethod + " ###")
     }
 
     override fun afterEach(context: ExtensionContext) {
         super.afterEach(context)
-        logger.info("### afterEach called ###")
+        logger.info("### afterEach: class - " + context.testClass + " ###"
+                + " method - " + context.testMethod + " ###")
     }
 
     override fun beforeTestExecution(context: ExtensionContext) {
         super.beforeTestExecution(context)
-        logger.info("### beforeTestExecution called ###")
+        logger.info("### beforeTestExecution: class - " + context.testClass + " ###"
+                + " method - " + context.testMethod + " ###")
     }
 
     override fun afterTestExecution(context: ExtensionContext) {
         super.afterTestExecution(context)
-        logger.info("### afterTestExecution called ###")
+        logger.info("### afterTestExecution: class - " + context.testClass + " ###"
+                + " method - " + context.testMethod + " ###")
     }
 
 }
