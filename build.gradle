@@ -38,7 +38,7 @@ publishing {
 }
 model {
 	tasks.generatePomFileForMavenPublication {
-		destination = file("$buildDir/libs/eureka-prometheus-bridge-0.0.1.pom")
+		destination = file("$buildDir/libs/junit-insights-0.0.1.pom")
 	}
 }
 
