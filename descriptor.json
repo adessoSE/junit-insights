@@ -1,0 +1,25 @@
+{
+  "package": {
+    "name": "junit-insights",
+    "repo": "junit-insights",
+    "subject": "adesso",
+    "desc": "JUnit Insights",
+    "website_url": "https://www.adesso.de",
+    "issue_tracker_url": "https://github.com/adessoAG/junit-insights/issues",
+    "vcs_url": "https://github.com/adessoAG/junit-insights.git",
+    "licenses": ["MIT"],
+    "labels": ["kotlin", "bintray", "gradle", "junit"],
+    "public_download_numbers": false,
+    "public_stats": false
+  },
+  "version": {
+    "name": "0.0.1",
+    "released": "2018-03-06",
+    "gpgSign": false
+  },
+  "files":
+  [
+    {"includePattern": "build/libs/(.*)", "uploadPattern": "de/adesso/junit-insights/0.0.1/$1"}
+  ],
+  "publish": true
+}
