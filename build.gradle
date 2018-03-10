@@ -78,6 +78,7 @@ dependencies {
     compile('org.junit.jupiter:junit-jupiter-engine')
     compile('org.junit.platform:junit-platform-engine')
     compile('org.junit.platform:junit-platform-launcher:1.0.0')
+    compile('com.h2database:h2')
     testCompile('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'junit', module: 'junit'
     }
