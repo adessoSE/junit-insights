@@ -4,7 +4,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-data class TimestampEvent (@Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
+data class TimestampEvent (@Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long = 0,
                            var timestamp: Date,
                            var event: EventType? = null,
                            var testClass: String? = null,

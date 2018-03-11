@@ -5,13 +5,10 @@ import de.adesso.junitinsights.TimestampEventService
 import org.junit.jupiter.api.extension.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.stereotype.Component
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import javax.annotation.Resource
 
-@Component
-open class SpringInsightExtension : SpringExtension() {
+class SpringInsightExtension: SpringExtension() {
     companion object {
         var logger : Logger = LoggerFactory.getLogger(this::class.java)
     }
