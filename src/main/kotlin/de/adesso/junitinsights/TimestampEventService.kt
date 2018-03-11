@@ -20,31 +20,31 @@ class TimestampEventService {
         var timestampEvent = createTimestampEvent(eventType, context)
         when (eventType) {
             EventType.APP_CONTEXT_START -> {
-                log.info("${eventType.name} saved.")
+                log.info("${eventType.name} saved. \n $timestampEvent")
                 saveTimestampEvent(timestampEvent)
             }
             EventType.APP_CONTEXT_END -> {
-                log.info("${eventType.name} saved.")
+                log.info("${eventType.name} saved. \n $timestampEvent")
                 saveTimestampEvent(timestampEvent)
 
             }
             EventType.TEST_CLASS_START -> {
-                log.info("${eventType.name} saved.")
+                log.info("${eventType.name} saved. \n $timestampEvent")
                 saveTimestampEvent(timestampEvent)
 
             }
             EventType.TEST_CLASS_END -> {
-                log.info("${eventType.name} saved.")
+                log.info("${eventType.name} saved. \n $timestampEvent")
                 saveTimestampEvent(timestampEvent)
 
             }
             EventType.TEST_METHOD_START -> {
-                log.info("${eventType.name} saved.")
+                log.info("${eventType.name} saved. \n $timestampEvent")
                 saveTimestampEvent(timestampEvent)
 
             }
             EventType.TEST_METHOD_END -> {
-                log.info("${eventType.name} saved.")
+                log.info("${eventType.name} saved. \n $timestampEvent")
                 saveTimestampEvent(timestampEvent)
 
             }
