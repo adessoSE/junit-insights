@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import javax.annotation.Resource
 
-@ComponentScan
 @Component
 open class SpringInsightExtension : SpringExtension() {
     companion object {
