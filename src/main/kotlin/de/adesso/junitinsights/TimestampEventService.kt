@@ -9,14 +9,15 @@ import java.util.*
 import javax.annotation.Resource
 
 @Service
-class TimestampEventService {
+class TimestampEventService(
+        @Resource var eventRepository: TimestampEventRepository
+){
+
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
-    @Resource
-    lateinit var eventRepository: TimestampEventRepository
-    fun createEventNow(eventType: EventType, context: ExtensionContext?): TimestampEvent? {
+    fun createEventNow(eventType: EventType, context: ExtensionContext?) {
         var timestampEvent = createTimestampEvent(eventType, context)
         when (eventType) {
             EventType.APP_CONTEXT_START -> {
@@ -49,7 +50,6 @@ class TimestampEventService {
 
             }
         }
-        return null
     }
 
     fun createTimestampEvent(eventType: EventType, context: ExtensionContext?): TimestampEvent {
