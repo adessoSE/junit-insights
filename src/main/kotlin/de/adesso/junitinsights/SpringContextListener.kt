@@ -6,7 +6,7 @@ import org.springframework.context.event.*
 import org.springframework.stereotype.Component
 
 @Component
-class SpringContextListener{
+class SpringContextListener {
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
