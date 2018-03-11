@@ -5,14 +5,7 @@ import org.springframework.boot.runApplication
 import javax.annotation.Resource
 
 @SpringBootApplication
-open class JunitInsightsApplication {
-    //@Resource
-    //lateinit var repository: EventRepository
-
-    fun test() {
-
-    }
-}
+class JunitInsightsApplication
 
 fun main(args: Array<String>) {
     runApplication<JunitInsightsApplication>(*args)
