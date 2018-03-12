@@ -1,5 +1,6 @@
 package de.adesso.junitinsights
 
+import de.adesso.junitinsights.annotations.JUnitInsights
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 
 @ExtendWith(SpringExtension::class)
+@JUnitInsights
 @SpringBootTest
 @AutoConfigureMockMvc
 class HelloControllerTest {

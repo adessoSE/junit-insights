@@ -1,4 +1,4 @@
-package de.adesso.junitinsights
+package de.adesso.junitinsights.repositories
 
 import java.util.*
 import javax.persistence.*

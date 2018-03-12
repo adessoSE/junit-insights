@@ -1,5 +1,8 @@
 package de.adesso.junitinsights
 
+import de.adesso.junitinsights.annotations.JUnitInsights
+import de.adesso.junitinsights.annotations.NoJUnitInsights
+import de.adesso.junitinsights.services.TimestampEventService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -22,5 +25,14 @@ class NewTest {
     @Test
     fun basicTest() {
         assertEquals(2, 1 + 1)
+    }
+    @Test
+    @NoJUnitInsights
+    fun basicTest2() {
+        assertEquals(0, 1 - 1)
+    }
+    @Test
+    fun basicTest3() {
+        assertEquals(3, 1 + 2)
     }
 }

@@ -1,7 +1,5 @@
 package de.adesso.junitinsights.extensions
 
-import de.adesso.junitinsights.EventType
-import de.adesso.junitinsights.TimestampEventService
 import org.junit.jupiter.api.extension.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

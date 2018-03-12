@@ -1,4 +1,4 @@
-package de.adesso.junitinsights
+package de.adesso.junitinsights.repositories
 
 enum class EventType {
     APP_CONTEXT_START,

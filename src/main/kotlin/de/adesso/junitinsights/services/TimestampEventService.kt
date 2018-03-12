@@ -1,55 +1,28 @@
-package de.adesso.junitinsights
+package de.adesso.junitinsights.services
 
+import de.adesso.junitinsights.repositories.EventType
+import de.adesso.junitinsights.repositories.TimestampEvent
+import de.adesso.junitinsights.repositories.TimestampEventRepository
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.*
-import javax.annotation.Resource
 
 @Service
 class TimestampEventService(
-        @Resource var eventRepository: TimestampEventRepository
+        @Autowired var eventRepository: TimestampEventRepository
 ){
-
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
     fun createEventNow(eventType: EventType, context: ExtensionContext?) {
         var timestampEvent = createTimestampEvent(eventType, context)
-        when (eventType) {
-            EventType.APP_CONTEXT_START -> {
-                log.info("${eventType.name} saved. \n $timestampEvent")
-                saveTimestampEvent(timestampEvent)
-            }
-            EventType.APP_CONTEXT_END -> {
-                log.info("${eventType.name} saved. \n $timestampEvent")
-                saveTimestampEvent(timestampEvent)
-
-            }
-            EventType.TEST_CLASS_START -> {
-                log.info("${eventType.name} saved. \n $timestampEvent")
-                saveTimestampEvent(timestampEvent)
-
-            }
-            EventType.TEST_CLASS_END -> {
-                log.info("${eventType.name} saved. \n $timestampEvent")
-                saveTimestampEvent(timestampEvent)
-
-            }
-            EventType.TEST_METHOD_START -> {
-                log.info("${eventType.name} saved. \n $timestampEvent")
-                saveTimestampEvent(timestampEvent)
-
-            }
-            EventType.TEST_METHOD_END -> {
-                log.info("${eventType.name} saved. \n $timestampEvent")
-                saveTimestampEvent(timestampEvent)
-
-            }
-        }
+        log.info("${eventType.name} saved. \n $timestampEvent")
+        saveTimestampEvent(timestampEvent)
     }
 
     fun createTimestampEvent(eventType: EventType, context: ExtensionContext?): TimestampEvent {
