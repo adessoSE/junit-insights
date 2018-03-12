@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith
  * - has the tag "integration" so we can filter by that,
  * e.g. when running tests from the command line
  */
-@Target(AnnotationTarget.TYPE, AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
+@Target(AnnotationTarget.TYPE, AnnotationTarget.FUNCTION, AnnotationTarget.CLASS, AnnotationTarget.ANNOTATION_CLASS)
 @Retention(value = AnnotationRetention.RUNTIME)
 @ExtendWith(SpringInsightExtension::class)
 annotation class JUnitInsights
