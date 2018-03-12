@@ -2,7 +2,7 @@ package de.adesso.junitinsights
 
 import de.adesso.junitinsights.annotations.JUnitInsights
 import de.adesso.junitinsights.annotations.NoJUnitInsights
-import de.adesso.junitinsights.services.TimestampEventService
+import de.adesso.junitinsights.services.ApplicationContextEventService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,7 +20,7 @@ class NewTest {
     }
 
     @Autowired
-    lateinit var timestampEventService: TimestampEventService
+    lateinit var applicationContextEventService: ApplicationContextEventService
 
     @Test
     fun basicTest() {

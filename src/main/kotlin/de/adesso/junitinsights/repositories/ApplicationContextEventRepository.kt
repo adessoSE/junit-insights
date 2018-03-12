@@ -4,4 +4,4 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TimestampEventRepository : JpaRepository<TimestampEvent, Long>
+interface ApplicationContextEventRepository : JpaRepository<ApplicationContextEvent, Long>

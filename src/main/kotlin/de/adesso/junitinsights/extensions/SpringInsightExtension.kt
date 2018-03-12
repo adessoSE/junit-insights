@@ -17,11 +17,11 @@ class SpringInsightExtension(
     }
 
     override fun beforeAll(context: ExtensionContext) {
-        //TODO Instanciate timestampEventService here, before container starts or tests are executed.
+        //TODO Instanciate applicationContextEventService here, before container starts or tests are executed.
         //TODO Also put the object in the extensioncontext, so its accessible in the testcontainer
         logger.info("### beforeAll: class - ${context.testClass} ### method - ${context.testMethod} ###")
 
-        //  timestampEventService.createEventNow(eventType = EventType.TEST_CLASS_START, context = context)
+        //  applicationContextEventService.createEventNow(eventType = ApplicationContextEventType.TEST_CLASS_START, context = context)
     }
 
     override fun afterAll(context: ExtensionContext) {
