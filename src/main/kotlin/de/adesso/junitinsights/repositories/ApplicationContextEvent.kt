@@ -6,11 +6,9 @@ import javax.persistence.*
 @Entity
 data class ApplicationContextEvent (@Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long = 0,
                                     var timestamp: Date,
-                                    var applicationContextEvent: ApplicationContextEventType? = null,
-                                    var testClass: String? = null,
-                                    var testMethod: String? = null) {
-
+                                    var applicationContextEvent: ApplicationContextEventType
+) {
     override fun toString(): String {
-        return "ApplicationContextEvent(id=$id, timestamp=$timestamp, applicationContextEvent=$applicationContextEvent, testClass='$testClass', testMethod='$testMethod')"
+        return "ApplicationContextEvent(id=$id, timestamp=$timestamp, applicationContextEvent=$applicationContextEvent)"
     }
 }

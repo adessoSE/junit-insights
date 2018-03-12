@@ -19,18 +19,16 @@ class ApplicationContextEventService(
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
-    fun createEventNow(applicationContextEventType: ApplicationContextEventType, context: ExtensionContext?) {
-        var timestampEvent = createTimestampEvent(applicationContextEventType, context)
-        log.info("${applicationContextEventType.name} saved. \n $timestampEvent")
-        saveTimestampEvent(timestampEvent)
+    /**
+     * Create Event
+     */
+    fun putEventIntoDatabaseNow(applicationContextEventType: ApplicationContextEventType, context: ExtensionContext?) {
+        var event = ApplicationContextEvent(timestamp = Date.from(Instant.now()), applicationContextEvent = applicationContextEventType)
+        log.info("${applicationContextEventType.name} saved.")
+        saveTimestampEvent(event)
     }
 
-    fun createTimestampEvent(applicationContextEventType: ApplicationContextEventType, context: ExtensionContext?): ApplicationContextEvent {
-        if(context != null) {
-            return ApplicationContextEvent(timestamp = Date.from(Instant.now()), applicationContextEvent = applicationContextEventType, testClass = context.testClass.toString(), testMethod = context.testMethod.toString())
-        }
-        return ApplicationContextEvent(timestamp = Date.from(Instant.now()), applicationContextEvent = applicationContextEventType)
-    }
+    //Repository-interactions
 
     fun saveTimestampEvent(applicationContextEvent: ApplicationContextEvent): ApplicationContextEvent {
         return eventRepository.save(applicationContextEvent)

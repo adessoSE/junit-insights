@@ -21,7 +21,7 @@ class SpringInsightExtension(
         //TODO Also put the object in the extensioncontext, so its accessible in the testcontainer
         logger.info("### beforeAll: class - ${context.testClass} ### method - ${context.testMethod} ###")
 
-        //  applicationContextEventService.createEventNow(eventType = ApplicationContextEventType.TEST_CLASS_START, context = context)
+        //  applicationContextEventService.putEventIntoDatabaseNow(eventType = ApplicationContextEventType.TEST_CLASS_START, context = context)
     }
 
     override fun afterAll(context: ExtensionContext) {
