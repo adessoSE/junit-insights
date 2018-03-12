@@ -33,7 +33,7 @@ class ApplicationContextEventService(
     fun save(applicationContextEvent: ApplicationContextEvent): ApplicationContextEvent {
         return eventRepository.save(applicationContextEvent)
     }
-    fun findAll(): MutableIterable<ApplicationContextEvent> {
+    fun findAll(): List<ApplicationContextEvent> {
         return eventRepository.findAll()
     }
 

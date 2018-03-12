@@ -23,6 +23,7 @@ class SpringContextListener {
         log.info("AppContextId: ${event.applicationContext.id}")
         //TODO Check if first init before closeing initial, so that its not a refresh
         applicationContextEventService.putEventIntoDatabaseNow(applicationContextEventType = ApplicationContextEventType.APP_CONTEXT_START, context = null)
+        log.info("ApplicationContextEvents in Database: \n ${applicationContextEventService.findAll()}")
     }
 
     @EventListener(ContextClosedEvent::class)
@@ -30,7 +31,7 @@ class SpringContextListener {
         log.info("ContextClosedEvent Received \n ApplicationContext was closed")
         log.info("AppContextId: ${event.applicationContext.id}")
         applicationContextEventService.putEventIntoDatabaseNow(applicationContextEventType = ApplicationContextEventType.APP_CONTEXT_END, context = null)
-
+        log.info("ApplicationContextEvents in Database: \n ${applicationContextEventService.findAll()}")
     }
 
 }

@@ -10,7 +10,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC3'
+        classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}"
     }
 }
 
@@ -26,6 +26,11 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven-publish'
+apply plugin: "kotlin-jpa"
+
+noArg {
+    annotation("javax.persistence.Entity")
+}
 
 publishing {
     publications {
