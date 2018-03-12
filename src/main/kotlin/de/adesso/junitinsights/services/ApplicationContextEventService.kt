@@ -25,19 +25,19 @@ class ApplicationContextEventService(
     fun putEventIntoDatabaseNow(applicationContextEventType: ApplicationContextEventType, context: ExtensionContext?) {
         var event = ApplicationContextEvent(timestamp = Date.from(Instant.now()), applicationContextEvent = applicationContextEventType)
         log.info("${applicationContextEventType.name} saved.")
-        saveTimestampEvent(event)
+        save(event)
     }
 
     //Repository-interactions
 
-    fun saveTimestampEvent(applicationContextEvent: ApplicationContextEvent): ApplicationContextEvent {
+    fun save(applicationContextEvent: ApplicationContextEvent): ApplicationContextEvent {
         return eventRepository.save(applicationContextEvent)
     }
-    fun findAllTimestampEvent(applicationContextEvent: ApplicationContextEvent): MutableIterable<ApplicationContextEvent> {
+    fun findAll(): MutableIterable<ApplicationContextEvent> {
         return eventRepository.findAll()
     }
 
-    fun deleteTimestampEvent(applicationContextEvent: ApplicationContextEvent){
+    fun delete(applicationContextEvent: ApplicationContextEvent){
         eventRepository.delete(applicationContextEvent)
     }
 }
