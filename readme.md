@@ -18,3 +18,10 @@ soll der Report generiert werden. Wenn man es hinbekommt, kann man die Funktiona
 so dass man im Report sehen kann, an welchen Stellen ein Spring-Context hochgefahren wurde.
 
 # How to use
+
+Add the dependency to your project.
+
+`//TODO`
+
+Add @JUnitInsights to the test-classes you want to benchmark.
+Be aware that ExtendsWith(SpringExtension::class) needs to be used as Runner-class.
