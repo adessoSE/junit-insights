@@ -13,8 +13,8 @@ import java.util.*
 
 @Service
 class ApplicationContextEventService(
-        @Autowired var eventRepository: ApplicationContextEventRepository
-) {
+        @Autowired var eventRepository: ApplicationContextEventRepository) {
+
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
@@ -28,7 +28,7 @@ class ApplicationContextEventService(
         save(event)
     }
 
-    //Repository-interactions
+    //Repository interactions
 
     fun save(applicationContextEvent: ApplicationContextEvent): ApplicationContextEvent {
         return eventRepository.save(applicationContextEvent)

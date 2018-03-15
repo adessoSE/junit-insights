@@ -48,5 +48,4 @@ class AnotherHelloControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("Greetings from Spring Boot!")))
     }
-
 }

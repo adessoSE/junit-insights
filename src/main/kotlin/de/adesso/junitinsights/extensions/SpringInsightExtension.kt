@@ -6,8 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class SpringInsightExtension(
-) : BeforeAllCallback, AfterAllCallback,
+class SpringInsightExtension : BeforeAllCallback, AfterAllCallback,
         BeforeEachCallback, AfterEachCallback,
         BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
@@ -16,11 +15,11 @@ class SpringInsightExtension(
     }
 
     override fun beforeAll(context: ExtensionContext) {
-        //TODO Instanciate applicationContextEventService here, before container starts or tests are executed.
-        //TODO Also put the object in the extensioncontext, so its accessible in the testcontainer
+        //TODO Instantiate ApplicationContextEventService here, before container starts or tests are executed.
+        //TODO Also put the object in the ExtensionContext, so it's accessible in the test container.
         logger.info("### beforeAll: class - ${context.testClass} ### method - ${context.testMethod} ###")
 
-        //  applicationContextEventService.putEventIntoDatabaseNow(eventType = ApplicationContextEventType.TEST_CLASS_START, context = context)
+        //applicationContextEventService.putEventIntoDatabaseNow(eventType = ApplicationContextEventType.TEST_CLASS_START, context = context)
     }
 
     override fun afterAll(context: ExtensionContext) {
@@ -42,5 +41,4 @@ class SpringInsightExtension(
     override fun afterTestExecution(context: ExtensionContext) {
         logger.info("### afterTestExecution: class - ${context.testClass} ### method - ${context.testMethod} ###")
     }
-
 }

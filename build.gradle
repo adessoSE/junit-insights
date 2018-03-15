@@ -99,6 +99,6 @@ dependencies {
     testRuntime("org.apache.logging.log4j:log4j-core:${log4jVersion}")
     testRuntime("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
 
-    // Only needed to run tests in an (IntelliJ) IDE(A) that bundles an older version
+    // Only needed to run tests in an IDE that bundles an older version (e.g. IntelliJ)
     testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
 }

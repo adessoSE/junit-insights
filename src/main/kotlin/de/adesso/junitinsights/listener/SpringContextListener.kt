@@ -12,6 +12,7 @@ import javax.annotation.Resource
 
 @Component
 class SpringContextListener {
+
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
@@ -35,5 +36,4 @@ class SpringContextListener {
         applicationContextEventService.putEventIntoDatabaseNow(applicationContextEventType = ApplicationContextEventType.APP_CONTEXT_END, context = null)
         log.info("ApplicationContextEvents in Database: \n ${applicationContextEventService.findAll()}")
     }
-
 }

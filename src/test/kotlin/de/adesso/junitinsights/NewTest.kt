@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @SpringBootTest
 @ExtendWith(SpringExtension::class)
 class NewTest {
+
     companion object {
         val log = LoggerFactory.getLogger(this::class.java.name)
     }

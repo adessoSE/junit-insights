@@ -8,7 +8,7 @@ import java.util.logging.Logger
 
 
 /**
- * Extension that measures the executiontime of each Testclass and Method
+ * Extension that measures the execution time of each test class and method
  *
  */
 class TestBenchmarkExtension :
@@ -27,7 +27,7 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * //TODO Wichtig, Test-Method is not present in the current Extensioncontext
+     * //TODO Important: test method is not present in the current ExtensionContext
      */
     override fun beforeAll(context: ExtensionContext) {
         if (shouldNotBeBenchmarked(context)) {
@@ -104,5 +104,4 @@ class TestBenchmarkExtension :
         val message = String.format("%s '%s' took %d ms.", unit, context.displayName, elapsedTime)
         context.publishReportEntry(singletonMap("Benchmark", message))
     }
-
 }
