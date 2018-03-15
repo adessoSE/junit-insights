@@ -4,7 +4,9 @@ import de.adesso.junitinsights.repositories.ApplicationContextEventType
 import de.adesso.junitinsights.services.ApplicationContextEventService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.context.event.*
+import org.springframework.context.event.ContextClosedEvent
+import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import javax.annotation.Resource
 
@@ -18,7 +20,7 @@ class SpringContextListener {
     lateinit var applicationContextEventService: ApplicationContextEventService
 
     @EventListener(ContextRefreshedEvent::class)
-        fun catchContextStart(event: ContextRefreshedEvent){
+    fun catchContextStart(event: ContextRefreshedEvent) {
         log.info("ContextRefreshedEvent Received \n ApplicationContext was initialized")
         log.info("AppContextId: ${event.applicationContext.id}")
         //TODO Check if first init before closeing initial, so that its not a refresh
@@ -27,7 +29,7 @@ class SpringContextListener {
     }
 
     @EventListener(ContextClosedEvent::class)
-    fun catchContextEnd(event: ContextClosedEvent){
+    fun catchContextEnd(event: ContextClosedEvent) {
         log.info("ContextClosedEvent Received \n ApplicationContext was closed")
         log.info("AppContextId: ${event.applicationContext.id}")
         applicationContextEventService.putEventIntoDatabaseNow(applicationContextEventType = ApplicationContextEventType.APP_CONTEXT_END, context = null)

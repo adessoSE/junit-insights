@@ -7,13 +7,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class SpringInsightExtension(
-):      BeforeAllCallback, AfterAllCallback,
+) : BeforeAllCallback, AfterAllCallback,
         BeforeEachCallback, AfterEachCallback,
-        BeforeTestExecutionCallback, AfterTestExecutionCallback
-{
+        BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
     companion object {
-        var logger : Logger = LoggerFactory.getLogger(this::class.java)
+        var logger: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
     override fun beforeAll(context: ExtensionContext) {

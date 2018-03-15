@@ -26,11 +26,13 @@ class NewTest {
     fun basicTest() {
         assertEquals(2, 1 + 1)
     }
+
     @Test
     @NoJUnitInsights
     fun basicTest2() {
         assertEquals(0, 1 - 1)
     }
+
     @Test
     fun basicTest3() {
         assertEquals(3, 1 + 2)

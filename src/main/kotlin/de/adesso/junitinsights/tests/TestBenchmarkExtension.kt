@@ -2,10 +2,9 @@ package de.adesso.junitinsights.tests
 
 import de.adesso.junitinsights.annotations.NoJUnitInsights
 import org.junit.jupiter.api.extension.*
-import java.util.logging.Logger
-import java.util.Collections.singletonMap
-import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
+import java.util.Collections.singletonMap
+import java.util.logging.Logger
 
 
 /**
@@ -24,49 +23,61 @@ class TestBenchmarkExtension :
 
 
     private enum class LaunchTimeKey {
-        BEFORE_TEST_EXECUTION , BEFORE_EACH, BEFORE_ALL
+        BEFORE_TEST_EXECUTION, BEFORE_EACH, BEFORE_ALL
     }
 
     /**
      * //TODO Wichtig, Test-Method is not present in the current Extensioncontext
      */
     override fun beforeAll(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) { return }
+        if (shouldNotBeBenchmarked(context)) {
+            return
+        }
         logger.info("### beforeAll: class - ${context.testClass} ### method - ${context.testMethod} ###")
-       // getStore(context).put(START_TIME_BEFORE_ALL, System.currentTimeMillis())
+        //getStore(context).put(START_TIME_BEFORE_ALL, System.currentTimeMillis())
 
     }
 
     override fun afterAll(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) { return }
+        if (shouldNotBeBenchmarked(context)) {
+            return
+        }
         logger.info("### afterAll: class - ${context.testClass} ### method - ${context.testMethod} ###")
         //calculateTimeFor(START_TIME_BEFORE_ALL, context = context)
 
     }
 
     override fun beforeEach(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) { return }
+        if (shouldNotBeBenchmarked(context)) {
+            return
+        }
         getStore(context).put(LaunchTimeKey.BEFORE_EACH, System.currentTimeMillis())
         logger.info("### beforeEach: class - ${context.testClass} ### method - ${context.testMethod} ###")
 
     }
 
     override fun afterEach(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) { return }
+        if (shouldNotBeBenchmarked(context)) {
+            return
+        }
         logger.info("### afterEach: class - ${context.testClass} ### method - ${context.testMethod} ###")
         calculateTimeFor(LaunchTimeKey.BEFORE_EACH, context = context)
     }
 
     @Throws(Exception::class)
     override fun beforeTestExecution(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) { return }
+        if (shouldNotBeBenchmarked(context)) {
+            return
+        }
         getStore(context).put(LaunchTimeKey.BEFORE_TEST_EXECUTION, System.currentTimeMillis())
         logger.info("### beforeTestExecution: class - ${context.testClass} ### method - ${context.testMethod} ###")
     }
 
     @Throws(Exception::class)
     override fun afterTestExecution(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) { return }
+        if (shouldNotBeBenchmarked(context)) {
+            return
+        }
         logger.info("### afterTestExecution: class - ${context.testClass} ### method - ${context.testMethod} ###")
         calculateTimeFor(LaunchTimeKey.BEFORE_TEST_EXECUTION, context = context)
     }

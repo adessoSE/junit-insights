@@ -1,8 +1,8 @@
 package de.adesso.junitinsights.services
 
-import de.adesso.junitinsights.repositories.ApplicationContextEventType
 import de.adesso.junitinsights.repositories.ApplicationContextEvent
 import de.adesso.junitinsights.repositories.ApplicationContextEventRepository
+import de.adesso.junitinsights.repositories.ApplicationContextEventType
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -14,7 +14,7 @@ import java.util.*
 @Service
 class ApplicationContextEventService(
         @Autowired var eventRepository: ApplicationContextEventRepository
-){
+) {
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
@@ -33,11 +33,12 @@ class ApplicationContextEventService(
     fun save(applicationContextEvent: ApplicationContextEvent): ApplicationContextEvent {
         return eventRepository.save(applicationContextEvent)
     }
+
     fun findAll(): List<ApplicationContextEvent> {
         return eventRepository.findAll()
     }
 
-    fun delete(applicationContextEvent: ApplicationContextEvent){
+    fun delete(applicationContextEvent: ApplicationContextEvent) {
         eventRepository.delete(applicationContextEvent)
     }
 }
