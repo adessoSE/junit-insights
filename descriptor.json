@@ -14,12 +14,15 @@
   },
   "version": {
     "name": "0.0.1",
-    "released": "2018-03-06",
+    "released": "2018-03-10",
     "gpgSign": false
   },
   "files":
   [
-    {"includePattern": "build/libs/(.*)", "uploadPattern": "de/adesso/junit-insights/0.0.1/$1"}
+    {"includePattern": "build/libs/(.*)", "uploadPattern": "de/adesso/junit-insights/0.0.1/$1",
+      "matrixParams": {
+        "override": 1 }
+    }
   ],
   "publish": true
 }
