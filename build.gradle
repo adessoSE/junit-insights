@@ -83,6 +83,7 @@ dependencies {
     compile('org.jetbrains.kotlin:kotlin-stdlib-jdk8')
     compile('org.jetbrains.kotlin:kotlin-reflect')
     compile('com.h2database:h2')
+    compile('javax.xml.bind:jaxb-api')
 
     compile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
     testCompile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
