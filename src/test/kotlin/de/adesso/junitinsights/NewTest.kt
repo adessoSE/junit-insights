@@ -27,4 +27,10 @@ class NewTest {
     fun basicTest3() {
         assertEquals(3, 1 + 2)
     }
+
+    @Test
+    fun delayTest() {
+        Thread.sleep(300)
+        assertEquals(1,1)
+    }
 }
