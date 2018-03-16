@@ -33,6 +33,7 @@ function calculateDurations(dataIn) {
         currentClass["begin"] = dataIn[i][0][0];
         currentClass["end"] = dataIn[i][dataIn[i].length-1][0];
         var testDurations = [];
+        var testDurationSum = 0;
         var testBegin = 0;
         for (var j = 0; j < dataIn[i].length; j++) {
             if (dataIn[i][j][1] === "before each") {
@@ -46,11 +47,13 @@ function calculateDurations(dataIn) {
                     console.error("An error occurred while parsing the file!");
                 } else {
                     testDurations.push(dataIn[i][j][0] - testBegin);
+                    testDurationSum += dataIn[i][j][0] - testBegin;
                     testBegin = 0;
                 }
             }
         }
         currentClass["tests"] = testDurations;
+        currentClass["spring"] = currentClass["end"] - currentClass["begin"] - testDurationSum;
 
         classesDurations.push(currentClass);
     }
