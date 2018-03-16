@@ -14,7 +14,7 @@ object TimestampWriter {
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     init {
-        file.write("event;test class;test function;timestamp")
+        file.write("timestamp;event;test class;test function")
         file.newLine()
     }
 
