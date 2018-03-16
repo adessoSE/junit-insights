@@ -1,10 +1,9 @@
 package de.adesso.junitinsights.tests
 
 import de.adesso.junitinsights.annotations.NoJUnitInsights
+import de.adesso.junitinsights.tools.TimestampWriter
 import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
-import java.util.Collections.singletonMap
-import java.util.logging.Logger
 
 
 /**
@@ -16,52 +15,46 @@ class TestBenchmarkExtension :
         BeforeEachCallback, AfterEachCallback,
         BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
-    companion object {
-        private val logger = Logger.getLogger(this::class.java.name)
-        private val NAMESPACE = ExtensionContext.Namespace.create("de", "adesso", "JUnitInsights")
-    }
+    private val timestampWriter = TimestampWriter
 
-
-    private enum class LaunchTimeKey {
-        BEFORE_TEST_EXECUTION, BEFORE_EACH, BEFORE_ALL
-    }
-
-    /**
-     * //TODO Important: test method is not present in the current ExtensionContext
-     */
     override fun beforeAll(context: ExtensionContext) {
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        logger.info("### beforeAll: class - ${context.testClass} ### method - ${context.testMethod} ###")
-        //getStore(context).put(START_TIME_BEFORE_ALL, System.currentTimeMillis())
-
+        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+                "before all",
+                context.testClass.toString(),
+                context.testMethod.toString())
     }
 
     override fun afterAll(context: ExtensionContext) {
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        logger.info("### afterAll: class - ${context.testClass} ### method - ${context.testMethod} ###")
-        //calculateTimeFor(START_TIME_BEFORE_ALL, context = context)
-
+        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+                "after all",
+                context.testClass.toString(),
+                context.testMethod.toString())
     }
 
     override fun beforeEach(context: ExtensionContext) {
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        getStore(context).put(LaunchTimeKey.BEFORE_EACH, System.currentTimeMillis())
-        logger.info("### beforeEach: class - ${context.testClass} ### method - ${context.testMethod} ###")
-
+        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+                "before each",
+                context.testClass.toString(),
+                context.testMethod.toString())
     }
 
     override fun afterEach(context: ExtensionContext) {
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        logger.info("### afterEach: class - ${context.testClass} ### method - ${context.testMethod} ###")
-        calculateTimeFor(LaunchTimeKey.BEFORE_EACH, context = context)
+        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+                "after each",
+                context.testClass.toString(),
+                context.testMethod.toString())
     }
 
     @Throws(Exception::class)
@@ -69,8 +62,10 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        getStore(context).put(LaunchTimeKey.BEFORE_TEST_EXECUTION, System.currentTimeMillis())
-        logger.info("### beforeTestExecution: class - ${context.testClass} ### method - ${context.testMethod} ###")
+        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+                "before test execution",
+                context.testClass.toString(),
+                context.testMethod.toString())
     }
 
     @Throws(Exception::class)
@@ -78,30 +73,15 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        logger.info("### afterTestExecution: class - ${context.testClass} ### method - ${context.testMethod} ###")
-        calculateTimeFor(LaunchTimeKey.BEFORE_TEST_EXECUTION, context = context)
-    }
-
-    private fun getStore(context: ExtensionContext): ExtensionContext.Store {
-        return context.getStore(NAMESPACE)
-    }
-
-    private fun calculateTimeFor(key: LaunchTimeKey, context: ExtensionContext) {
-        val testMethod = context.requiredTestMethod
-        val startTime = getStore(context).remove(key, Long::class.javaPrimitiveType)
-        val duration = System.currentTimeMillis() - startTime
-        logger.info { String.format("Method [%s] took %s ms.", testMethod.name, duration) }
-
+        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+                "after test execution",
+                context.testClass.toString(),
+                context.testMethod.toString())
     }
 
     private fun shouldNotBeBenchmarked(context: ExtensionContext): Boolean {
         return context.element
                 .map<Boolean> { el -> isAnnotated(el, NoJUnitInsights::class.java) }
                 .orElse(false)
-    }
-
-    private fun report(unit: String, context: ExtensionContext, elapsedTime: Long) {
-        val message = String.format("%s '%s' took %d ms.", unit, context.displayName, elapsedTime)
-        context.publishReportEntry(singletonMap("Benchmark", message))
     }
 }
