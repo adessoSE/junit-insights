@@ -21,7 +21,7 @@ class SpringContextListener {
     fun catchContextStart(event: ContextRefreshedEvent) {
         //log.info("### AppContextId: ${event.applicationContext.id}")
         //TODO Check if first init before closing initial, so that its not a refresh
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "context refreshed",
                 "", "")
     }
@@ -29,10 +29,10 @@ class SpringContextListener {
     @EventListener(ContextClosedEvent::class)
     fun catchContextEnd(event: ContextClosedEvent) {
         //log.info("### AppContextId: ${event.applicationContext.id}")
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "context closed",
                 "", "")
         //TODO: Is this method really called only once at the end?
-        timestampWriter.close()
+        timestampWriter.flush()
     }
 }

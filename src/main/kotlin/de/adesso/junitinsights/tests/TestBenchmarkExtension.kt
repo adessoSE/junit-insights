@@ -21,7 +21,7 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before all",
                 context.testClass.toString(),
                 context.testMethod.toString())
@@ -31,7 +31,7 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after all",
                 context.testClass.toString(),
                 context.testMethod.toString())
@@ -41,7 +41,7 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before each",
                 context.testClass.toString(),
                 context.testMethod.toString())
@@ -51,7 +51,7 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after each",
                 context.testClass.toString(),
                 context.testMethod.toString())
@@ -62,7 +62,7 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before test execution",
                 context.testClass.toString(),
                 context.testMethod.toString())
@@ -73,7 +73,7 @@ class TestBenchmarkExtension :
         if (shouldNotBeBenchmarked(context)) {
             return
         }
-        timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after test execution",
                 context.testClass.toString(),
                 context.testMethod.toString())
