@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JUnit Insights</title>
+</head>
+<body>
+    <script src="papaparse.min.js"></script>
+    <script src="processData.js"></script>
+
+    <input type="file" accept=".csv" id="csv_input">
+    <script>
+        inputElement = document.getElementById("csv_input")
+        inputElement.onchange = function(event) {
+            var inputFile = inputElement.files[0];
+            processData(inputFile);
+        }
+    </script>
+</body>
+</html>
