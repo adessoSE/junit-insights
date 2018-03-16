@@ -20,7 +20,7 @@ class SpringContextListener {
     @EventListener(ContextRefreshedEvent::class)
     fun catchContextStart(event: ContextRefreshedEvent) {
         //log.info("### AppContextId: ${event.applicationContext.id}")
-        //TODO Check if first init before closeing initial, so that its not a refresh
+        //TODO Check if first init before closing initial, so that its not a refresh
         timestampWriter.writeTimestamp(System.currentTimeMillis().toString(),
                 "context refreshed",
                 "", "")

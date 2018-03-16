@@ -3,7 +3,7 @@ package de.adesso.junitinsights.tools
 import java.io.File
 
 object TimestampWriter {
-    var file = File("timestamps.csv").bufferedWriter()
+    private var file = File("timestamps.csv").bufferedWriter()
 
     init {
         file.write("event;test class;test function;timestamp")
