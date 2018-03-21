@@ -1,3 +1,9 @@
+function uploadFile() {
+    inputElement = document.getElementById("csv_input");
+    var inputFile = inputElement.files[0];
+    processData(inputFile);
+}
+
 function processData(file) {
     Papa.parse(file, {
         complete: function(results) {

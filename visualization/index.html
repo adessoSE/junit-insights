@@ -15,20 +15,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <div class="container-fluid">
-        <h1>JUnit Insights</h1>
-
-        <input type="file" accept=".csv" id="csv_input">
+        <h1>JUnit Insights
+        <label class="btn btn-primary">
+            Upload CSV<input type="file" accept=".csv" id="csv_input" onchange="uploadFile()" hidden>
+        </label>
+        </h1>
 
         <div class="row" id="overviewChart"></div>
         <div class="row" id="individualChart"></div>
     </div>
-
-    <script>
-        inputElement = document.getElementById("csv_input");
-        inputElement.onchange = function(event) {
-            var inputFile = inputElement.files[0];
-            processData(inputFile);
-        }
-    </script>
 </body>
 </html>
