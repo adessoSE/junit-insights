@@ -103,7 +103,7 @@ function drawPerTestPie(classesData) {
     var data = [];
     var countY = Math.ceil(classesData.length / 3);
     var heightPerPie = 1/countY;
-    var rowNumber = 0;
+    var rowNumber = countY-1;
     var columnNumber = 0;
     var annotations = [];
     for (var i = 0; i < classesData.length; i++) {
@@ -118,7 +118,7 @@ function drawPerTestPie(classesData) {
             textinfo: "percent",
             domain: {
                 x: [columnNumber*0.33,columnNumber*0.33+0.33],
-                y: [rowNumber*heightPerPie,rowNumber*heightPerPie+heightPerPie]
+                y: [rowNumber*heightPerPie,rowNumber*heightPerPie+(heightPerPie*0.8)]
             },
             type: "pie"
         };
@@ -128,29 +128,30 @@ function drawPerTestPie(classesData) {
             currentData["labels"].push(classesData[i]["testNames"][j]);
         }
 
-        if (columnNumber === 2) {
-            columnNumber = 0;
-            rowNumber++;
-        } else {
-            columnNumber++;
-        }
-
         data.push(currentData);
 
         annotations.push({
             xanchor: "center",
-            yanchor: "top",
+            yanchor: "center",
             showarrow: false,
             text: classesData[i]["name"] + " (" + classesData[i]["duration"] + "ms)",
             x: (columnNumber*0.66 + 0.33)/2,
-            y: 0
-        })
+            y: rowNumber*heightPerPie
+        });
+
+        if (columnNumber === 2) {
+            columnNumber = 0;
+            rowNumber--;
+        } else {
+            columnNumber++;
+        }
     }
 
     var individualChartLayout = {
         showlegend: false,
         title: "Time spent on individual test classes",
-        annotations: annotations
+        annotations: annotations,
+        height: (countY)*400
     };
 
     Plotly.newPlot("individualChart", data, individualChartLayout);
