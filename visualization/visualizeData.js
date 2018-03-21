@@ -21,7 +21,10 @@ function drawOverviewPie(classesData) {
 
     var pieChartLayout = {
         showlegend: false,
-        title: "Time spent on Spring initialization vs. test execution"
+        font: {
+            family: "Oswald",
+            size:16
+        }
     };
 
     Plotly.newPlot("overviewChart", pieChartData, pieChartLayout);
@@ -85,7 +88,9 @@ function drawPerTestPie(classesData) {
             showarrow: false,
             text: classesData[i]["name"] + " (" + classesData[i]["duration"] + "ms)",
             font: {
-                color: textColor
+                family: "Oswald",
+                color: textColor,
+                size: 16
             },
             x: (columnNumber*0.66 + 0.33)/2,
             y: (rowNumber-0.07)*heightPerPie
@@ -101,7 +106,10 @@ function drawPerTestPie(classesData) {
 
     var individualChartLayout = {
         showlegend: false,
-        title: "Time spent on individual test classes",
+        font: {
+            family: "Oswald",
+            size: 16
+        },
         annotations: annotations,
         height: (countY)*400
     };
