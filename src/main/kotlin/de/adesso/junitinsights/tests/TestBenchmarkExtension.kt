@@ -23,7 +23,7 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before all",
-                context.testClass.toString(),
+                context.testClass.toString().replace("class ",""),
                 context.testMethod.toString())
     }
 
@@ -33,7 +33,7 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after all",
-                context.testClass.toString(),
+                context.testClass.toString().replace("class ",""),
                 context.testMethod.toString())
     }
 
@@ -43,7 +43,7 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before each",
-                context.testClass.toString(),
+                context.testClass.toString().replace("class ",""),
                 context.testMethod.toString())
     }
 
@@ -53,7 +53,7 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after each",
-                context.testClass.toString(),
+                context.testClass.toString().replace("class ",""),
                 context.testMethod.toString())
     }
 
@@ -64,7 +64,7 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before test execution",
-                context.testClass.toString(),
+                context.testClass.toString().replace("class ",""),
                 context.testMethod.toString())
     }
 
@@ -75,7 +75,7 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after test execution",
-                context.testClass.toString(),
+                context.testClass.toString().replace("class ",""),
                 context.testMethod.toString())
     }
 
