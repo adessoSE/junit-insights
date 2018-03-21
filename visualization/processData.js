@@ -14,6 +14,8 @@ function processData(file) {
             console.log(classesDurations);
             drawOverviewPie(classesDurations);
             drawPerTestPie(classesDurations);
+            showGeneralData(classesDurations);
+            document.getElementById("information").style.visibility="visible";
         }
     });
 }
@@ -71,4 +73,16 @@ function calculateDurations(dataIn) {
         classesDurations.push(currentClass);
     }
     return classesDurations;
+}
+
+function showGeneralData(classesData) {
+    var createdSpringContexts = 0;
+    var testedMethods = 0;
+    for (var i = 0; i < classesData.length; i++) {
+        createdSpringContexts += classesData[i]["newContexts"];
+        testedMethods += classesData[i]["tests"].length;
+    }
+    document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
+    document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesData.length;
+    document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
 }

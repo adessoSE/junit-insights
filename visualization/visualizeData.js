@@ -111,5 +111,4 @@ function drawPerTestPie(classesData) {
 
 window.onresize = function() {
     Plotly.relayout("individualChart", {autosize: true});
-    Plotly.relayout("overviewChart", {autosize:true})
 };

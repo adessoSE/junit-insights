@@ -22,8 +22,18 @@
         </label>
         </h1>
 
-        <div class="row" id="overviewChart"></div>
-        <div class="row" id="individualChart"></div>
+        <div id="information" style="visibility: hidden">
+            <div class="row">
+                <div class="col" id="overviewChart"></div>
+                <div class="col" style="height: 500px;">
+                    <h2>General information:</h2>
+                    <p id="createdSpringContexts">Created Spring contexts: </p>
+                    <p id="testedClasses">Tested classes: </p>
+                    <p id="testedMethods">Tested methods: </p>
+                </div>
+            </div>
+            <div class="row" id="individualChart"></div>
+        </div>
     </div>
 </body>
 </html>
