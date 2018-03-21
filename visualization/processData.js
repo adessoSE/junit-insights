@@ -136,7 +136,7 @@ function drawPerTestPie(classesData) {
             showarrow: false,
             text: classesData[i]["name"] + " (" + classesData[i]["duration"] + "ms)",
             x: (columnNumber*0.66 + 0.33)/2,
-            y: rowNumber*heightPerPie
+            y: (rowNumber-0.07)*heightPerPie
         });
 
         if (columnNumber === 2) {
