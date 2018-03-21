@@ -9,17 +9,26 @@
     <script src="papaparse.min.js"></script>
     <script src="processData.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <input type="file" accept=".csv" id="csv_input">
+    <div class="container-fluid">
+        <h1>JUnit Insights</h1>
+
+        <input type="file" accept=".csv" id="csv_input">
+
+        <div class="row" id="overviewChart"></div>
+        <div class="row" id="individualChart"></div>
+    </div>
+
     <script>
-        inputElement = document.getElementById("csv_input")
+        inputElement = document.getElementById("csv_input");
         inputElement.onchange = function(event) {
             var inputFile = inputElement.files[0];
             processData(inputFile);
         }
     </script>
-
-    <div id="overviewChart"></div>
-    <div id="individualChart"></div>
 </body>
 </html>

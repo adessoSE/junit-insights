@@ -56,7 +56,8 @@ function calculateDurations(dataIn) {
         }
         currentClass["tests"] = testDurations;
         currentClass["testNames"] = testNames;
-        currentClass["spring"] = currentClass["end"] - currentClass["begin"] - testDurationSum;
+        currentClass["duration"] = currentClass["end"] - currentClass["begin"];
+        currentClass["spring"] = currentClass["duration"] - testDurationSum;
 
         classesDurations.push(currentClass);
     }
@@ -79,13 +80,14 @@ function drawOverviewPie(classesData) {
         marker: {
             colors: ["rgb(109,179,63)","rgb(220,82,74)"]
         },
-        textinfo: "percent+label",
+        textinfo: "percent+label+value",
         hoverinfo: "none",
         type: "pie"
     }];
 
     var pieChartLayout = {
-        showlegend: false
+        showlegend: false,
+        title: "Time spent on Spring initialization vs. test execution"
     };
 
     Plotly.newPlot("overviewChart", pieChartData, pieChartLayout);
@@ -97,11 +99,12 @@ function drawPerTestPie(classesData) {
     var heightPerPie = 1/countY;
     var rowNumber = 0;
     var columnNumber = 0;
+    var annotations = [];
     for (var i = 0; i < classesData.length; i++) {
         var currentData = {
             values: [classesData[i]["spring"]],
             labels: ["Spring"],
-            name: classesData[i]["name"],
+            title: classesData[i]["name"],
             marker: {
                 colors: ["rgb(109,179,63)","rgb(220,82,74)"]
             },
@@ -127,11 +130,27 @@ function drawPerTestPie(classesData) {
         }
 
         data.push(currentData);
+
+        annotations.push({
+            xanchor: "center",
+            yanchor: "top",
+            showarrow: false,
+            text: classesData[i]["name"] + " (" + classesData[i]["duration"] + "ms)",
+            x: (columnNumber*0.66 + 0.33)/2,
+            y: 0
+        })
     }
 
     var individualChartLayout = {
-        showlegend: false
+        showlegend: false,
+        title: "Time spent on individual test classes",
+        annotations: annotations
     };
 
     Plotly.newPlot("individualChart", data, individualChartLayout);
 }
+
+window.onresize = function() {
+    Plotly.relayout("individualChart", {autosize: true});
+    Plotly.relayout("overviewChart", {autosize:true})
+};
