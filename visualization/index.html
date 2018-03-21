@@ -8,6 +8,7 @@
 <body>
     <script src="papaparse.min.js"></script>
     <script src="processData.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <input type="file" accept=".csv" id="csv_input">
     <script>
@@ -17,5 +18,8 @@
             processData(inputFile);
         }
     </script>
+
+    <div id="overviewChart"></div>
+    <div id="individualChart"></div>
 </body>
 </html>

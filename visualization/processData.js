@@ -4,9 +4,10 @@ function processData(file) {
             var data = results.data.filter(element => element.length === 4);
             data.shift();
             var classesTimestamps = splitIntoClasses(data);
-            console.log(classesTimestamps);
             var classesDurations = calculateDurations(classesTimestamps);
             console.log(classesDurations);
+            drawOverviewPie(classesDurations);
+            drawPerTestPie(classesDurations);
         }
     });
 }
@@ -14,7 +15,6 @@ function processData(file) {
 function splitIntoClasses(dataIn) {
     var classesTimestamps = [];
     var currentClass = [];
-    console.log(dataIn);
     for (var i = 0; i < dataIn.length; i++) {
         currentClass.push(dataIn[i]);
         if (dataIn[i][1] === "after all") {
@@ -33,6 +33,7 @@ function calculateDurations(dataIn) {
         currentClass["begin"] = dataIn[i][0][0];
         currentClass["end"] = dataIn[i][dataIn[i].length-1][0];
         var testDurations = [];
+        var testNames = [];
         var testDurationSum = 0;
         var testBegin = 0;
         for (var j = 0; j < dataIn[i].length; j++) {
@@ -47,15 +48,90 @@ function calculateDurations(dataIn) {
                     console.error("An error occurred while parsing the file!");
                 } else {
                     testDurations.push(dataIn[i][j][0] - testBegin);
+                    testNames.push(dataIn[i][j][3]);
                     testDurationSum += dataIn[i][j][0] - testBegin;
                     testBegin = 0;
                 }
             }
         }
         currentClass["tests"] = testDurations;
+        currentClass["testNames"] = testNames;
         currentClass["spring"] = currentClass["end"] - currentClass["begin"] - testDurationSum;
 
         classesDurations.push(currentClass);
     }
     return classesDurations;
+}
+
+function drawOverviewPie(classesData) {
+    springTime = 0;
+    testTime = 0;
+    for (var i = 0; i < classesData.length; i++) {
+        springTime += classesData[i]["spring"];
+        for (var j = 0; j < classesData[i]["tests"].length; j++) {
+            testTime += classesData[i]["tests"][j]
+        }
+    }
+
+    var pieChartData = [{
+        values: [springTime, testTime],
+        labels: ["Spring", "Tests"],
+        marker: {
+            colors: ["rgb(109,179,63)","rgb(220,82,74)"]
+        },
+        textinfo: "percent+label",
+        hoverinfo: "none",
+        type: "pie"
+    }];
+
+    var pieChartLayout = {
+        showlegend: false
+    };
+
+    Plotly.newPlot("overviewChart", pieChartData, pieChartLayout);
+}
+
+function drawPerTestPie(classesData) {
+    var data = [];
+    var countY = Math.ceil(classesData.length / 3);
+    var heightPerPie = 1/countY;
+    var rowNumber = 0;
+    var columnNumber = 0;
+    for (var i = 0; i < classesData.length; i++) {
+        var currentData = {
+            values: [classesData[i]["spring"]],
+            labels: ["Spring"],
+            name: classesData[i]["name"],
+            marker: {
+                colors: ["rgb(109,179,63)","rgb(220,82,74)"]
+            },
+            hoverinfo: "label",
+            textinfo: "percent",
+            domain: {
+                x: [columnNumber*0.33,columnNumber*0.33+0.33],
+                y: [rowNumber*heightPerPie,rowNumber*heightPerPie+heightPerPie]
+            },
+            type: "pie"
+        };
+
+        for (var j = 0; j < classesData[i]["tests"].length; j++) {
+            currentData["values"].push(classesData[i]["tests"][j]);
+            currentData["labels"].push(classesData[i]["testNames"][j]);
+        }
+
+        if (columnNumber === 2) {
+            columnNumber = 0;
+            rowNumber++;
+        } else {
+            columnNumber++;
+        }
+
+        data.push(currentData);
+    }
+
+    var individualChartLayout = {
+        showlegend: false
+    };
+
+    Plotly.newPlot("individualChart", data, individualChartLayout);
 }
