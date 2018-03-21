@@ -38,6 +38,7 @@ function calculateDurations(dataIn) {
         currentClass["name"] = dataIn[i][0][2];
         currentClass["begin"] = dataIn[i][0][0];
         currentClass["end"] = dataIn[i][dataIn[i].length-1][0];
+        currentClass["newContexts"] = 0;
         var testDurations = [];
         var testNames = [];
         var testDurationSum = 0;
@@ -58,6 +59,8 @@ function calculateDurations(dataIn) {
                     testDurationSum += dataIn[i][j][0] - testBegin;
                     testBegin = 0;
                 }
+            } else if (dataIn[i][j][1] === "context refreshed") {
+                currentClass["newContexts"]++;
             }
         }
         currentClass["tests"] = testDurations;
@@ -149,11 +152,16 @@ function drawPerTestPie(classesData) {
 
         data.push(currentData);
 
+        var textColor = classesData[i]["newContexts"] === 0 ? "black" : "red";
+        
         annotations.push({
             xanchor: "center",
             yanchor: "center",
             showarrow: false,
             text: classesData[i]["name"] + " (" + classesData[i]["duration"] + "ms)",
+            font: {
+                color: textColor
+            },
             x: (columnNumber*0.66 + 0.33)/2,
             y: (rowNumber-0.07)*heightPerPie
         });
