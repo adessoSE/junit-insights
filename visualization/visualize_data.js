@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Creates a plot that shows the time spent on spring initialization vs. actual test execution
+ * @param allClasses All data about the durations of important events for each test class
+ */
 function drawOverviewPie(allClasses) {
     var springTime = 0;
     var testTime = 0;
@@ -32,11 +36,15 @@ function drawOverviewPie(allClasses) {
     Plotly.newPlot("overviewChart", pieChartData, pieChartLayout);
 }
 
+/**
+ * Creates a plot that shows the time spent on different events for each test class individually
+ * @param allClasses All data about the durations of important events for each test class
+ */
 function drawPerTestPie(allClasses) {
     var data = [];
     var countY = Math.ceil(allClasses.length / 3);
     var heightPerPie = 1/countY;
-    var rowNumber = countY-1;
+    var rowNumber = countY-1;   // because y grows towards the top of the page, start with the last row
     var columnNumber = 0;
     var annotations = [];
     var textColor, otherColor, otherText, currentData;
@@ -129,5 +137,5 @@ function drawPerTestPie(allClasses) {
 }
 
 window.onresize = function() {
-    Plotly.relayout("individualChart", {autosize: true});
+    Plotly.relayout("individualChart", {autosize: true});   // fit the plots in a resized window again
 };
