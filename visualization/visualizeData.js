@@ -38,12 +38,25 @@ function drawPerTestPie(classesData) {
     var columnNumber = 0;
     var annotations = [];
     for (var i = 0; i < classesData.length; i++) {
+        var textColor;
+        var otherColor;
+        var otherText;
+        if (classesData[i]["newContexts"] === 0) {
+            textColor = "black";
+            otherColor = "rgb(180, 180, 180)";
+            otherText = "Other";
+        } else {
+            textColor = "green";
+            otherColor = "rgb(109, 179, 63)";
+            otherText = "Spring";
+        }
+
         var currentData = {
             values: [classesData[i]["spring"]],
-            labels: ["Spring"],
+            labels: [otherText],
             title: classesData[i]["name"],
             marker: {
-                colors: ["rgb(109, 179, 63)",
+                colors: [otherColor,
                     "rgb(179, 77, 102)",
                     "rgb(238, 223, 123)",
                     "rgb(60, 125, 160)",
@@ -79,8 +92,6 @@ function drawPerTestPie(classesData) {
         }
 
         data.push(currentData);
-
-        var textColor = classesData[i]["newContexts"] === 0 ? "black" : "red";
 
         annotations.push({
             xanchor: "center",
