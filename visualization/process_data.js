@@ -15,8 +15,8 @@ function uploadFile() {
  */
 function processData(file) {
     Papa.parse(file, {
-        complete: function(content) {
-            var data = content.data.filter(function(element) {
+        complete: function (content) {
+            var data = content.data.filter(function (element) {
                 return element.length === 4;    // remove irrelevant lines like blank lines
             });
             data.shift();   // remove first line of csv file containing descriptions of each column
@@ -26,7 +26,7 @@ function processData(file) {
             drawOverviewPie(classesDurations);
             drawPerTestPie(classesDurations);
             showGeneralData(classesDurations);
-            document.getElementById("information").style.visibility="visible";
+            document.getElementById("information").style.visibility = "visible";
         }
     });
 }
@@ -39,7 +39,7 @@ function processData(file) {
 function splitIntoClasses(rawData) {
     var classesTimestamps = [];
     var currentClass = [];
-    rawData.forEach(function(entry) {
+    rawData.forEach(function (entry) {
         currentClass.push(entry);
         if (entry[1] === "after all") {     // each class terminates with "after all"
             classesTimestamps.push(currentClass);
@@ -57,17 +57,17 @@ function splitIntoClasses(rawData) {
 function calculateDurations(classesTimestamps) {
     var classesDurations = [];
     var currentClass, testDurations, testNames, testDurationSum, testBegin;
-    classesTimestamps.forEach(function(currentClassTimestamps) {
+    classesTimestamps.forEach(function (currentClassTimestamps) {
         currentClass = {};
         currentClass.name = currentClassTimestamps[0][2];
         currentClass.begin = currentClassTimestamps[0][0];
-        currentClass.end = currentClassTimestamps[currentClassTimestamps.length-1][0];
+        currentClass.end = currentClassTimestamps[currentClassTimestamps.length - 1][0];
         currentClass.newContexts = 0;
         testDurations = [];
         testNames = [];
         testDurationSum = 0;
         testBegin = 0;
-        currentClassTimestamps.forEach(function(currentEvent) {
+        currentClassTimestamps.forEach(function (currentEvent) {
             if (currentEvent[1] === "before each") {    // "before each" is the first event for each test
                 if (testBegin === 0) {
                     testBegin = currentEvent[0];
@@ -104,7 +104,7 @@ function calculateDurations(classesTimestamps) {
 function showGeneralData(allClasses) {
     var createdSpringContexts = 0;
     var testedMethods = 0;
-    allClasses.forEach(function(currentClass) {
+    allClasses.forEach(function (currentClass) {
         createdSpringContexts += currentClass.newContexts;
         testedMethods += currentClass.tests.length;
     });

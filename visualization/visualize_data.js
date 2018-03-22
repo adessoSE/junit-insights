@@ -7,9 +7,9 @@
 function drawOverviewPie(allClasses) {
     var springTime = 0;
     var testTime = 0;
-    allClasses.forEach(function(currentClass) {
+    allClasses.forEach(function (currentClass) {
         springTime += currentClass.spring;
-        currentClass.tests.forEach(function(currentTest) {
+        currentClass.tests.forEach(function (currentTest) {
             testTime += currentTest;
         })
     });
@@ -18,7 +18,7 @@ function drawOverviewPie(allClasses) {
         values: [springTime, testTime],
         labels: ["Spring", "Tests"],
         marker: {
-            colors: ["rgb(109,179,63)","rgb(220,82,74)"]
+            colors: ["rgb(109, 179, 63)", "rgb(220, 82, 74)"]
         },
         textinfo: "percent+label+value",
         hoverinfo: "none",
@@ -29,7 +29,7 @@ function drawOverviewPie(allClasses) {
         showlegend: false,
         font: {
             family: "Oswald",
-            size:16
+            size: 16
         }
     };
 
@@ -43,12 +43,12 @@ function drawOverviewPie(allClasses) {
 function drawPerTestPie(allClasses) {
     var data = [];
     var countY = Math.ceil(allClasses.length / 3);
-    var heightPerPie = 1/countY;
-    var rowNumber = countY-1;   // because y grows towards the top of the page, start with the last row
+    var heightPerPie = 1 / countY;
+    var rowNumber = countY - 1;   // because y grows towards the top of the page, start with the last row
     var columnNumber = 0;
     var annotations = [];
     var textColor, otherColor, otherText, currentData;
-    allClasses.forEach(function(currentClass) {
+    allClasses.forEach(function (currentClass) {
         if (currentClass.newContexts === 0) {
             textColor = "black";
             otherColor = "rgb(180, 180, 180)";
@@ -88,8 +88,8 @@ function drawPerTestPie(allClasses) {
             hoverinfo: "label",
             textinfo: "percent",
             domain: {
-                x: [columnNumber*0.33,columnNumber*0.33+0.33],
-                y: [rowNumber*heightPerPie,rowNumber*heightPerPie+(heightPerPie*0.8)]
+                x: [columnNumber * 0.33, columnNumber * 0.33 + 0.33],
+                y: [rowNumber * heightPerPie, rowNumber * heightPerPie + (heightPerPie * 0.8)]
             },
             type: "pie"
         };
@@ -111,8 +111,8 @@ function drawPerTestPie(allClasses) {
                 color: textColor,
                 size: 16
             },
-            x: (columnNumber*0.66 + 0.33)/2,
-            y: (rowNumber-0.07)*heightPerPie
+            x: (columnNumber * 0.66 + 0.33) / 2,
+            y: (rowNumber - 0.07) * heightPerPie
         });
 
         if (columnNumber === 2) {
@@ -130,12 +130,12 @@ function drawPerTestPie(allClasses) {
             size: 16
         },
         annotations: annotations,
-        height: (countY)*400
+        height: (countY) * 400
     };
 
     Plotly.newPlot("individualChart", data, individualChartLayout);
 }
 
-window.onresize = function() {
+window.onresize = function () {
     Plotly.relayout("individualChart", {autosize: true});   // fit the plots in a resized window again
 };
