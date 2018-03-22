@@ -35,6 +35,7 @@ class TestBenchmarkExtension :
                 "after all",
                 context.testClass.toString().replace("class ",""),
                 context.testMethod.toString())
+        timestampWriter.flush()
     }
 
     override fun beforeEach(context: ExtensionContext) {
