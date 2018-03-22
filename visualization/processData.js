@@ -37,20 +37,20 @@ function splitIntoClasses(rawData) {
     return classesTimestamps;
 }
 
-function calculateDurations(allClasses) {
+function calculateDurations(classesTimestamps) {
     var classesDurations = [];
     var currentClass, testDurations, testNames, testDurationSum, testBegin;
-    allClasses.forEach(function(currentClass) {
+    classesTimestamps.forEach(function(currentClassTimestamps) {
         currentClass = {};
-        currentClass.name = currentClass[0][2];
-        currentClass.begin = currentClass[0][0];
-        currentClass.end = currentClass[currentClass.length-1][0];
+        currentClass.name = currentClassTimestamps[0][2];
+        currentClass.begin = currentClassTimestamps[0][0];
+        currentClass.end = currentClassTimestamps[currentClassTimestamps.length-1][0];
         currentClass.newContexts = 0;
         testDurations = [];
         testNames = [];
         testDurationSum = 0;
         testBegin = 0;
-        currentClass.forEach(function(currentEvent) {
+        currentClassTimestamps.forEach(function(currentEvent) {
             if (currentEvent[1] === "before each") {
                 if (testBegin === 0) {
                     testBegin = currentEvent[0];
