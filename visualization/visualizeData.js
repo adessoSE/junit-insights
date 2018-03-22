@@ -1,12 +1,14 @@
-function drawOverviewPie(classesData) {
-    springTime = 0;
-    testTime = 0;
-    for (var i = 0; i < classesData.length; i++) {
-        springTime += classesData[i]["spring"];
-        for (var j = 0; j < classesData[i]["tests"].length; j++) {
-            testTime += classesData[i]["tests"][j]
-        }
-    }
+"use strict";
+
+function drawOverviewPie(allClasses) {
+    var springTime = 0;
+    var testTime = 0;
+    allClasses.forEach(function(currentClass) {
+        springTime += currentClass.spring;
+        currentClass.tests.forEach(function(currentTest) {
+            testTime += currentTest;
+        })
+    });
 
     var pieChartData = [{
         values: [springTime, testTime],
@@ -30,18 +32,16 @@ function drawOverviewPie(classesData) {
     Plotly.newPlot("overviewChart", pieChartData, pieChartLayout);
 }
 
-function drawPerTestPie(classesData) {
+function drawPerTestPie(allClasses) {
     var data = [];
-    var countY = Math.ceil(classesData.length / 3);
+    var countY = Math.ceil(allClasses.length / 3);
     var heightPerPie = 1/countY;
     var rowNumber = countY-1;
     var columnNumber = 0;
     var annotations = [];
-    for (var i = 0; i < classesData.length; i++) {
-        var textColor;
-        var otherColor;
-        var otherText;
-        if (classesData[i]["newContexts"] === 0) {
+    var textColor, otherColor, otherText, currentData;
+    allClasses.forEach(function(currentClass) {
+        if (currentClass.newContexts === 0) {
             textColor = "black";
             otherColor = "rgb(180, 180, 180)";
             otherText = "Other";
@@ -51,10 +51,10 @@ function drawPerTestPie(classesData) {
             otherText = "Spring";
         }
 
-        var currentData = {
-            values: [classesData[i]["spring"]],
+        currentData = {
+            values: [currentClass.spring],
             labels: [otherText],
-            title: classesData[i]["name"],
+            title: currentClass.name,
             marker: {
                 colors: [otherColor,
                     "rgb(179, 77, 102)",
@@ -86,9 +86,9 @@ function drawPerTestPie(classesData) {
             type: "pie"
         };
 
-        for (var j = 0; j < classesData[i]["tests"].length; j++) {
-            currentData["values"].push(classesData[i]["tests"][j]);
-            currentData["labels"].push(classesData[i]["testNames"][j]);
+        for (var j = 0; j < currentClass.tests.length; j++) {
+            currentData.values.push(currentClass.tests[j]);
+            currentData.labels.push(currentClass.testNames[j]);
         }
 
         data.push(currentData);
@@ -97,7 +97,7 @@ function drawPerTestPie(classesData) {
             xanchor: "center",
             yanchor: "center",
             showarrow: false,
-            text: classesData[i]["name"] + " (" + classesData[i]["duration"] + "ms)",
+            text: currentClass.name + " (" + currentClass.duration + "ms)",
             font: {
                 family: "Oswald",
                 color: textColor,
@@ -113,7 +113,7 @@ function drawPerTestPie(classesData) {
         } else {
             columnNumber++;
         }
-    }
+    });
 
     var individualChartLayout = {
         showlegend: false,

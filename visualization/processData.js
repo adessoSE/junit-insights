@@ -1,13 +1,17 @@
+"use strict";
+
 function uploadFile() {
-    inputElement = document.getElementById("csv_input");
+    var inputElement = document.getElementById("csv_input");
     var inputFile = inputElement.files[0];
     processData(inputFile);
 }
 
 function processData(file) {
     Papa.parse(file, {
-        complete: function(results) {
-            var data = results.data.filter(element => element.length === 4);
+        complete: function(content) {
+            var data = content.data.filter(function(element) {
+                return element.length === 4;
+            });
             data.shift();
             var classesTimestamps = splitIntoClasses(data);
             var classesDurations = calculateDurations(classesTimestamps);
@@ -20,69 +24,70 @@ function processData(file) {
     });
 }
 
-function splitIntoClasses(dataIn) {
+function splitIntoClasses(rawData) {
     var classesTimestamps = [];
     var currentClass = [];
-    for (var i = 0; i < dataIn.length; i++) {
-        currentClass.push(dataIn[i]);
-        if (dataIn[i][1] === "after all") {
+    rawData.forEach(function(entry) {
+        currentClass.push(entry);
+        if (entry[1] === "after all") {
             classesTimestamps.push(currentClass);
             currentClass = [];
         }
-    }
+    });
     return classesTimestamps;
 }
 
-function calculateDurations(dataIn) {
+function calculateDurations(allClasses) {
     var classesDurations = [];
-    for (var i = 0; i < dataIn.length; i++) {
-        var currentClass = {};
-        currentClass["name"] = dataIn[i][0][2];
-        currentClass["begin"] = dataIn[i][0][0];
-        currentClass["end"] = dataIn[i][dataIn[i].length-1][0];
-        currentClass["newContexts"] = 0;
-        var testDurations = [];
-        var testNames = [];
-        var testDurationSum = 0;
-        var testBegin = 0;
-        for (var j = 0; j < dataIn[i].length; j++) {
-            if (dataIn[i][j][1] === "before each") {
+    var currentClass, testDurations, testNames, testDurationSum, testBegin;
+    allClasses.forEach(function(currentClass) {
+        currentClass = {};
+        currentClass.name = currentClass[0][2];
+        currentClass.begin = currentClass[0][0];
+        currentClass.end = currentClass[currentClass.length-1][0];
+        currentClass.newContexts = 0;
+        testDurations = [];
+        testNames = [];
+        testDurationSum = 0;
+        testBegin = 0;
+        currentClass.forEach(function(currentEvent) {
+            if (currentEvent[1] === "before each") {
                 if (testBegin === 0) {
-                    testBegin = dataIn[i][j][0];
+                    testBegin = currentEvent[0];
                 } else {
                     console.error("An error occurred while parsing the file!");
                 }
-            } else if (dataIn[i][j][1] === "after each") {
+            } else if (currentEvent[1] === "after each") {
                 if (testBegin === 0) {
                     console.error("An error occurred while parsing the file!");
                 } else {
-                    testDurations.push(dataIn[i][j][0] - testBegin);
-                    testNames.push(dataIn[i][j][3]);
-                    testDurationSum += dataIn[i][j][0] - testBegin;
+                    testDurations.push(currentEvent[0] - testBegin);
+                    testNames.push(currentEvent[3]);
+                    testDurationSum += currentEvent[0] - testBegin;
                     testBegin = 0;
                 }
-            } else if (dataIn[i][j][1] === "context refreshed") {
-                currentClass["newContexts"]++;
+            } else if (currentEvent[1] === "context refreshed") {
+                currentClass.newContexts++;
             }
-        }
-        currentClass["tests"] = testDurations;
-        currentClass["testNames"] = testNames;
-        currentClass["duration"] = currentClass["end"] - currentClass["begin"];
-        currentClass["spring"] = currentClass["duration"] - testDurationSum;
+        });
+        currentClass.tests = testDurations;
+        currentClass.testNames = testNames;
+        currentClass.duration = currentClass.end - currentClass.begin;
+        currentClass.spring = currentClass.duration - testDurationSum;
 
         classesDurations.push(currentClass);
-    }
+    });
     return classesDurations;
 }
 
-function showGeneralData(classesData) {
+function showGeneralData(allClasses) {
     var createdSpringContexts = 0;
     var testedMethods = 0;
-    for (var i = 0; i < classesData.length; i++) {
-        createdSpringContexts += classesData[i]["newContexts"];
-        testedMethods += classesData[i]["tests"].length;
-    }
+    allClasses.forEach(function(currentClass) {
+        createdSpringContexts += currentClass.newContexts;
+        testedMethods += currentClass.tests.length;
+    });
     document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
-    document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesData.length;
+    document.getElementById("testedClasses").innerHTML = "Tested classes: " + allClasses.length;
     document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
 }
