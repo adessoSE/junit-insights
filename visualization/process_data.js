@@ -23,8 +23,8 @@ function processData(file) {
             var classesTimestamps = splitIntoClasses(data);
             var classesDurations = calculateDurations(classesTimestamps);
             console.log(classesDurations);
-            drawOverviewPie(classesDurations);
-            drawPerTestPie(classesDurations);
+            drawOverviewBar(classesDurations);
+            drawPerTestBar(classesDurations);
             showGeneralData(classesDurations);
             document.getElementById("information").style.visibility = "visible";
         }
