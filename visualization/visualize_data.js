@@ -107,7 +107,7 @@ function drawPerTestBar(allClasses) {
             marker: {
                 color: otherColor
             },
-            hoverinfo: "text",
+            hoverinfo: "none",
             type: "bar",
             orientation: "h"
         }];
@@ -120,7 +120,7 @@ function drawPerTestBar(allClasses) {
                 marker: {
                     color: colors[j]
                 },
-                hoverinfo: "text",
+                hoverinfo: "none",
                 type: "bar",
                 orientation: "h"
             });
