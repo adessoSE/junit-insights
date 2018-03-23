@@ -23,8 +23,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before all",
-                context.testClass.toString(),
-                context.testMethod.toString())
+                trimClassName(context),
+                trimMethodName(context))
     }
 
     override fun afterAll(context: ExtensionContext) {
@@ -33,8 +33,9 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after all",
-                context.testClass.toString(),
-                context.testMethod.toString())
+                trimClassName(context),
+                trimMethodName(context))
+        timestampWriter.flush()
     }
 
     override fun beforeEach(context: ExtensionContext) {
@@ -43,8 +44,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before each",
-                context.testClass.toString(),
-                context.testMethod.toString())
+                trimClassName(context),
+                trimMethodName(context))
     }
 
     override fun afterEach(context: ExtensionContext) {
@@ -53,8 +54,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after each",
-                context.testClass.toString(),
-                context.testMethod.toString())
+                trimClassName(context),
+                trimMethodName(context))
     }
 
     @Throws(Exception::class)
@@ -64,8 +65,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before test execution",
-                context.testClass.toString(),
-                context.testMethod.toString())
+                trimClassName(context),
+                trimMethodName(context))
     }
 
     @Throws(Exception::class)
@@ -75,13 +76,22 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after test execution",
-                context.testClass.toString(),
-                context.testMethod.toString())
+                trimClassName(context),
+                trimMethodName(context))
     }
 
     private fun shouldNotBeBenchmarked(context: ExtensionContext): Boolean {
         return context.element
                 .map<Boolean> { el -> isAnnotated(el, NoJUnitInsights::class.java) }
                 .orElse(false)
+    }
+
+    private fun trimClassName(testContext: ExtensionContext): String {
+        return testContext.testClass.toString().replace("class", "")
+    }
+
+    private fun trimMethodName(testContext: ExtensionContext): String {
+        val splitName = testContext.testMethod.toString().split(".")
+        return if (splitName.isEmpty()) "" else splitName.last()
     }
 }
