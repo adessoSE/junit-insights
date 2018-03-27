@@ -19,7 +19,5 @@ To make this behavior transparent, a report is created.
 
 Add the dependency to your project.
 
-`//TODO`
-
 Add @JUnitInsights to the test-classes you want to benchmark.
 Be aware that ExtendsWith(SpringExtension::class) needs to be used as Runner-class.
