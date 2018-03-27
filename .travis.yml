@@ -4,7 +4,6 @@ jdk:
 before_install:
   - chmod +x gradlew
 before_deploy:
-  - ./gradlew build
   - ./gradlew generatePomFileForMavenPublication
 deploy:
   provider: bintray
