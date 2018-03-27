@@ -16,6 +16,7 @@ DOM.individualChartContainer = function() {
 function drawOverviewBar(allClasses) {
     var springTime = 0;
     var testTime = 0;
+    var infoText;
     allClasses.forEach(function (currentClass) {
         springTime += currentClass.spring;
         currentClass.tests.forEach(function (currentTest) {
@@ -70,7 +71,13 @@ function drawOverviewBar(allClasses) {
         height: 200
     };
 
-    Plotly.newPlot("overviewChart", barChartData, barChartLayout);
+    if (springTime + testTime <= 0) {
+        infoText = document.createElement("p");
+        infoText.innerHTML = "The test took no measurable time to complete";
+        document.getElementById("overviewChart").appendChild(infoText);
+    } else {
+        Plotly.newPlot("overviewChart", barChartData, barChartLayout);
+    }
 }
 
 /**
@@ -167,12 +174,18 @@ function drawPerTestBar(allClasses) {
         chartLabelDiv.appendChild(chartLabel);
         DOM.individualChartContainer().appendChild(chartLabelDiv);
 
-        chartDiv = document.createElement("div");
-        chartDiv.setAttribute("class", "row");
-        chartDiv.setAttribute("id", "individualChart" + i);
-        DOM.individualChartContainer().appendChild(chartDiv);
-
-        Plotly.newPlot("individualChart" + i, currentChart, individualChartLayout);
+        if (currentClass.duration <= 0) {
+            chartDiv = document.createElement("p");
+            chartDiv.innerHTML = "The test took no measurable time to complete";
+            chartDiv.setAttribute("id",i);
+            DOM.individualChartContainer().appendChild(chartDiv);
+        } else {
+            chartDiv = document.createElement("div");
+            chartDiv.setAttribute("class", "row");
+            chartDiv.setAttribute("id", "individualChart" + i);
+            DOM.individualChartContainer().appendChild(chartDiv);
+            Plotly.newPlot("individualChart" + i, currentChart, individualChartLayout);
+        }
     });
 }
 
