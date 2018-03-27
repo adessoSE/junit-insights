@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.7/papaparse.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="process_data.js"></script>
+<script src="visualize_data.js"></script>
+
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Oswald:400,300,700);
+
+    body {
+        font-family: 'Oswald', sans-serif !important;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>JUnit Insights</title>
+</head>
+
+
+<body>
+<div class="container-fluid">
+    <h1 align="center">JUnit Insights
+        <label class="btn btn-primary">
+            Upload CSV<input type="file" accept=".csv" id="csv_input" onchange="uploadFile()" hidden>
+        </label>
+    </h1>
+
+    <div id="information" style="visibility: hidden">
+        <div class="row">
+            <div class="col">
+                <h2 align="center">Time spent on Spring initialization vs. test execution</h2>
+                <div id="overviewChart"></div>
+            </div>
+            <div class="col" align="center">
+                <h2>General information:</h2>
+                <p id="createdSpringContexts">Created Spring contexts: </p>
+                <p id="testedClasses">Tested classes: </p>
+                <p id="testedMethods">Tested methods: </p>
+            </div>
+        </div>
+        <h2 align="center" style="margin-top: 30px;">Time spent on individual test classes</h2>
+        <div id="individualChart"></div>
+    </div>
+</div>
+</body>
+</html>
