@@ -6,6 +6,13 @@
 function uploadFile() {
     var inputElement = document.getElementById("csv_input");
     var inputFile = inputElement.files[0];
+
+    // remove all old data
+    var individualChart = document.getElementById("individualChart");
+    while (individualChart.firstChild) {
+        individualChart.removeChild(individualChart.firstChild);
+    }
+
     processData(inputFile);
 }
 
