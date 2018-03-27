@@ -8,14 +8,14 @@ var deltaMode = false
 var logOutput = false
 
 object TimestampWriter {
-    private var file = File("timestamps.csv").bufferedWriter()
+    private var bufferedWriter = File("timestamps.csv").bufferedWriter()
     private var lastTimestamp: Long = 0
 
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     init {
-        file.write("timestamp;event;test class;test function")
-        file.newLine()
+        bufferedWriter.write("timestamp;event;test class;test function")
+        bufferedWriter.newLine()
     }
 
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String) {
@@ -28,14 +28,14 @@ object TimestampWriter {
                 lastTimestamp = timestamp
             }
         }
-        file.write(tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction))
-        file.newLine()
+        bufferedWriter.write(tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction))
+        bufferedWriter.newLine()
         if (logOutput)
             logger.info("########" + tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction) + "\n")
     }
 
     fun flush() {
-        file.flush()
+        bufferedWriter.flush()
     }
 
     private fun trimObjectString(string: String): String {
