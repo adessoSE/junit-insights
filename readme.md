@@ -16,4 +16,10 @@ For the user of the test classes, it looks like some tests take a long time to e
 To make this behavior transparent, a report is created.
 
 # How to use
-ToDo
+
+Add the dependency to your project.
+
+`//TODO`
+
+Add @JUnitInsights to the test-classes you want to benchmark.
+Be aware that ExtendsWith(SpringExtension::class) needs to be used as Runner-class.
