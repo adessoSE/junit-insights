@@ -1,5 +1,14 @@
 "use strict";
 
+var DOM = {};
+DOM._individualChartContainer = null;
+DOM.individualChartContainer = function() {
+    if (DOM._individualChartContainer == null) {
+        DOM._individualChartContainer = document.getElementById("individualChart");
+    }
+    return DOM._individualChartContainer;
+};
+
 /**
  * Creates a plot that shows the time spent on spring initialization vs. actual test execution
  * @param allClasses All data about the durations of important events for each test class
@@ -90,7 +99,6 @@ function drawPerTestBar(allClasses) {
         "rgb(128, 128, 128)"];
     var otherColor, otherText, currentChart, chartDiv, chartLabel, chartLabelDiv;
 
-
     allClasses.forEach(function (currentClass, i) {
         if (currentClass.newContexts === 0) {
             otherColor = "rgb(180, 180, 180)";
@@ -157,19 +165,19 @@ function drawPerTestBar(allClasses) {
         chartLabel = document.createElement("h4");
         chartLabel.innerHTML = currentClass.name + " (" + currentClass.duration + "ms)";
         chartLabelDiv.appendChild(chartLabel);
-        document.getElementById("individualChart").appendChild(chartLabelDiv);
+        DOM.individualChartContainer().appendChild(chartLabelDiv);
 
         chartDiv = document.createElement("div");
         chartDiv.setAttribute("class", "row");
         chartDiv.setAttribute("id", "individualChart" + i);
-        document.getElementById("individualChart").appendChild(chartDiv);
+        DOM.individualChartContainer().appendChild(chartDiv);
 
         Plotly.newPlot("individualChart" + i, currentChart, individualChartLayout);
     });
 }
 
 window.onresize = function () {
-    document.getElementById("individualChart").childNodes.forEach(function (child) {
+    DOM.individualChartContainer().childNodes.forEach(function (child) {
         if (child.id.startsWith("individualChart")) {
             Plotly.relayout(child.id, {autosize: true});   // fit the plots in a resized window again
         }
