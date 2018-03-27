@@ -3,12 +3,15 @@ package de.adesso.junitinsights.tools
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 var deltaMode = false
 var logOutput = false
 
 object TimestampWriter {
-    private var bufferedWriter = File("timestamps.csv").bufferedWriter()
+    private var currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
+    private var bufferedWriter = File("insight_$currentTime.csv").bufferedWriter()
     private var lastTimestamp: Long = 0
 
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
