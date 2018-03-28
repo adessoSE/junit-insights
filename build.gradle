@@ -53,23 +53,6 @@ model {
 group = 'de.adesso'
 version = '0.0.1'
 sourceCompatibility = 1.8
-
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin/'
-    test.java.srcDirs += 'src/test/kotlin/'
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'de.adesso.junitinsights.JunitInsightsApplication'
-    }
-
-    // This line of code recursively collects and copies all of a project's files
-    // and adds them to the JAR itself. One can extend this task, to skip certain
-    // files or particular types at will
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
-
 compileKotlin {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
