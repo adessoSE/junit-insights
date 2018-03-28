@@ -11,3 +11,4 @@ deploy:
   user: $BINTRAY_API_USER
   key: $BINTRAY_API_KEY
   dry-run: false
+  skip_cleanup: true
