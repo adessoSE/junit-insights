@@ -16,6 +16,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
+/**
+ * Tests for the HelloController
+ */
 @ExtendWith(SpringExtension::class)
 @JUnitInsights
 @SpringBootTest

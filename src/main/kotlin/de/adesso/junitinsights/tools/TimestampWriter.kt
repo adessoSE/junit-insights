@@ -36,6 +36,7 @@ object TimestampWriter {
     }
 
     fun createReport() {
+        logger.info("createReport() called \n \n \n")
         val htmlTemplateFileInputStream = ClassPathResource("/htmlTemplate.html")
         var htmlString = CharStreams.toString(InputStreamReader(htmlTemplateFileInputStream.inputStream, "UTF-8"))
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
