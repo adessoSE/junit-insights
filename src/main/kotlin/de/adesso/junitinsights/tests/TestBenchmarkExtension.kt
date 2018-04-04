@@ -116,6 +116,7 @@ class TestBenchmarkExtension :
 
     /**
      * Checks if @NoJUnitInsights is present and disables measuring then.
+     * @param context Context provided by JUnit 5
      * @see NoJUnitInsights
      */
     private fun shouldNotBeBenchmarked(context: ExtensionContext): Boolean {
@@ -126,6 +127,7 @@ class TestBenchmarkExtension :
 
     /**
      * Helper function to remove the "class" keyword in front of the class name.
+     * @param testContext Context provided by JUnit 5
      */
     private fun trimClassName(testContext: ExtensionContext): String {
         return testContext.testClass.toString().replace("class", "")
@@ -133,6 +135,7 @@ class TestBenchmarkExtension :
 
     /**
      * Helper function to remove the class and package names in front of the method name.
+     * @param testContext Context provided by JUnit 5
      */
     private fun trimMethodName(testContext: ExtensionContext): String {
         val splitName = testContext.testMethod.toString().split(".")

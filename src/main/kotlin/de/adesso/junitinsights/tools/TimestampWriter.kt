@@ -29,6 +29,10 @@ object TimestampWriter {
 
     /**
      * Writes a timestamp with some meta information into the buffer.
+     * @param timestamp Timestamp for the event
+     * @param event Event that triggered the creation of this timestamp
+     * @param testClass In case of an event that belongs to a certain test class, this can be included here
+     * @param testFunction In case of an event that belongs to a certain test function, this can be included here
      */
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String) {
         var tstamp: Long = timestamp
@@ -60,6 +64,7 @@ object TimestampWriter {
 
     /**
      * Removes unnecessary characters from class and method names.
+     * @param string The string containing information about the class or method
      */
     private fun trimObjectString(string: String): String {
         return string.replace("Optional.empty", "")
