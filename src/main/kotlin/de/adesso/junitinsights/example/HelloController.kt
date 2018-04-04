@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 /**
- * A simple controller used in the tests.
+ * A simple example controller used in the example tests.
  */
 @RestController
 class HelloController {

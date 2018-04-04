@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith
  *
  * Now all methods will be measured, except the methods thats contain the NoJUnitInsights-Annotation.
  * @see NoJUnitInsights
- *
  */
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @Retention(value = AnnotationRetention.RUNTIME)

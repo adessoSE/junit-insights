@@ -10,7 +10,6 @@ import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
  * Extension that measures the execution time of each test class and method.
  *
  * It implements the callback-functions of the JUnit5 Jupiter API.
- *
  */
 class TestBenchmarkExtension :
         BeforeAllCallback, AfterAllCallback,
@@ -20,7 +19,7 @@ class TestBenchmarkExtension :
     private val timestampWriter = TimestampWriter
 
     /**
-     * Callback function
+     * Triggered at the very beginning of each test class.
      * @param context Context provided by JUnit 5
      * @see BeforeAllCallback
      */
@@ -35,7 +34,7 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * Callback function
+     * Triggered after all test methods have finished for a test class.
      * @param context Context provided by JUnit 5
      * @see AfterAllCallback
      */
@@ -51,7 +50,7 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * Callback function
+     * Triggered before the execution of each test method.
      * @param context Context provided by JUnit 5
      * @see BeforeEachCallback
      */
@@ -66,7 +65,7 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * Callback function
+     * Triggered after the execution of each test method.
      * @param context Context provided by JUnit 5
      * @see AfterEachCallback
      */
@@ -81,9 +80,11 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * Callback function
+     * Triggered right before the execution of a test method.
+     * Very similar to beforeEach.
      * @param context Context provided by JUnit 5
      * @see BeforeTestExecutionCallback
+     * @see beforeEach
      */
     @Throws(Exception::class)
     override fun beforeTestExecution(context: ExtensionContext) {
@@ -97,7 +98,8 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * Callback function
+     * Triggered right after the execution of a test method.
+     * Very similar to afterEach.
      * @param context Context provided by JUnit 5
      * @see AfterTestExecutionCallback
      */
@@ -123,14 +125,14 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * Halperfunction to trim the name of a class
+     * Helper function to remove the "class" keyword in front of the class name.
      */
     private fun trimClassName(testContext: ExtensionContext): String {
         return testContext.testClass.toString().replace("class", "")
     }
 
     /**
-     * Halperfunction to trim the methodname of a method
+     * Helper function to remove the class and package names in front of the method name.
      */
     private fun trimMethodName(testContext: ExtensionContext): String {
         val splitName = testContext.testMethod.toString().split(".")

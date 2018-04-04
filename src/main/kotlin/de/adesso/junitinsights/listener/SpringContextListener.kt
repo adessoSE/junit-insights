@@ -21,7 +21,7 @@ class SpringContextListener {
     private val timestampWriter = TimestampWriter
 
     /**
-     * Listen for ContextRefreshedEvent
+     * Listens for ContextRefreshedEvent
      * which appears when the context is updated or refreshed.
      * @see ContextRefreshedEvent
      */
@@ -35,7 +35,7 @@ class SpringContextListener {
     }
 
     /**
-     * Listen for ContextClosedEvent
+     * Listens for ContextClosedEvent
      * which appears when the context is closed.
      * @see ContextClosedEvent
      */
