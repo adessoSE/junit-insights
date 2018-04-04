@@ -1,9 +1,12 @@
 package de.adesso.junitinsights.tools
 
+import com.google.common.io.CharStreams
 import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.core.io.ClassPathResource
 import java.io.File
+import java.io.InputStreamReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -33,8 +36,8 @@ object TimestampWriter {
     }
 
     fun createReport() {
-        val htmlTemplateFile = File("visualization/index.html")
-        var htmlString = FileUtils.readFileToString(htmlTemplateFile,"UTF-8")
+        val htmlTemplateFileInputStream = ClassPathResource("/htmlTemplate.html")
+        var htmlString = CharStreams.toString(InputStreamReader(htmlTemplateFileInputStream.inputStream, "UTF-8"))
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
         val reportPath = "insight_$currentTime.html"
         val htmlReportFile = File(reportPath)
