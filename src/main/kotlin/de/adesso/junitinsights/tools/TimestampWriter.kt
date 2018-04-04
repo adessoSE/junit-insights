@@ -39,8 +39,7 @@ object TimestampWriter {
         val htmlTemplateFileInputStream = ClassPathResource("/htmlTemplate.html")
         var htmlString = CharStreams.toString(InputStreamReader(htmlTemplateFileInputStream.inputStream, "UTF-8"))
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
-        val reportPath = "insight_$currentTime.html"
-        val htmlReportFile = File(reportPath)
+        val htmlReportFile = File(Configuration.reportPath + "insight_$currentTime.html")
         FileUtils.writeStringToFile(htmlReportFile, htmlString, "UTF-8")
     }
 
