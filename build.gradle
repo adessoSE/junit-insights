@@ -102,7 +102,6 @@ dependencies {
     testRuntime("org.apache.logging.log4j:log4j-core:${log4jVersion}")
     testRuntime("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
     compile("commons-io:commons-io:2.6")
-    compile('com.google.guava:guava:24.0-jre')
 
     // Only needed to run tests in an IDE that bundles an older version (e.g. IntelliJ)
     testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
