@@ -33,6 +33,6 @@ class SpringContextListener {
                 "context closed",
                 "", "")
         //TODO: Is this method really called only once at the end?
-        timestampWriter.flush()
+        timestampWriter.createReport()
     }
 }

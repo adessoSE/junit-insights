@@ -35,7 +35,7 @@ class TestBenchmarkExtension :
                 "after all",
                 trimClassName(context),
                 trimMethodName(context))
-        timestampWriter.flush()
+        timestampWriter.createReport()
     }
 
     override fun beforeEach(context: ExtensionContext) {
