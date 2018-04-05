@@ -1,10 +1,14 @@
 package de.adesso.junitinsights.tools
 
 import com.google.common.io.CharStreams
+import de.adesso.junitinsights.config.JUnitInsightsConfiguration
 import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
+import org.springframework.stereotype.Component
 import java.io.File
 import java.io.InputStreamReader
 import java.time.LocalDateTime
@@ -17,7 +21,6 @@ object TimestampWriter {
     private var currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
     private var lastTimestamp: Long = 0
     private var timestamps = StringBuilder()
-
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String) {
@@ -36,10 +39,10 @@ object TimestampWriter {
     }
 
     fun createReport() {
-        val htmlTemplateFileInputStream = ClassPathResource("/htmlTemplate.html")
+        val htmlTemplateFileInputStream = ClassPathResource(JUnitInsightsConfiguration.reportTemplatePath)
         var htmlString = CharStreams.toString(InputStreamReader(htmlTemplateFileInputStream.inputStream, "UTF-8"))
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
-        val htmlReportFile = File(Configuration.reportPath + "insight_$currentTime.html")
+        val htmlReportFile = File(JUnitInsightsConfiguration.reportPath + "insight_$currentTime.html")
         FileUtils.writeStringToFile(htmlReportFile, htmlString, "UTF-8")
     }
 
