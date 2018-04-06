@@ -47,6 +47,21 @@ General application specific methods
     }
 
     /**
+     * Click handler for the clear button
+     * Clears the filter fields and refreshes the list of test classes
+     */
+    function clearClicked() {
+        var formData = document.getElementById("filter_form");
+        formData.elements[0].value = "";
+        formData.elements[1].value = "";
+        formData.elements[2].value = "";
+        formData.elements[3].value = "";
+        formData.elements[4].checked = false;
+
+        refreshClicked()
+    }
+
+    /**
      * Refreshes the set of currently displayed test classes
      * according to the filter and ordering settings the user applied.
      */
@@ -472,6 +487,7 @@ Methods for creating the charts displaying the results of the data processing
                     <label for="only_spring_tests" style="display: inline-block;">only_spring_tests</label>
                 </div>
                 <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
+                <div class="col"><input type="button" value="Clear" onclick="clearClicked()"></div>
             </form>
         </div>
         <div id="individualChart"></div>
