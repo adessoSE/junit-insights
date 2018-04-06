@@ -4,16 +4,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
+<!--
+Global variables
+-->
 <script>
     /**
      * The csv data gets injected into this string when applying this template
      * @type {string}
      */
     var csvString = "$timestampCsvString";
+
+    var classesDurations;
 </script>
 
 <!--
-Methods for processing the csv data before they can be displayed
+Methods for processing the csv data before it can be displayed
 -->
 <script>
     "use strict";
@@ -36,11 +41,11 @@ Methods for processing the csv data before they can be displayed
                     return element.length === 4;    // remove irrelevant lines like blank lines
                 });
                 var classesTimestamps = splitIntoClasses(data);
-                var classesDurations = calculateDurations(classesTimestamps);
+                classesDurations = calculateDurations(classesTimestamps);
                 console.log(classesDurations);
-                drawOverviewBar(classesDurations);
-                drawPerTestBar(classesDurations);
-                showGeneralData(classesDurations);
+                drawOverviewBar();
+                drawPerTestBar();
+                showGeneralData();
                 document.getElementById("information").style.visibility = "visible";
             }
         });
@@ -114,17 +119,16 @@ Methods for processing the csv data before they can be displayed
 
     /**
      * Fills in the general information about the observed tests
-     * @param allClasses All data about the durations of important events for each test class
      */
-    function showGeneralData(allClasses) {
+    function showGeneralData() {
         var createdSpringContexts = 0;
         var testedMethods = 0;
-        allClasses.forEach(function (currentClass) {
+        classesDurations.forEach(function (currentClass) {
             createdSpringContexts += currentClass.newContexts;
             testedMethods += currentClass.tests.length;
         });
         document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
-        document.getElementById("testedClasses").innerHTML = "Tested classes: " + allClasses.length;
+        document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesDurations.length;
         document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
     }
 </script>
@@ -146,13 +150,12 @@ Methods for creating the charts displaying the results of the data processing
 
     /**
      * Creates a plot that shows the time spent on spring initialization vs. actual test execution
-     * @param allClasses All data about the durations of important events for each test class
      */
-    function drawOverviewBar(allClasses) {
+    function drawOverviewBar() {
         var springTime = 0;
         var testTime = 0;
         var infoText;
-        allClasses.forEach(function (currentClass) {
+        classesDurations.forEach(function (currentClass) {
             springTime += currentClass.spring;
             currentClass.tests.forEach(function (currentTest) {
                 testTime += currentTest;
@@ -217,9 +220,8 @@ Methods for creating the charts displaying the results of the data processing
 
     /**
      * Creates a plot that shows the time spent on different events for each test class individually
-     * @param allClasses All data about the durations of important events for each test class
      */
-    function drawPerTestBar(allClasses) {
+    function drawPerTestBar() {
         var colors = ["rgb(179, 77, 102)",
             "rgb(238, 223, 123)",
             "rgb(60, 125, 160)",
@@ -241,7 +243,7 @@ Methods for creating the charts displaying the results of the data processing
             "rgb(128, 128, 128)"];
         var otherColor, otherText, currentChart, chartDiv, chartLabel, chartLabelDiv;
 
-        allClasses.forEach(function (currentClass, i) {
+        classesDurations.forEach(function (currentClass, i) {
             if (currentClass.newContexts === 0) {
                 otherColor = "rgb(180, 180, 180)";
                 otherText = "Other";
@@ -331,6 +333,33 @@ Methods for creating the charts displaying the results of the data processing
             }
         });
     };
+
+    function refreshClicked() {
+        var individualChart = document.getElementById("individualChart");
+        while (individualChart.firstChild) {
+            individualChart.removeChild(individualChart.firstChild);
+        }
+
+        applyFilters();
+
+        drawPerTestBar();
+    }
+
+    function applyFilters() {
+        var formData = document.getElementById("filter_form");
+        var minSpringShare = formData.elements[0].value;
+        var maxSpringShare = formData.elements[1].value;
+        var minTestTime = formData.elements[2].value;
+        var maxTestTime = formData.elements[3].value;
+        var onlySpringTests = formData.elements[4].checked;
+
+        console.log(formData.elements);
+        console.log(minSpringShare);
+        console.log(maxSpringShare);
+        console.log(minTestTime);
+        console.log(maxTestTime);
+        console.log(onlySpringTests);
+    }
 </script>
 
 <!DOCTYPE html>
@@ -342,6 +371,19 @@ Methods for creating the charts displaying the results of the data processing
 
     body {
         font-family: 'Oswald', sans-serif !important;
+    }
+
+    .right-addon {
+        position: relative;
+    }
+    .right-addon input {
+        padding-right: 30px;
+    }
+    .right-addon span {
+        position: absolute;
+        right: 0;
+        padding: 7px 12px;
+        pointer-events: none;
     }
 </style>
 
@@ -369,6 +411,39 @@ Methods for creating the charts displaying the results of the data processing
             </div>
         </div>
         <h2 align="center" style="margin-top: 30px;">Time spent on individual test classes</h2>
+        <div class="row">
+            <form class="form-inline" id="filter_form">
+                <div class="col">
+                    <div class="right-addon">
+                        <span>%</span>
+                        <input type="number" class="form-control" id="min_spring_share" placeholder="min_spring_share">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="right-addon">
+                        <span>%</span>
+                        <input type="number" class="form-control" id="max_spring_share" placeholder="max_spring_share">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="right-addon">
+                        <span>ms</span>
+                        <input type="number" class="form-control" id="min_test_time" placeholder="min_test_time">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="right-addon">
+                        <span>ms</span>
+                        <input type="number" class="form-control" id="max_test_time" placeholder="max_test_time">
+                    </div>
+                </div>
+                <div class="col" style="white-space: nowrap;">
+                    <input type="checkbox" id="only_spring_tests" style="display: inline-block;">
+                    <label for="only_spring_tests" style="display: inline-block;">only_spring_tests</label>
+                </div>
+                <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
+            </form>
+        </div>
         <div id="individualChart"></div>
     </div>
 </div>
