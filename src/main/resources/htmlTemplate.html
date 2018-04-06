@@ -18,7 +18,7 @@ Global variables
 </script>
 
 <!--
-Methods for processing the csv data before it can be displayed
+General application specific methods
 -->
 <script>
     "use strict";
@@ -29,6 +29,48 @@ Methods for processing the csv data before it can be displayed
     window.onload = function() {
         processData(csvString);
     };
+
+    /**
+     * Click handler for the refresh button
+     * Applies filters and ordering for the individual test charts
+     */
+    function refreshClicked() {
+        var individualChart = document.getElementById("individualChart");
+        while (individualChart.firstChild) {
+            individualChart.removeChild(individualChart.firstChild);
+        }
+
+        applyFilters();
+
+        drawPerTestBar();
+    }
+
+    /**
+     * Refreshes the set of currently displayed test classes
+     * according to the filter and ordering settings the user applied.
+     */
+    function applyFilters() {
+        var formData = document.getElementById("filter_form");
+        var minSpringShare = formData.elements[0].value;
+        var maxSpringShare = formData.elements[1].value;
+        var minTestTime = formData.elements[2].value;
+        var maxTestTime = formData.elements[3].value;
+        var onlySpringTests = formData.elements[4].checked;
+
+        console.log(formData.elements);
+        console.log(minSpringShare);
+        console.log(maxSpringShare);
+        console.log(minTestTime);
+        console.log(maxTestTime);
+        console.log(onlySpringTests);
+    }
+</script>
+
+<!--
+Methods for processing the csv data before it can be displayed
+-->
+<script>
+    "use strict";
 
     /**
      * Kicks off the processing of the csv data and the creation of the plots
@@ -116,21 +158,6 @@ Methods for processing the csv data before it can be displayed
         });
         return classesDurations;
     }
-
-    /**
-     * Fills in the general information about the observed tests
-     */
-    function showGeneralData() {
-        var createdSpringContexts = 0;
-        var testedMethods = 0;
-        classesDurations.forEach(function (currentClass) {
-            createdSpringContexts += currentClass.newContexts;
-            testedMethods += currentClass.tests.length;
-        });
-        document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
-        document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesDurations.length;
-        document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
-    }
 </script>
 
 <!--
@@ -216,6 +243,21 @@ Methods for creating the charts displaying the results of the data processing
         } else {
             Plotly.newPlot("overviewChart", barChartData, barChartLayout);
         }
+    }
+
+    /**
+     * Fills in the general information about the observed tests
+     */
+    function showGeneralData() {
+        var createdSpringContexts = 0;
+        var testedMethods = 0;
+        classesDurations.forEach(function (currentClass) {
+            createdSpringContexts += currentClass.newContexts;
+            testedMethods += currentClass.tests.length;
+        });
+        document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
+        document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesDurations.length;
+        document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
     }
 
     /**
@@ -333,33 +375,6 @@ Methods for creating the charts displaying the results of the data processing
             }
         });
     };
-
-    function refreshClicked() {
-        var individualChart = document.getElementById("individualChart");
-        while (individualChart.firstChild) {
-            individualChart.removeChild(individualChart.firstChild);
-        }
-
-        applyFilters();
-
-        drawPerTestBar();
-    }
-
-    function applyFilters() {
-        var formData = document.getElementById("filter_form");
-        var minSpringShare = formData.elements[0].value;
-        var maxSpringShare = formData.elements[1].value;
-        var minTestTime = formData.elements[2].value;
-        var maxTestTime = formData.elements[3].value;
-        var onlySpringTests = formData.elements[4].checked;
-
-        console.log(formData.elements);
-        console.log(minSpringShare);
-        console.log(maxSpringShare);
-        console.log(minTestTime);
-        console.log(maxTestTime);
-        console.log(onlySpringTests);
-    }
 </script>
 
 <!DOCTYPE html>
