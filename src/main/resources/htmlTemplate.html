@@ -15,6 +15,7 @@ Global variables
     var csvString = "$timestampCsvString";
 
     var classesDurations;
+    var allClassesDurations;
 </script>
 
 <!--
@@ -26,7 +27,7 @@ General application specific methods
     /**
      * Starts processing the data after the site fully loaded
      */
-    window.onload = function() {
+    window.onload = function () {
         processData(csvString);
     };
 
@@ -57,12 +58,23 @@ General application specific methods
         var maxTestTime = formData.elements[3].value;
         var onlySpringTests = formData.elements[4].checked;
 
-        console.log(formData.elements);
-        console.log(minSpringShare);
-        console.log(maxSpringShare);
-        console.log(minTestTime);
-        console.log(maxTestTime);
-        console.log(onlySpringTests);
+        // set default values if the fields are left blank
+        if (minSpringShare === "") { minSpringShare = 0; }
+        if (maxSpringShare === "") { maxSpringShare = 100; }
+        if (minTestTime === "") { minTestTime = 0; }
+        if (maxTestTime === "") { maxTestTime = Infinity; }
+
+        classesDurations = [];
+        allClassesDurations.forEach(function (currentClass) {
+            if (currentClass.spring / currentClass.duration < minSpringShare / 100 ||
+                (currentClass.newContexts < 1 && minSpringShare > 0) ||
+                (currentClass.spring / currentClass.duration > maxSpringShare / 100 && currentClass.newContexts > 0) ||
+                currentClass.duration < minTestTime ||
+                currentClass.duration > maxTestTime ||
+                (onlySpringTests && currentClass.newContexts < 1))
+                return;
+            classesDurations.push(currentClass);
+        });
     }
 </script>
 
@@ -83,7 +95,8 @@ Methods for processing the csv data before it can be displayed
                     return element.length === 4;    // remove irrelevant lines like blank lines
                 });
                 var classesTimestamps = splitIntoClasses(data);
-                classesDurations = calculateDurations(classesTimestamps);
+                allClassesDurations = calculateDurations(classesTimestamps);
+                classesDurations = allClassesDurations;     // by default all test classes should be displayed
                 console.log(classesDurations);
                 drawOverviewBar();
                 drawPerTestBar();
@@ -168,7 +181,7 @@ Methods for creating the charts displaying the results of the data processing
 
     var DOM = {};
     DOM._individualChartContainer = null;
-    DOM.individualChartContainer = function() {
+    DOM.individualChartContainer = function () {
         if (DOM._individualChartContainer == null) {
             DOM._individualChartContainer = document.getElementById("individualChart");
         }
@@ -356,7 +369,7 @@ Methods for creating the charts displaying the results of the data processing
             if (currentClass.duration <= 0) {
                 chartDiv = document.createElement("p");
                 chartDiv.innerHTML = "The test took no measurable time to complete";
-                chartDiv.setAttribute("id",i);
+                chartDiv.setAttribute("id", i);
                 DOM.individualChartContainer().appendChild(chartDiv);
             } else {
                 chartDiv = document.createElement("div");
@@ -391,9 +404,11 @@ Methods for creating the charts displaying the results of the data processing
     .right-addon {
         position: relative;
     }
+
     .right-addon input {
         padding-right: 30px;
     }
+
     .right-addon span {
         position: absolute;
         right: 0;
