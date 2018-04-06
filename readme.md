@@ -1,3 +1,4 @@
+[![codebeat badge](https://codebeat.co/badges/bac44e06-3560-4c28-814c-b5495bfa3c28)](https://codebeat.co/projects/github-com-adessoag-junit-insights-master)
 [![GitHub issues](https://img.shields.io/github/issues/adessoAG/junit-insights.svg?style=flat-square)](https://github.com/adessoAG/junit-insights/issues)
 [![GitHub forks](https://img.shields.io/github/forks/adessoAG/junit-insights.svg?style=flat-square)](https://github.com/adessoAG/junit-insights/network)
 [![GitHub stars](https://img.shields.io/github/stars/adessoAG/junit-insights.svg?style=flat-square)](https://github.com/adessoAG/junit-insights/stargazers)
