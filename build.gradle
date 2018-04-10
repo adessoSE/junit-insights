@@ -107,4 +107,10 @@ dependencies {
     
     // Only needed to run tests in an IDE that bundles an older version (e.g. IntelliJ)
     testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+
+    //You can easily generate your own configuration metadata file from items annotated with
+    // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
+    // includes a Java annotation processor which is invoked as your project is compiled.
+    // To use the processor, include a dependency on spring-boot-configuration-processor.
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
