@@ -83,8 +83,7 @@ General application specific methods
         classesDurations = [];
         allClassesDurations.forEach(function (currentClass) {
             if (currentClass.spring / currentClass.duration < minSpringShare / 100 ||
-                (currentClass.newContexts < 1 && minSpringShare > 0) ||
-                (currentClass.spring / currentClass.duration > maxSpringShare / 100 && currentClass.newContexts > 0) ||
+                currentClass.spring / currentClass.duration > maxSpringShare / 100 ||
                 currentClass.duration < minTestTime ||
                 currentClass.duration > maxTestTime ||
                 (onlySpringTests && currentClass.newContexts < 1))
@@ -218,7 +217,13 @@ Methods for processing the csv data before it can be displayed
             currentClass.tests = testDurations;
             currentClass.testNames = testNames;
             currentClass.duration = currentClass.end - currentClass.begin;
-            currentClass.spring = currentClass.duration - testDurationSum;
+            if (currentClass.newContexts > 0) {
+                currentClass.spring = currentClass.duration - testDurationSum;
+                currentClass.other = 0;
+            } else {
+                currentClass.spring = 0;
+                currentClass.other = currentClass.duration - testDurationSum;
+            }
 
             classesDurations.push(currentClass);
         });
@@ -349,23 +354,15 @@ Methods for creating the charts displaying the results of the data processing
             "rgb(239, 219, 202)",
             "rgb(21, 21, 85)",
             "rgb(128, 128, 128)"];
-        var otherColor, otherText, currentChart, chartDiv, chartLabel, chartLabelDiv;
+        var currentChart, chartDiv, chartLabel, chartLabelDiv;
 
         classesDurations.forEach(function (currentClass, i) {
-            if (currentClass.newContexts === 0) {
-                otherColor = "rgb(180, 180, 180)";
-                otherText = "Other";
-            } else {
-                otherColor = "rgb(109, 179, 63)";
-                otherText = "Spring";
-            }
-
             currentChart = [{
                 x: [currentClass.spring],
-                text: otherText + " (" + currentClass.spring + "ms)",
+                text: "Spring (" + currentClass.spring + "ms)",
                 textposition: "inside",
                 marker: {
-                    color: otherColor
+                    color: "rgb(109, 179, 63)"
                 },
                 hoverinfo: "none",
                 type: "bar",
@@ -385,6 +382,18 @@ Methods for creating the charts displaying the results of the data processing
                     orientation: "h"
                 });
             }
+
+            currentChart.push({
+                x: [currentClass.other],
+                text: "Other (" + currentClass.other + "ms)",
+                textposition: "inside",
+                marker: {
+                    color: "rgb(180, 180, 180)"
+                },
+                hoverinfo: "none",
+                type: "bar",
+                orientation: "h"
+            });
 
             var individualChartLayout = {
                 showlegend: false,
