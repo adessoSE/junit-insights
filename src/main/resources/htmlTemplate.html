@@ -4,16 +4,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
+<!--
+Global variables
+-->
 <script>
     /**
      * The csv data gets injected into this string when applying this template
      * @type {string}
      */
     var csvString = "$timestampCsvString";
+
+    var classesDurations;
+    var allClassesDurations;
 </script>
 
 <!--
-Methods for processing the csv data before they can be displayed
+General application specific methods
 -->
 <script>
     "use strict";
@@ -21,9 +27,114 @@ Methods for processing the csv data before they can be displayed
     /**
      * Starts processing the data after the site fully loaded
      */
-    window.onload = function() {
+    window.onload = function () {
         processData(csvString);
     };
+
+    /**
+     * Click handler for the refresh button
+     * Applies filters and ordering for the individual test charts
+     */
+    function refreshClicked() {
+        var individualChart = document.getElementById("individualChart");
+        while (individualChart.firstChild) {
+            individualChart.removeChild(individualChart.firstChild);
+        }
+
+        applyFilters();
+        orderList();
+
+        drawPerTestBar();
+    }
+
+    /**
+     * Click handler for the clear button
+     * Clears the filter fields and refreshes the list of test classes
+     */
+    function clearClicked() {
+        var formData = document.getElementById("filter_form");
+        formData.elements[0].value = "";
+        formData.elements[1].value = "";
+        formData.elements[2].value = "";
+        formData.elements[3].value = "";
+        formData.elements[4].checked = false;
+
+        refreshClicked()
+    }
+
+    /**
+     * Refreshes the set of currently displayed test classes
+     * according to the filter and ordering settings the user applied.
+     */
+    function applyFilters() {
+        var formData = document.getElementById("filter_form");
+        var minSpringShare = formData.elements[0].value;
+        var maxSpringShare = formData.elements[1].value;
+        var minTestTime = formData.elements[2].value;
+        var maxTestTime = formData.elements[3].value;
+        var onlySpringTests = formData.elements[4].checked;
+
+        // set default values if the fields are left blank
+        if (minSpringShare === "") { minSpringShare = 0; }
+        if (maxSpringShare === "") { maxSpringShare = 100; }
+        if (minTestTime === "") { minTestTime = 0; }
+        if (maxTestTime === "") { maxTestTime = Infinity; }
+
+        classesDurations = [];
+        allClassesDurations.forEach(function (currentClass) {
+            if (currentClass.spring / currentClass.duration < minSpringShare / 100 ||
+                currentClass.spring / currentClass.duration > maxSpringShare / 100 ||
+                currentClass.duration < minTestTime ||
+                currentClass.duration > maxTestTime ||
+                (onlySpringTests && currentClass.newContexts < 1))
+                return;
+            classesDurations.push(currentClass);
+        });
+    }
+
+    function orderList() {
+        var selector = document.getElementById("order_select");
+        var orderBy = selector.options[selector.selectedIndex].value;
+
+        switch (orderBy) {
+            case "execution_order_down":
+                break;
+            case "execution_order_up":
+                classesDurations = classesDurations.reverse();
+                break;
+            case "duration_down":
+                classesDurations = classesDurations.sort(function(a,b) {
+                    return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
+                });
+                break;
+            case "duration_up":
+                classesDurations = classesDurations.sort(function(a,b) {
+                    return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
+                });
+                classesDurations = classesDurations.reverse();
+                break;
+            case "spring_down":
+                classesDurations = classesDurations.sort(function(a,b) {
+                    return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
+                });
+                break;
+            case "spring_up":
+                classesDurations = classesDurations.sort(function(a,b) {
+                    return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
+                });
+                classesDurations = classesDurations.reverse();
+                break;
+            default:
+                console.log("Something went wrong with the order selection element.")
+        }
+    }
+</script>
+
+<!--
+Methods for processing the csv data before it can be displayed
+-->
+<script>
+    "use strict";
 
     /**
      * Kicks off the processing of the csv data and the creation of the plots
@@ -36,11 +147,12 @@ Methods for processing the csv data before they can be displayed
                     return element.length === 4;    // remove irrelevant lines like blank lines
                 });
                 var classesTimestamps = splitIntoClasses(data);
-                var classesDurations = calculateDurations(classesTimestamps);
+                allClassesDurations = calculateDurations(classesTimestamps);
+                classesDurations = allClassesDurations;     // by default all test classes should be displayed
                 console.log(classesDurations);
-                drawOverviewBar(classesDurations);
-                drawPerTestBar(classesDurations);
-                showGeneralData(classesDurations);
+                drawOverviewBar();
+                drawPerTestBar();
+                showGeneralData();
                 document.getElementById("information").style.visibility = "visible";
             }
         });
@@ -105,27 +217,17 @@ Methods for processing the csv data before they can be displayed
             currentClass.tests = testDurations;
             currentClass.testNames = testNames;
             currentClass.duration = currentClass.end - currentClass.begin;
-            currentClass.spring = currentClass.duration - testDurationSum;
+            if (currentClass.newContexts > 0) {
+                currentClass.spring = currentClass.duration - testDurationSum;
+                currentClass.other = 0;
+            } else {
+                currentClass.spring = 0;
+                currentClass.other = currentClass.duration - testDurationSum;
+            }
 
             classesDurations.push(currentClass);
         });
         return classesDurations;
-    }
-
-    /**
-     * Fills in the general information about the observed tests
-     * @param allClasses All data about the durations of important events for each test class
-     */
-    function showGeneralData(allClasses) {
-        var createdSpringContexts = 0;
-        var testedMethods = 0;
-        allClasses.forEach(function (currentClass) {
-            createdSpringContexts += currentClass.newContexts;
-            testedMethods += currentClass.tests.length;
-        });
-        document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
-        document.getElementById("testedClasses").innerHTML = "Tested classes: " + allClasses.length;
-        document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
     }
 </script>
 
@@ -137,7 +239,7 @@ Methods for creating the charts displaying the results of the data processing
 
     var DOM = {};
     DOM._individualChartContainer = null;
-    DOM.individualChartContainer = function() {
+    DOM.individualChartContainer = function () {
         if (DOM._individualChartContainer == null) {
             DOM._individualChartContainer = document.getElementById("individualChart");
         }
@@ -146,13 +248,12 @@ Methods for creating the charts displaying the results of the data processing
 
     /**
      * Creates a plot that shows the time spent on spring initialization vs. actual test execution
-     * @param allClasses All data about the durations of important events for each test class
      */
-    function drawOverviewBar(allClasses) {
+    function drawOverviewBar() {
         var springTime = 0;
         var testTime = 0;
         var infoText;
-        allClasses.forEach(function (currentClass) {
+        classesDurations.forEach(function (currentClass) {
             springTime += currentClass.spring;
             currentClass.tests.forEach(function (currentTest) {
                 testTime += currentTest;
@@ -216,10 +317,24 @@ Methods for creating the charts displaying the results of the data processing
     }
 
     /**
-     * Creates a plot that shows the time spent on different events for each test class individually
-     * @param allClasses All data about the durations of important events for each test class
+     * Fills in the general information about the observed tests
      */
-    function drawPerTestBar(allClasses) {
+    function showGeneralData() {
+        var createdSpringContexts = 0;
+        var testedMethods = 0;
+        classesDurations.forEach(function (currentClass) {
+            createdSpringContexts += currentClass.newContexts;
+            testedMethods += currentClass.tests.length;
+        });
+        document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
+        document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesDurations.length;
+        document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
+    }
+
+    /**
+     * Creates a plot that shows the time spent on different events for each test class individually
+     */
+    function drawPerTestBar() {
         var colors = ["rgb(179, 77, 102)",
             "rgb(238, 223, 123)",
             "rgb(60, 125, 160)",
@@ -239,23 +354,15 @@ Methods for creating the charts displaying the results of the data processing
             "rgb(239, 219, 202)",
             "rgb(21, 21, 85)",
             "rgb(128, 128, 128)"];
-        var otherColor, otherText, currentChart, chartDiv, chartLabel, chartLabelDiv;
+        var currentChart, chartDiv, chartLabel, chartLabelDiv;
 
-        allClasses.forEach(function (currentClass, i) {
-            if (currentClass.newContexts === 0) {
-                otherColor = "rgb(180, 180, 180)";
-                otherText = "Other";
-            } else {
-                otherColor = "rgb(109, 179, 63)";
-                otherText = "Spring";
-            }
-
+        classesDurations.forEach(function (currentClass, i) {
             currentChart = [{
                 x: [currentClass.spring],
-                text: otherText + " (" + currentClass.spring + "ms)",
+                text: "Spring (" + currentClass.spring + "ms)",
                 textposition: "inside",
                 marker: {
-                    color: otherColor
+                    color: "rgb(109, 179, 63)"
                 },
                 hoverinfo: "none",
                 type: "bar",
@@ -275,6 +382,18 @@ Methods for creating the charts displaying the results of the data processing
                     orientation: "h"
                 });
             }
+
+            currentChart.push({
+                x: [currentClass.other],
+                text: "Other (" + currentClass.other + "ms)",
+                textposition: "inside",
+                marker: {
+                    color: "rgb(180, 180, 180)"
+                },
+                hoverinfo: "none",
+                type: "bar",
+                orientation: "h"
+            });
 
             var individualChartLayout = {
                 showlegend: false,
@@ -312,7 +431,7 @@ Methods for creating the charts displaying the results of the data processing
             if (currentClass.duration <= 0) {
                 chartDiv = document.createElement("p");
                 chartDiv.innerHTML = "The test took no measurable time to complete";
-                chartDiv.setAttribute("id",i);
+                chartDiv.setAttribute("id", i);
                 DOM.individualChartContainer().appendChild(chartDiv);
             } else {
                 chartDiv = document.createElement("div");
@@ -343,6 +462,21 @@ Methods for creating the charts displaying the results of the data processing
     body {
         font-family: 'Oswald', sans-serif !important;
     }
+
+    .right-addon {
+        position: relative;
+    }
+
+    .right-addon input {
+        padding-right: 30px;
+    }
+
+    .right-addon span {
+        position: absolute;
+        right: 0;
+        padding: 7px 12px;
+        pointer-events: none;
+    }
 </style>
 
 <head>
@@ -369,6 +503,53 @@ Methods for creating the charts displaying the results of the data processing
             </div>
         </div>
         <h2 align="center" style="margin-top: 30px;">Time spent on individual test classes</h2>
+        <div class="row">
+            <form class="form-inline" id="filter_form">
+                <div class="col">
+                    <div class="right-addon">
+                        <span>%</span>
+                        <input type="number" class="form-control" id="min_spring_share" placeholder="min_spring_share">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="right-addon">
+                        <span>%</span>
+                        <input type="number" class="form-control" id="max_spring_share" placeholder="max_spring_share">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="right-addon">
+                        <span>ms</span>
+                        <input type="number" class="form-control" id="min_test_time" placeholder="min_test_time">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="right-addon">
+                        <span>ms</span>
+                        <input type="number" class="form-control" id="max_test_time" placeholder="max_test_time">
+                    </div>
+                </div>
+                <div class="col" style="white-space: nowrap;">
+                    <input type="checkbox" id="only_spring_tests" style="display: inline-block;">
+                    <label for="only_spring_tests" style="display: inline-block;">only_spring_tests</label>
+                </div>
+                <div class="col"><input type="button" value="Clear" onclick="clearClicked()"></div>
+                <div class="col" style="white-space: nowrap;">
+                    <label style="display: inline-block;">
+                        Order by:
+                        <select id="order_select" style="display: inline-block;">
+                            <option value="execution_order_down" selected>execution order &#8615</option>
+                            <option value="execution_order_up">execution order &#8613</option>
+                            <option value="duration_down">test duration &#8615</option>
+                            <option value="duration_up">test duration &#8613</option>
+                            <option value="spring_down">spring duration &#8615</option>
+                            <option value="spring_up">spring duration &#8613</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
+            </form>
+        </div>
         <div id="individualChart"></div>
     </div>
 </div>
