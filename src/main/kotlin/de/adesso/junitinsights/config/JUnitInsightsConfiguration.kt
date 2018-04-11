@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource
 
 @Configuration
 @EnableConfigurationProperties(JUnitInsightsReportProperties::class)
-@PropertySource("classpath:junitinsights.properties")
+@PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = arrayOf("de.adesso.junitinsights"))
 class JUnitInsightsConfiguration
 
