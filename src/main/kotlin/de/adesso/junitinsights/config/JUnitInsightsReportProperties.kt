@@ -8,6 +8,4 @@ import org.springframework.stereotype.Component
 object JUnitInsightsReportProperties {
     var path: String = ""
     var templatepath: String = "/htmlTemplate.html"
-
-
 }

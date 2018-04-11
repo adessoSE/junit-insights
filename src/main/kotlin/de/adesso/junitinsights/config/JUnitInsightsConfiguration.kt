@@ -9,9 +9,7 @@ import org.springframework.context.annotation.PropertySource
 @EnableConfigurationProperties(JUnitInsightsReportProperties::class)
 @PropertySource("classpath:junitinsights.properties")
 @ComponentScan(basePackages = arrayOf("de.adesso.junitinsights"))
-class JUnitInsightsConfiguration {
-
-}
+class JUnitInsightsConfiguration
 
 
 
