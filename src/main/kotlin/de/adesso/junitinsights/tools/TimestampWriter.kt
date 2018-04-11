@@ -1,6 +1,7 @@
 package de.adesso.junitinsights.tools
 
 import com.google.common.io.CharStreams
+import de.adesso.junitinsights.config.JUnitInsightsReportProperties
 import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -24,7 +25,6 @@ object TimestampWriter {
     private var currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
     private var lastTimestamp: Long = 0
     private var timestamps = StringBuilder()
-
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     /**
@@ -53,12 +53,10 @@ object TimestampWriter {
      * Creates the html file containing all the collected data.
      */
     fun createReport() {
-        logger.info("createReport() called \n \n \n")
-        val htmlTemplateFileInputStream = ClassPathResource("/htmlTemplate.html")
+        val htmlTemplateFileInputStream = ClassPathResource(JUnitInsightsReportProperties.templatepath)
         var htmlString = CharStreams.toString(InputStreamReader(htmlTemplateFileInputStream.inputStream, "UTF-8"))
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
-        val reportPath = "insight_$currentTime.html"
-        val htmlReportFile = File(reportPath)
+        val htmlReportFile = File(JUnitInsightsReportProperties.path + "insight_$currentTime.html")
         FileUtils.writeStringToFile(htmlReportFile, htmlString, "UTF-8")
     }
 
