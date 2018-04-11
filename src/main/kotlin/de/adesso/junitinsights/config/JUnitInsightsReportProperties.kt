@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties(prefix = "junitinsights.report")
 object JUnitInsightsReportProperties {
     var path: String = ""
-    var templatepath: String = "/htmlTemplate.html"
+    val templatepath: String = "/htmlTemplate.html"
 }
