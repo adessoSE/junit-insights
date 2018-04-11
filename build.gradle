@@ -112,5 +112,5 @@ dependencies {
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
     // includes a Java annotation processor which is invoked as your project is compiled.
     // To use the processor, include a dependency on spring-boot-configuration-processor.
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    compile "org.springframework.boot:spring-boot-configuration-processor"
 }
