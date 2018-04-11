@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-de.adesso.junitinsights.config.JUnitInsightsConfiguration
