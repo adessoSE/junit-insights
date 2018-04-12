@@ -85,6 +85,7 @@ dependencies {
     compile("commons-io:commons-io:2.6")
     compile('org.jetbrains.kotlin:kotlin-reflect')
     compile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    compile("org.junit.platform:junit-platform-launcher:1.1.1")
     compile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
     compile('org.springframework.boot:spring-boot-starter-web')
 
