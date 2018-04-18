@@ -41,6 +41,7 @@ publishing {
                     it.scope*.value = 'compile'
                 }
             }
+            artifactId = 'junit-insights'
         }
     }
 }
