@@ -1,0 +1,116 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.2.31'
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}"
+    }
+}
+
+ext.junit4Version        = '4.12'
+ext.junitVintageVersion  = '4.12.0'
+ext.junitPlatformVersion = '1.1.0'
+ext.junitJupiterVersion  = '5.1.0'
+ext.log4jVersion         = '2.6.2'
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven-publish'
+apply plugin: "kotlin-jpa"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            pom.withXml {
+                asNode().dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+            }
+        }
+    }
+}
+model {
+    tasks.generatePomFileForMavenPublication {
+        destination = file("$buildDir/libs/junit-insights-0.0.1.pom")
+    }
+}
+
+group = 'de.adesso'
+version = '0.0.1'
+sourceCompatibility = 1.8
+task fatJar(type: Jar) {
+    baseName = project.name + ''
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+build.dependsOn fatJar
+assemble.dependsOn fatJar
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('com.fasterxml.jackson.module:jackson-module-kotlin')
+    compile("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    compile('org.jetbrains.kotlin:kotlin-reflect')
+
+    compile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
+    testCompile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
+
+    // JUnit Jupiter API and TestEngine implementation
+    compile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+
+    // If you also want to support JUnit 3 and JUnit 4 tests
+    //testCompile("junit:junit:${junit4Version}")
+    //testRuntime("org.junit.vintage:junit-vintage-engine:${junitVintageVersion}")
+
+    testRuntime("org.apache.logging.log4j:log4j-core:${log4jVersion}")
+    testRuntime("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
+    compile("commons-io:commons-io:2.6")
+    compile('com.google.guava:guava:24.0-jre')
+    
+    // Only needed to run tests in an IDE that bundles an older version (e.g. IntelliJ)
+    testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+
+    //You can easily generate your own configuration metadata file from items annotated with
+    // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
+    // includes a Java annotation processor which is invoked as your project is compiled.
+    // To use the processor, include a dependency on spring-boot-configuration-processor.
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}
