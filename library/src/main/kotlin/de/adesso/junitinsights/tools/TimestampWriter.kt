@@ -1,15 +1,15 @@
 package de.adesso.junitinsights.tools
 
-import com.google.common.io.CharStreams
 import de.adesso.junitinsights.config.JUnitInsightsReportProperties
-import org.apache.commons.io.FileUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import java.io.File
 import java.io.InputStreamReader
+import java.io.PrintWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
 
 /**
  * Configuration options for the logging of timestamps
@@ -53,11 +53,15 @@ object TimestampWriter {
      * Creates the html file containing all the collected data.
      */
     fun createReport() {
-        val htmlTemplateFileInputStream = ClassPathResource(JUnitInsightsReportProperties.templatepath)
-        var htmlString = CharStreams.toString(InputStreamReader(htmlTemplateFileInputStream.inputStream, "UTF-8"))
+        val htmlTemplatePath = ClassPathResource(JUnitInsightsReportProperties.templatepath)
+        var htmlString = InputStreamReader(htmlTemplatePath.inputStream, "UTF-8").readText()
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
         val htmlReportFile = File(JUnitInsightsReportProperties.path + "insight_$currentTime.html")
-        FileUtils.writeStringToFile(htmlReportFile, htmlString, "UTF-8")
+        htmlReportFile.parentFile.mkdirs()
+        PrintWriter(htmlReportFile).use {
+            it.write(htmlString);
+        }
+
     }
 
     /**
