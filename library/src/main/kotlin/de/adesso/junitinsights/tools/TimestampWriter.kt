@@ -57,7 +57,8 @@ object TimestampWriter {
         var htmlString = InputStreamReader(htmlTemplatePath.inputStream, "UTF-8").readText()
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
         val htmlReportFile = File(JUnitInsightsReportProperties.path + "insight_$currentTime.html")
-        htmlReportFile.parentFile.mkdirs()
+        if (htmlReportFile.parentFile != null)
+            htmlReportFile.parentFile.mkdirs()
         PrintWriter(htmlReportFile).use {
             it.write(htmlString);
         }
