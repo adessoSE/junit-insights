@@ -75,10 +75,18 @@ General application specific methods
         var onlySpringTests = formData.elements[4].checked;
 
         // set default values if the fields are left blank
-        if (minSpringShare === "") { minSpringShare = 0; }
-        if (maxSpringShare === "") { maxSpringShare = 100; }
-        if (minTestTime === "") { minTestTime = 0; }
-        if (maxTestTime === "") { maxTestTime = Infinity; }
+        if (minSpringShare === "") {
+            minSpringShare = 0;
+        }
+        if (maxSpringShare === "") {
+            maxSpringShare = 100;
+        }
+        if (minTestTime === "") {
+            minTestTime = 0;
+        }
+        if (maxTestTime === "") {
+            maxTestTime = Infinity;
+        }
 
         classesDurations = [];
         allClassesDurations.forEach(function (currentClass) {
@@ -103,23 +111,23 @@ General application specific methods
                 classesDurations = classesDurations.reverse();
                 break;
             case "duration_down":
-                classesDurations = classesDurations.sort(function(a,b) {
+                classesDurations = classesDurations.sort(function (a, b) {
                     return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
                 });
                 break;
             case "duration_up":
-                classesDurations = classesDurations.sort(function(a,b) {
+                classesDurations = classesDurations.sort(function (a, b) {
                     return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
                 });
                 classesDurations = classesDurations.reverse();
                 break;
             case "spring_down":
-                classesDurations = classesDurations.sort(function(a,b) {
+                classesDurations = classesDurations.sort(function (a, b) {
                     return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
                 });
                 break;
             case "spring_up":
-                classesDurations = classesDurations.sort(function(a,b) {
+                classesDurations = classesDurations.sort(function (a, b) {
                     return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
                 });
                 classesDurations = classesDurations.reverse();

@@ -20,7 +20,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven-publish'
-apply plugin: "kotlin-jpa"
+apply plugin: 'kotlin-jpa'
 
 publishing {
     publications {
@@ -42,7 +42,7 @@ publishing {
 
 model {
     tasks.generatePomFileForMavenPublication {
-        destination = file("$buildDir/libs/junit-insights-0.0.1.pom")
+        destination = file('$buildDir/libs/junit-insights-0.0.1.pom')
     }
 }
 
@@ -61,14 +61,14 @@ assemble.dependsOn fatJar
 
 compileKotlin {
     kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
     }
 }
 
@@ -79,12 +79,12 @@ repositories {
 
 dependencies {
     compile('org.jetbrains.kotlin:kotlin-reflect')
-    compile("org.junit.jupiter:junit-jupiter-api:5.1.0")
+    compile('org.junit.jupiter:junit-jupiter-api:5.1.0')
     compile('org.springframework.boot:spring-boot-starter')
 
     // You can easily generate your own configuration metadata file from items annotated with
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
     // includes a Java annotation processor which is invoked as your project is compiled.
     // To use the processor, include a dependency on spring-boot-configuration-processor.
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }

@@ -3,7 +3,6 @@ package de.adesso.junitinsightstester
 import de.adesso.junitinsights.annotations.JUnitInsights
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
 
 /**
@@ -13,9 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @JUnitInsights
 class JUnitInsightsTesterTests {
 
-	@Test
-	fun contextLoads() {
-		assertEquals(1,1);
-	}
+    @Test
+    fun contextLoads() {
+        assertEquals(1, 1);
+    }
 
 }
