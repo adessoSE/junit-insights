@@ -54,7 +54,7 @@ group = 'de.adesso'
 version = '0.0.1'
 sourceCompatibility = 1.8
 task fatJar(type: Jar) {
-    baseName = project.name + ''
+    baseName = 'junit-insights'
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
