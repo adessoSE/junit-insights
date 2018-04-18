@@ -84,6 +84,7 @@ repositories {
 dependencies {
     compile('org.jetbrains.kotlin:kotlin-reflect')
     compile('org.junit.jupiter:junit-jupiter-api:5.1.0')
+    compile('org.junit.platform:junit-platform-launcher:1.1.0')
     compile('org.springframework.boot:spring-boot-starter')
 
     // You can easily generate your own configuration metadata file from items annotated with
