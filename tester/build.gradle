@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		kotlinVersion = '1.2.20'
+		kotlinVersion = '1.2.31'
 		springBootVersion = '2.0.0.RELEASE'
 	}
 	repositories {
@@ -15,13 +15,13 @@ buildscript {
 
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-spring'
-apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.example'
+group = 'de.adesso.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
 compileKotlin {
 	kotlinOptions {
 		freeCompilerArgs = ["-Xjsr305=strict"]
@@ -39,19 +39,11 @@ repositories {
 	mavenCentral()
 }
 
-
-ext.junitJupiterVersion  = '5.1.0'
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
-	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	compile("org.jetbrains.kotlin:kotlin-reflect")
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+
 	testCompile (project(':library'))
 
-    // JUnit Jupiter API and TestEngine implementation
-    testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
-	testRuntime("org.junit.platform:junit-platform-launcher:1.1.0")
-	testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
-	testRuntime("org.junit.vintage:junit-vintage-engine:${junitJupiterVersion}")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.0")
 }

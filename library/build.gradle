@@ -14,12 +14,6 @@ buildscript {
     }
 }
 
-ext.junit4Version        = '4.12'
-ext.junitVintageVersion  = '4.12.0'
-ext.junitPlatformVersion = '1.1.0'
-ext.junitJupiterVersion  = '5.1.0'
-ext.log4jVersion         = '2.6.2'
-
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
@@ -45,6 +39,7 @@ publishing {
         }
     }
 }
+
 model {
     tasks.generatePomFileForMavenPublication {
         destination = file("$buildDir/libs/junit-insights-0.0.1.pom")
@@ -54,6 +49,7 @@ model {
 group = 'de.adesso'
 version = '0.0.1'
 sourceCompatibility = 1.8
+
 task fatJar(type: Jar) {
     baseName = 'junit-insights'
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -85,12 +81,12 @@ dependencies {
     compile('com.google.guava:guava:24.0-jre')
     compile("commons-io:commons-io:2.6")
     compile('org.jetbrains.kotlin:kotlin-reflect')
-    compile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    compile("org.junit.jupiter:junit-jupiter-api:5.1.0")
     compile("org.junit.platform:junit-platform-launcher:1.1.1")
     compile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
     compile('org.springframework.boot:spring-boot-starter-web')
 
-    //You can easily generate your own configuration metadata file from items annotated with
+    // You can easily generate your own configuration metadata file from items annotated with
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
     // includes a Java annotation processor which is invoked as your project is compiled.
     // To use the processor, include a dependency on spring-boot-configuration-processor.
