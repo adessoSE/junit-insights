@@ -56,6 +56,10 @@ task fatJar(type: Jar) {
     with jar
 }
 
+bootJar {
+    enabled = false
+}
+
 build.dependsOn fatJar
 assemble.dependsOn fatJar
 
