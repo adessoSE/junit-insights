@@ -82,32 +82,12 @@ repositories {
 
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter')
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('com.fasterxml.jackson.module:jackson-module-kotlin')
-    compile("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    compile('org.jetbrains.kotlin:kotlin-reflect')
-
-    compile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
-    testCompile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
-
-    // JUnit Jupiter API and TestEngine implementation
-    compile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
-    testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
-
-    // If you also want to support JUnit 3 and JUnit 4 tests
-    //testCompile("junit:junit:${junit4Version}")
-    //testRuntime("org.junit.vintage:junit-vintage-engine:${junitVintageVersion}")
-
-    testRuntime("org.apache.logging.log4j:log4j-core:${log4jVersion}")
-    testRuntime("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
-    compile("commons-io:commons-io:2.6")
     compile('com.google.guava:guava:24.0-jre')
-    
-    // Only needed to run tests in an IDE that bundles an older version (e.g. IntelliJ)
-    testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}")
+    compile("commons-io:commons-io:2.6")
+    compile('org.jetbrains.kotlin:kotlin-reflect')
+    compile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+    compile('org.springframework.boot:spring-boot-starter-test') { exclude group: 'junit', module: 'junit' }
+    compile('org.springframework.boot:spring-boot-starter-web')
 
     //You can easily generate your own configuration metadata file from items annotated with
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
