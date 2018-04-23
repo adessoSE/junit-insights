@@ -58,6 +58,9 @@ General application specific methods
         formData.elements[2].value = "";
         formData.elements[3].value = "";
         formData.elements[4].checked = false;
+        formData.elements[6].checked = true;
+        formData.elements[7].checked = true;
+        formData.elements[8].checked = true;
 
         refreshClicked()
     }
@@ -73,6 +76,9 @@ General application specific methods
         var minTestTime = formData.elements[2].value;
         var maxTestTime = formData.elements[3].value;
         var onlySpringTests = formData.elements[4].checked;
+        var includeSucceededTests = formData.elements[6].checked;
+        var includePartialTests = formData.elements[7].checked;
+        var includeFailedTests = formData.elements[8].checked;
 
         // set default values if the fields are left blank
         if (minSpringShare === "") {
@@ -94,7 +100,11 @@ General application specific methods
                 currentClass.spring / currentClass.duration > maxSpringShare / 100 ||
                 currentClass.duration < minTestTime ||
                 currentClass.duration > maxTestTime ||
-                (onlySpringTests && currentClass.newContexts < 1))
+                (onlySpringTests && currentClass.newContexts < 1) ||
+                (!includeSucceededTests && currentClass.testStatus === "success") ||
+                (!includeFailedTests && currentClass.testStatus === "failure") ||
+                (!includePartialTests && currentClass.testStatus === "partial")
+            )
                 return;
             classesDurations.push(currentClass);
         });
@@ -152,7 +162,7 @@ Methods for processing the csv data before it can be displayed
         Papa.parse(csvData, {
             complete: function (content) {
                 var data = content.data.filter(function (element) {
-                    return element.length === 4;    // remove irrelevant lines like blank lines
+                    return element.length === 5;    // remove irrelevant lines like blank lines
                 });
                 var classesTimestamps = splitIntoClasses(data);
                 allClassesDurations = calculateDurations(classesTimestamps);
@@ -191,7 +201,7 @@ Methods for processing the csv data before it can be displayed
      */
     function calculateDurations(classesTimestamps) {
         var classesDurations = [];
-        var currentClass, testDurations, testNames, testDurationSum, testBegin;
+        var currentClass, testDurations, testNames, testSuccess, testDurationSum, testBegin;
         classesTimestamps.forEach(function (currentClassTimestamps) {
             currentClass = {};
             currentClass.name = currentClassTimestamps[0][2];
@@ -200,16 +210,18 @@ Methods for processing the csv data before it can be displayed
             currentClass.newContexts = 0;
             testDurations = [];
             testNames = [];
+            testSuccess = [];
             testDurationSum = 0;
             testBegin = 0;
+
             currentClassTimestamps.forEach(function (currentEvent) {
-                if (currentEvent[1] === "before each") {    // "before each" is the first event for each test
+                if (currentEvent[1] === "before test execution") {    // "before test execution" is the first event for each test
                     if (testBegin === 0) {
                         testBegin = currentEvent[0];
                     } else {
                         console.error("An error occurred while parsing the file!");
                     }
-                } else if (currentEvent[1] === "after each") {  // "after each" marks termination of the test
+                } else if (currentEvent[1] === "after test execution") {  // "after test execution" marks termination of the test
                     if (testBegin === 0) {
                         console.error("An error occurred while parsing the file!");
                     } else {
@@ -217,11 +229,13 @@ Methods for processing the csv data before it can be displayed
                         testNames.push(currentEvent[3]);
                         testDurationSum += currentEvent[0] - testBegin;
                         testBegin = 0;
+                        testSuccess.push(currentEvent[4] === "false")
                     }
                 } else if (currentEvent[1] === "context refreshed") {
                     currentClass.newContexts++;
                 }
             });
+
             currentClass.tests = testDurations;
             currentClass.testNames = testNames;
             currentClass.duration = currentClass.end - currentClass.begin;
@@ -232,6 +246,14 @@ Methods for processing the csv data before it can be displayed
                 currentClass.spring = 0;
                 currentClass.other = currentClass.duration - testDurationSum;
             }
+
+            currentClass.testSuccess = testSuccess;
+            if (currentClass.testSuccess.every(t => t))
+                currentClass.testStatus = "success";
+            else if (currentClass.testSuccess.every(t => !t))
+                currentClass.testStatus = "failure";
+            else
+                currentClass.testStatus = "partial";
 
             classesDurations.push(currentClass);
         });
@@ -433,6 +455,10 @@ Methods for creating the charts displaying the results of the data processing
             chartLabelDiv.style.marginTop = "30px";
             chartLabel = document.createElement("h4");
             chartLabel.innerHTML = currentClass.name + " (" + currentClass.duration + "ms)";
+            if (currentClass.testStatus === "partial")
+                chartLabel.style.color = "orange";
+            else if (currentClass.testStatus === "failure")
+                chartLabel.style.color = "red";
             chartLabelDiv.appendChild(chartLabel);
             DOM.individualChartContainer().appendChild(chartLabelDiv);
 
@@ -540,6 +566,25 @@ Methods for creating the charts displaying the results of the data processing
                 <div class="col" style="white-space: nowrap;">
                     <input type="checkbox" id="only_spring_tests" style="display: inline-block;">
                     <label for="only_spring_tests" style="display: inline-block;">only_spring_tests</label>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" style="white-space: nowrap;">
+                        test_status<span class="caret" style="display: inline-block;"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_succeeded_tests" checked style="display: inline-block;"/>
+                            <label for="include_succeeded_tests" style="display: inline-block;">include_succeeded_tests</label>
+                        </li>
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_partial_tests" checked style="display: inline-block;"/>
+                            <label for="include_partial_tests" style="display: inline-block;">include_partial_tests</label>
+                        </li>
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_failed_tests" checked style="display: inline-block;"/>
+                            <label for="include_failed_tests" style="display: inline-block;">include_failed_tests</label>
+                        </li>
+                    </ul>
                 </div>
                 <div class="col"><input type="button" value="Clear" onclick="clearClicked()"></div>
                 <div class="col" style="white-space: nowrap;">

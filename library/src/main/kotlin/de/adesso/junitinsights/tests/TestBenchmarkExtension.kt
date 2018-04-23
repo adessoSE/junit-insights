@@ -111,7 +111,8 @@ class TestBenchmarkExtension :
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after test execution",
                 trimClassName(context),
-                trimMethodName(context))
+                trimMethodName(context),
+                context.executionException.isPresent)
     }
 
     /**
