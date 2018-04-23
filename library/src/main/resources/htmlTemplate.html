@@ -65,6 +65,13 @@ General application specific methods
         refreshClicked()
     }
 
+    function orderToggled(button) {
+        if (button.value === "\u21A7")
+            button.value = "\u21A5";
+        else
+            button.value = "\u21A7";
+    }
+
     /**
      * Refreshes the set of currently displayed test classes
      * according to the filter and ordering settings the user applied.
@@ -114,39 +121,28 @@ General application specific methods
 
     function orderList() {
         let selector = document.getElementById("order_select");
+        let orderUpDown = document.getElementById("order_up_down");
         let orderBy = selector.options[selector.selectedIndex].value;
 
         switch (orderBy) {
-            case "execution_order_down":
+            case "execution_order":
                 break;
-            case "execution_order_up":
-                classesDurations = classesDurations.reverse();
-                break;
-            case "duration_down":
+            case "duration":
                 classesDurations = classesDurations.sort(function (a, b) {
                     return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
                 });
                 break;
-            case "duration_up":
-                classesDurations = classesDurations.sort(function (a, b) {
-                    return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
-                });
-                classesDurations = classesDurations.reverse();
-                break;
-            case "spring_down":
+            case "spring":
                 classesDurations = classesDurations.sort(function (a, b) {
                     return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
                 });
-                break;
-            case "spring_up":
-                classesDurations = classesDurations.sort(function (a, b) {
-                    return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
-                });
-                classesDurations = classesDurations.reverse();
                 break;
             default:
-                console.log("Something went wrong with the order selection element.")
+                console.log("Something went wrong with the order selection element.");
+                return
         }
+        if (orderUpDown.value === "\u21A5")
+            classesDurations = classesDurations.reverse();
     }
 </script>
 
@@ -611,15 +607,13 @@ Methods for creating the charts displaying the results of the data processing
                     <label style="display: inline-block;">
                         Order by:
                         <select id="order_select" style="display: inline-block;">
-                            <option value="execution_order_down" selected>execution order &#8615</option>
-                            <option value="execution_order_up">execution order &#8613</option>
-                            <option value="duration_down">test duration &#8615</option>
-                            <option value="duration_up">test duration &#8613</option>
-                            <option value="spring_down">spring duration &#8615</option>
-                            <option value="spring_up">spring duration &#8613</option>
+                            <option value="execution_order" selected>execution order</option>
+                            <option value="duration">test duration</option>
+                            <option value="spring">spring duration</option>
                         </select>
                     </label>
                 </div>
+                <div class="col"><input type="button" id="order_up_down" value="&#8615" onclick="orderToggled(this)"/></div>
                 <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
             </form>
         </div>
