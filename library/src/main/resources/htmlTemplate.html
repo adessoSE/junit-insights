@@ -29,6 +29,7 @@ General application specific methods
      */
     window.onload = function () {
         processData(csvString);
+        $('[data-toggle="tooltip"]').tooltip();     // enable bootstrap tooltips on initialization
     };
 
     /**
@@ -547,65 +548,69 @@ Methods for creating the charts displaying the results of the data processing
                 <div class="col">
                     <div class="right-addon">
                         <span>%</span>
-                        <input type="number" class="form-control" id="min_spring_share" placeholder="min_spring_share">
+                        <input type="number" class="form-control" id="min_spring_share" placeholder="Min. Spring share"
+                               data-toggle="tooltip" title="The minimum portion of time spent on Spring initialization">
                     </div>
                 </div>
                 <div class="col">
                     <div class="right-addon">
                         <span>%</span>
-                        <input type="number" class="form-control" id="max_spring_share" placeholder="max_spring_share">
+                        <input type="number" class="form-control" id="max_spring_share" placeholder="Max. Spring share"
+                               data-toggle="tooltip" title="The maximum portion of time spent on Spring initialization">
                     </div>
                 </div>
                 <div class="col">
                     <div class="right-addon">
                         <span>ms</span>
-                        <input type="number" class="form-control" id="min_test_time" placeholder="min_test_time">
+                        <input type="number" class="form-control" id="min_test_time" placeholder="Min. test time"
+                               data-toggle="tooltip" title="The minimum total duration of a test class">
                     </div>
                 </div>
                 <div class="col">
                     <div class="right-addon">
                         <span>ms</span>
-                        <input type="number" class="form-control" id="max_test_time" placeholder="max_test_time">
+                        <input type="number" class="form-control" id="max_test_time" placeholder="Max. test time"
+                               data-toggle="tooltip" title="The maximum total duration of a test class">
                     </div>
                 </div>
-                <div class="button-group">
+                <div class="button-group" data-toggle="tooltip" title="Filter tests that create their own Spring context and those that don't">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                             style="white-space: nowrap;">
-                        context_creation<span class="caret" style="display: inline-block;"></span>
+                        Context creation<span class="caret" style="display: inline-block;"></span>
                     </button>
                     <ul class="dropdown-menu">
                         <li style="white-space: nowrap;">
                             <input type="checkbox" id="include_spring_tests" checked style="display: inline-block;"/>
                             <label for="include_spring_tests"
-                                   style="display: inline-block;">include_spring_tests</label>
+                                   style="display: inline-block;">Include Spring tests</label>
                         </li>
                         <li style="white-space: nowrap;">
                             <input type="checkbox" id="include_non_spring_tests" checked style="display: inline-block;"/>
                             <label for="include_non_spring_tests"
-                                   style="display: inline-block;">include_non_spring_tests</label>
+                                   style="display: inline-block;">Include non Spring tests</label>
                         </li>
                     </ul>
                 </div>
-                <div class="button-group" style="margin-left: 10px;">
+                <div class="button-group" style="margin-left: 10px;" data-toggle="tooltip" title="Filter tests based on their success">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                             style="white-space: nowrap;">
-                        test_status<span class="caret" style="display: inline-block;"></span>
+                        Test success<span class="caret" style="display: inline-block;"></span>
                     </button>
                     <ul class="dropdown-menu">
                         <li style="white-space: nowrap;">
                             <input type="checkbox" id="include_succeeded_tests" checked style="display: inline-block;"/>
                             <label for="include_succeeded_tests"
-                                   style="display: inline-block;">include_succeeded_tests</label>
+                                   style="display: inline-block;">Include succeeded tests</label>
                         </li>
                         <li style="white-space: nowrap;">
                             <input type="checkbox" id="include_partial_tests" checked style="display: inline-block;"/>
                             <label for="include_partial_tests"
-                                   style="display: inline-block;">include_partial_tests</label>
+                                   style="display: inline-block;">Include partial succeeded tests</label>
                         </li>
                         <li style="white-space: nowrap;">
                             <input type="checkbox" id="include_failed_tests" checked style="display: inline-block;"/>
                             <label for="include_failed_tests"
-                                   style="display: inline-block;">include_failed_tests</label>
+                                   style="display: inline-block;">Include failed tests</label>
                         </li>
                     </ul>
                 </div>
