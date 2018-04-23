@@ -137,6 +137,13 @@ General application specific methods
                     return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
                 });
                 break;
+            case "tests_only":
+                classesDurations = classesDurations.sort(function (a, b) {
+                    let actualA = a.duration - a.spring - a.other;
+                    let actualB = b.duration - b.spring - b.other;
+                    return (actualA > actualB) ? 1 : ((actualB > actualA) ? -1 : 0)
+                });
+                break;
             default:
                 console.log("Something went wrong with the order selection element.");
                 return
@@ -608,8 +615,9 @@ Methods for creating the charts displaying the results of the data processing
                         Order by:
                         <select id="order_select" style="display: inline-block;">
                             <option value="execution_order" selected>execution order</option>
-                            <option value="duration">test duration</option>
+                            <option value="duration">total duration</option>
                             <option value="spring">spring duration</option>
+                            <option value="tests_only">test duration</option>
                         </select>
                     </label>
                 </div>
