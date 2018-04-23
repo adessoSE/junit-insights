@@ -75,10 +75,11 @@ General application specific methods
         let maxSpringShare = formData.elements[1].value;
         let minTestTime = formData.elements[2].value;
         let maxTestTime = formData.elements[3].value;
-        let onlySpringTests = formData.elements[4].checked;
-        let includeSucceededTests = formData.elements[6].checked;
-        let includePartialTests = formData.elements[7].checked;
-        let includeFailedTests = formData.elements[8].checked;
+        let includeSpringTests = formData.elements[5].checked;
+        let includeNonSpringTests = formData.elements[6].checked;
+        let includeSucceededTests = formData.elements[8].checked;
+        let includePartialTests = formData.elements[9].checked;
+        let includeFailedTests = formData.elements[10].checked;
 
         // set default values if the fields are left blank
         if (minSpringShare === "") {
@@ -100,7 +101,8 @@ General application specific methods
                 currentClass.spring / currentClass.duration > maxSpringShare / 100 ||
                 currentClass.duration < minTestTime ||
                 currentClass.duration > maxTestTime ||
-                (onlySpringTests && currentClass.newContexts < 1) ||
+                (!includeSpringTests && currentClass.newContexts > 0) ||
+                (!includeNonSpringTests && currentClass.newContexts < 1) ||
                 (!includeSucceededTests && currentClass.testStatus === "success") ||
                 (!includeFailedTests && currentClass.testStatus === "failure") ||
                 (!includePartialTests && currentClass.testStatus === "partial")
@@ -563,11 +565,25 @@ Methods for creating the charts displaying the results of the data processing
                         <input type="number" class="form-control" id="max_test_time" placeholder="max_test_time">
                     </div>
                 </div>
-                <div class="col" style="white-space: nowrap;">
-                    <input type="checkbox" id="only_spring_tests" style="display: inline-block;">
-                    <label for="only_spring_tests" style="display: inline-block;">only_spring_tests</label>
-                </div>
                 <div class="button-group">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
+                            style="white-space: nowrap;">
+                        context_creation<span class="caret" style="display: inline-block;"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_spring_tests" checked style="display: inline-block;"/>
+                            <label for="include_spring_tests"
+                                   style="display: inline-block;">include_spring_tests</label>
+                        </li>
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_non_spring_tests" checked style="display: inline-block;"/>
+                            <label for="include_non_spring_tests"
+                                   style="display: inline-block;">include_non_spring_tests</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="button-group" style="margin-left: 10px;">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                             style="white-space: nowrap;">
                         test_status<span class="caret" style="display: inline-block;"></span>
