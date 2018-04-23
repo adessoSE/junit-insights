@@ -12,10 +12,10 @@ Global variables
      * The csv data gets injected into this string when applying this template
      * @type {string}
      */
-    var csvString = "$timestampCsvString";
+    let csvString = "$timestampCsvString";
 
-    var classesDurations;
-    var allClassesDurations;
+    let classesDurations;
+    let allClassesDurations;
 </script>
 
 <!--
@@ -36,7 +36,7 @@ General application specific methods
      * Applies filters and ordering for the individual test charts
      */
     function refreshClicked() {
-        var individualChart = document.getElementById("individualChart");
+        let individualChart = document.getElementById("individualChart");
         while (individualChart.firstChild) {
             individualChart.removeChild(individualChart.firstChild);
         }
@@ -52,7 +52,7 @@ General application specific methods
      * Clears the filter fields and refreshes the list of test classes
      */
     function clearClicked() {
-        var formData = document.getElementById("filter_form");
+        let formData = document.getElementById("filter_form");
         formData.elements[0].value = "";
         formData.elements[1].value = "";
         formData.elements[2].value = "";
@@ -70,15 +70,15 @@ General application specific methods
      * according to the filter and ordering settings the user applied.
      */
     function applyFilters() {
-        var formData = document.getElementById("filter_form");
-        var minSpringShare = formData.elements[0].value;
-        var maxSpringShare = formData.elements[1].value;
-        var minTestTime = formData.elements[2].value;
-        var maxTestTime = formData.elements[3].value;
-        var onlySpringTests = formData.elements[4].checked;
-        var includeSucceededTests = formData.elements[6].checked;
-        var includePartialTests = formData.elements[7].checked;
-        var includeFailedTests = formData.elements[8].checked;
+        let formData = document.getElementById("filter_form");
+        let minSpringShare = formData.elements[0].value;
+        let maxSpringShare = formData.elements[1].value;
+        let minTestTime = formData.elements[2].value;
+        let maxTestTime = formData.elements[3].value;
+        let onlySpringTests = formData.elements[4].checked;
+        let includeSucceededTests = formData.elements[6].checked;
+        let includePartialTests = formData.elements[7].checked;
+        let includeFailedTests = formData.elements[8].checked;
 
         // set default values if the fields are left blank
         if (minSpringShare === "") {
@@ -111,8 +111,8 @@ General application specific methods
     }
 
     function orderList() {
-        var selector = document.getElementById("order_select");
-        var orderBy = selector.options[selector.selectedIndex].value;
+        let selector = document.getElementById("order_select");
+        let orderBy = selector.options[selector.selectedIndex].value;
 
         switch (orderBy) {
             case "execution_order_down":
@@ -161,10 +161,10 @@ Methods for processing the csv data before it can be displayed
     function processData(csvData) {
         Papa.parse(csvData, {
             complete: function (content) {
-                var data = content.data.filter(function (element) {
+                let data = content.data.filter(function (element) {
                     return element.length === 5;    // remove irrelevant lines like blank lines
                 });
-                var classesTimestamps = splitIntoClasses(data);
+                let classesTimestamps = splitIntoClasses(data);
                 allClassesDurations = calculateDurations(classesTimestamps);
                 classesDurations = allClassesDurations;     // by default all test classes should be displayed
                 console.log(classesDurations);
@@ -182,8 +182,8 @@ Methods for processing the csv data before it can be displayed
      * @returns {Array}
      */
     function splitIntoClasses(rawData) {
-        var classesTimestamps = [];
-        var currentClass = [];
+        let classesTimestamps = [];
+        let currentClass = [];
         rawData.forEach(function (entry) {
             currentClass.push(entry);
             if (entry[1] === "after all") {     // each class terminates with "after all"
@@ -200,8 +200,8 @@ Methods for processing the csv data before it can be displayed
      * @returns {Array}
      */
     function calculateDurations(classesTimestamps) {
-        var classesDurations = [];
-        var currentClass, testDurations, testNames, testSuccess, testDurationSum, testBegin;
+        let classesDurations = [];
+        let currentClass, testDurations, testNames, testSuccess, testDurationSum, testBegin;
         classesTimestamps.forEach(function (currentClassTimestamps) {
             currentClass = {};
             currentClass.name = currentClassTimestamps[0][2];
@@ -267,7 +267,7 @@ Methods for creating the charts displaying the results of the data processing
 <script>
     "use strict";
 
-    var DOM = {};
+    let DOM = {};
     DOM._individualChartContainer = null;
     DOM.individualChartContainer = function () {
         if (DOM._individualChartContainer == null) {
@@ -280,9 +280,9 @@ Methods for creating the charts displaying the results of the data processing
      * Creates a plot that shows the time spent on spring initialization vs. actual test execution
      */
     function drawOverviewBar() {
-        var springTime = 0;
-        var testTime = 0;
-        var infoText;
+        let springTime = 0;
+        let testTime = 0;
+        let infoText;
         classesDurations.forEach(function (currentClass) {
             springTime += currentClass.spring;
             currentClass.tests.forEach(function (currentTest) {
@@ -290,7 +290,7 @@ Methods for creating the charts displaying the results of the data processing
             })
         });
 
-        var barChartData = [{
+        let barChartData = [{
             x: [springTime],
             marker: {
                 color: "rgb(109, 179, 63)"
@@ -312,7 +312,7 @@ Methods for creating the charts displaying the results of the data processing
             orientation: "h"
         }];
 
-        var barChartLayout = {
+        let barChartLayout = {
             showlegend: false,
             font: {
                 family: "Oswald",
@@ -350,8 +350,8 @@ Methods for creating the charts displaying the results of the data processing
      * Fills in the general information about the observed tests
      */
     function showGeneralData() {
-        var createdSpringContexts = 0;
-        var testedMethods = 0;
+        let createdSpringContexts = 0;
+        let testedMethods = 0;
         classesDurations.forEach(function (currentClass) {
             createdSpringContexts += currentClass.newContexts;
             testedMethods += currentClass.tests.length;
@@ -365,7 +365,7 @@ Methods for creating the charts displaying the results of the data processing
      * Creates a plot that shows the time spent on different events for each test class individually
      */
     function drawPerTestBar() {
-        var colors = ["rgb(179, 77, 102)",
+        let colors = ["rgb(179, 77, 102)",
             "rgb(238, 223, 123)",
             "rgb(60, 125, 160)",
             "rgb(206, 148, 107)",
@@ -384,7 +384,7 @@ Methods for creating the charts displaying the results of the data processing
             "rgb(239, 219, 202)",
             "rgb(21, 21, 85)",
             "rgb(128, 128, 128)"];
-        var currentChart, chartDiv, chartLabel, chartLabelDiv;
+        let currentChart, chartDiv, chartLabel, chartLabelDiv;
 
         classesDurations.forEach(function (currentClass, i) {
             currentChart = [{
@@ -399,7 +399,7 @@ Methods for creating the charts displaying the results of the data processing
                 orientation: "h"
             }];
 
-            for (var j = 0; j < currentClass.tests.length; j++) {
+            for (let j = 0; j < currentClass.tests.length; j++) {
                 currentChart.push({
                     x: [currentClass.tests[j]],
                     text: currentClass.testNames[j] + "(" + currentClass.tests[j] + "ms)",
@@ -425,7 +425,7 @@ Methods for creating the charts displaying the results of the data processing
                 orientation: "h"
             });
 
-            var individualChartLayout = {
+            let individualChartLayout = {
                 showlegend: false,
                 font: {
                     family: "Oswald",
