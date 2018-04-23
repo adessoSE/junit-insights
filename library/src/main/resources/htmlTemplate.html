@@ -573,7 +573,8 @@ Methods for creating the charts displaying the results of the data processing
                                data-toggle="tooltip" title="The maximum total duration of a test class">
                     </div>
                 </div>
-                <div class="button-group" data-toggle="tooltip" title="Filter tests that create their own Spring context and those that don't">
+                <div class="button-group" data-toggle="tooltip"
+                     title="Filter tests that create their own Spring context and those that don't">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                             style="white-space: nowrap;">
                         Context creation<span class="caret" style="display: inline-block;"></span>
@@ -585,13 +586,15 @@ Methods for creating the charts displaying the results of the data processing
                                    style="display: inline-block;">Include Spring tests</label>
                         </li>
                         <li style="white-space: nowrap;">
-                            <input type="checkbox" id="include_non_spring_tests" checked style="display: inline-block;"/>
+                            <input type="checkbox" id="include_non_spring_tests" checked
+                                   style="display: inline-block;"/>
                             <label for="include_non_spring_tests"
                                    style="display: inline-block;">Include non Spring tests</label>
                         </li>
                     </ul>
                 </div>
-                <div class="button-group" style="margin-left: 10px;" data-toggle="tooltip" title="Filter tests based on their success">
+                <div class="button-group" style="margin-left: 10px;" data-toggle="tooltip"
+                     title="Filter tests based on their success">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                             style="white-space: nowrap;">
                         Test success<span class="caret" style="display: inline-block;"></span>
@@ -626,7 +629,8 @@ Methods for creating the charts displaying the results of the data processing
                         </select>
                     </label>
                 </div>
-                <div class="col"><input type="button" id="order_up_down" value="&#8615" onclick="orderToggled(this)"/></div>
+                <div class="col"><input type="button" id="order_up_down" value="&#8615" onclick="orderToggled(this)"/>
+                </div>
                 <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
             </form>
         </div>
