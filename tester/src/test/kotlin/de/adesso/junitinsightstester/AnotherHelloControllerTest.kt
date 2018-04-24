@@ -1,4 +1,4 @@
-package de.adesso.junitinsights
+package de.adesso.junitinsightstester
 
 import de.adesso.junitinsights.annotations.JUnitInsights
 import org.hamcrest.Matchers.equalTo

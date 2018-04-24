@@ -1,4 +1,4 @@
-package de.adesso.junitinsights.example
+package de.adesso.junitinsightstester
 
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController

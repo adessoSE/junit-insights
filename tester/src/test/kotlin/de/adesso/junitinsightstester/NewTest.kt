@@ -1,4 +1,4 @@
-package de.adesso.junitinsights
+package de.adesso.junitinsightstester
 
 import de.adesso.junitinsights.annotations.JUnitInsights
 import de.adesso.junitinsights.annotations.NoJUnitInsights
@@ -34,6 +34,6 @@ class NewTest {
     @Test
     fun delayTest() {
         Thread.sleep(300)
-        assertEquals(1,1)
+        assertEquals(1, 1)
     }
 }
