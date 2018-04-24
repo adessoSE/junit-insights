@@ -12,10 +12,10 @@ Global variables
      * The csv data gets injected into this string when applying this template
      * @type {string}
      */
-    var csvString = "$timestampCsvString";
+    let csvString = "$timestampCsvString";
 
-    var classesDurations;
-    var allClassesDurations;
+    let classesDurations;
+    let allClassesDurations;
 </script>
 
 <!--
@@ -29,6 +29,7 @@ General application specific methods
      */
     window.onload = function () {
         processData(csvString);
+        $('[data-toggle="tooltip"]').tooltip();     // enable bootstrap tooltips on initialization
     };
 
     /**
@@ -36,7 +37,7 @@ General application specific methods
      * Applies filters and ordering for the individual test charts
      */
     function refreshClicked() {
-        var individualChart = document.getElementById("individualChart");
+        let individualChart = document.getElementById("individualChart");
         while (individualChart.firstChild) {
             individualChart.removeChild(individualChart.firstChild);
         }
@@ -52,14 +53,24 @@ General application specific methods
      * Clears the filter fields and refreshes the list of test classes
      */
     function clearClicked() {
-        var formData = document.getElementById("filter_form");
+        let formData = document.getElementById("filter_form");
         formData.elements[0].value = "";
         formData.elements[1].value = "";
         formData.elements[2].value = "";
         formData.elements[3].value = "";
         formData.elements[4].checked = false;
+        formData.elements[6].checked = true;
+        formData.elements[7].checked = true;
+        formData.elements[8].checked = true;
 
         refreshClicked()
+    }
+
+    function orderToggled(button) {
+        if (button.value === "\u21A7")
+            button.value = "\u21A5";
+        else
+            button.value = "\u21A7";
     }
 
     /**
@@ -67,12 +78,16 @@ General application specific methods
      * according to the filter and ordering settings the user applied.
      */
     function applyFilters() {
-        var formData = document.getElementById("filter_form");
-        var minSpringShare = formData.elements[0].value;
-        var maxSpringShare = formData.elements[1].value;
-        var minTestTime = formData.elements[2].value;
-        var maxTestTime = formData.elements[3].value;
-        var onlySpringTests = formData.elements[4].checked;
+        let formData = document.getElementById("filter_form");
+        let minSpringShare = formData.elements[0].value;
+        let maxSpringShare = formData.elements[1].value;
+        let minTestTime = formData.elements[2].value;
+        let maxTestTime = formData.elements[3].value;
+        let includeSpringTests = formData.elements[5].checked;
+        let includeNonSpringTests = formData.elements[6].checked;
+        let includeSucceededTests = formData.elements[8].checked;
+        let includePartialTests = formData.elements[9].checked;
+        let includeFailedTests = formData.elements[10].checked;
 
         // set default values if the fields are left blank
         if (minSpringShare === "") {
@@ -94,47 +109,48 @@ General application specific methods
                 currentClass.spring / currentClass.duration > maxSpringShare / 100 ||
                 currentClass.duration < minTestTime ||
                 currentClass.duration > maxTestTime ||
-                (onlySpringTests && currentClass.newContexts < 1))
+                (!includeSpringTests && currentClass.newContexts > 0) ||
+                (!includeNonSpringTests && currentClass.newContexts < 1) ||
+                (!includeSucceededTests && currentClass.testStatus === "success") ||
+                (!includeFailedTests && currentClass.testStatus === "failure") ||
+                (!includePartialTests && currentClass.testStatus === "partial")
+            )
                 return;
             classesDurations.push(currentClass);
         });
     }
 
     function orderList() {
-        var selector = document.getElementById("order_select");
-        var orderBy = selector.options[selector.selectedIndex].value;
+        let selector = document.getElementById("order_select");
+        let orderUpDown = document.getElementById("order_up_down");
+        let orderBy = selector.options[selector.selectedIndex].value;
 
         switch (orderBy) {
-            case "execution_order_down":
+            case "execution_order":
                 break;
-            case "execution_order_up":
-                classesDurations = classesDurations.reverse();
-                break;
-            case "duration_down":
+            case "duration":
                 classesDurations = classesDurations.sort(function (a, b) {
                     return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
                 });
                 break;
-            case "duration_up":
-                classesDurations = classesDurations.sort(function (a, b) {
-                    return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
-                });
-                classesDurations = classesDurations.reverse();
-                break;
-            case "spring_down":
+            case "spring":
                 classesDurations = classesDurations.sort(function (a, b) {
                     return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
                 });
                 break;
-            case "spring_up":
+            case "tests_only":
                 classesDurations = classesDurations.sort(function (a, b) {
-                    return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
+                    let actualA = a.duration - a.spring - a.other;
+                    let actualB = b.duration - b.spring - b.other;
+                    return (actualA > actualB) ? 1 : ((actualB > actualA) ? -1 : 0)
                 });
-                classesDurations = classesDurations.reverse();
                 break;
             default:
-                console.log("Something went wrong with the order selection element.")
+                console.log("Something went wrong with the order selection element.");
+                return
         }
+        if (orderUpDown.value === "\u21A5")
+            classesDurations = classesDurations.reverse();
     }
 </script>
 
@@ -151,10 +167,10 @@ Methods for processing the csv data before it can be displayed
     function processData(csvData) {
         Papa.parse(csvData, {
             complete: function (content) {
-                var data = content.data.filter(function (element) {
-                    return element.length === 4;    // remove irrelevant lines like blank lines
+                let data = content.data.filter(function (element) {
+                    return element.length === 5;    // remove irrelevant lines like blank lines
                 });
-                var classesTimestamps = splitIntoClasses(data);
+                let classesTimestamps = splitIntoClasses(data);
                 allClassesDurations = calculateDurations(classesTimestamps);
                 classesDurations = allClassesDurations;     // by default all test classes should be displayed
                 console.log(classesDurations);
@@ -172,8 +188,8 @@ Methods for processing the csv data before it can be displayed
      * @returns {Array}
      */
     function splitIntoClasses(rawData) {
-        var classesTimestamps = [];
-        var currentClass = [];
+        let classesTimestamps = [];
+        let currentClass = [];
         rawData.forEach(function (entry) {
             currentClass.push(entry);
             if (entry[1] === "after all") {     // each class terminates with "after all"
@@ -190,8 +206,8 @@ Methods for processing the csv data before it can be displayed
      * @returns {Array}
      */
     function calculateDurations(classesTimestamps) {
-        var classesDurations = [];
-        var currentClass, testDurations, testNames, testDurationSum, testBegin;
+        let classesDurations = [];
+        let currentClass, testDurations, testNames, testSuccess, testDurationSum, testBegin;
         classesTimestamps.forEach(function (currentClassTimestamps) {
             currentClass = {};
             currentClass.name = currentClassTimestamps[0][2];
@@ -200,16 +216,18 @@ Methods for processing the csv data before it can be displayed
             currentClass.newContexts = 0;
             testDurations = [];
             testNames = [];
+            testSuccess = [];
             testDurationSum = 0;
             testBegin = 0;
+
             currentClassTimestamps.forEach(function (currentEvent) {
-                if (currentEvent[1] === "before each") {    // "before each" is the first event for each test
+                if (currentEvent[1] === "before test execution") {    // "before test execution" is the first event for each test
                     if (testBegin === 0) {
                         testBegin = currentEvent[0];
                     } else {
                         console.error("An error occurred while parsing the file!");
                     }
-                } else if (currentEvent[1] === "after each") {  // "after each" marks termination of the test
+                } else if (currentEvent[1] === "after test execution") {  // "after test execution" marks termination of the test
                     if (testBegin === 0) {
                         console.error("An error occurred while parsing the file!");
                     } else {
@@ -217,11 +235,13 @@ Methods for processing the csv data before it can be displayed
                         testNames.push(currentEvent[3]);
                         testDurationSum += currentEvent[0] - testBegin;
                         testBegin = 0;
+                        testSuccess.push(currentEvent[4] === "false")
                     }
                 } else if (currentEvent[1] === "context refreshed") {
                     currentClass.newContexts++;
                 }
             });
+
             currentClass.tests = testDurations;
             currentClass.testNames = testNames;
             currentClass.duration = currentClass.end - currentClass.begin;
@@ -232,6 +252,14 @@ Methods for processing the csv data before it can be displayed
                 currentClass.spring = 0;
                 currentClass.other = currentClass.duration - testDurationSum;
             }
+
+            currentClass.testSuccess = testSuccess;
+            if (currentClass.testSuccess.every(t => t))
+                currentClass.testStatus = "success";
+            else if (currentClass.testSuccess.every(t => !t))
+                currentClass.testStatus = "failure";
+            else
+                currentClass.testStatus = "partial";
 
             classesDurations.push(currentClass);
         });
@@ -245,7 +273,7 @@ Methods for creating the charts displaying the results of the data processing
 <script>
     "use strict";
 
-    var DOM = {};
+    let DOM = {};
     DOM._individualChartContainer = null;
     DOM.individualChartContainer = function () {
         if (DOM._individualChartContainer == null) {
@@ -258,9 +286,9 @@ Methods for creating the charts displaying the results of the data processing
      * Creates a plot that shows the time spent on spring initialization vs. actual test execution
      */
     function drawOverviewBar() {
-        var springTime = 0;
-        var testTime = 0;
-        var infoText;
+        let springTime = 0;
+        let testTime = 0;
+        let infoText;
         classesDurations.forEach(function (currentClass) {
             springTime += currentClass.spring;
             currentClass.tests.forEach(function (currentTest) {
@@ -268,7 +296,7 @@ Methods for creating the charts displaying the results of the data processing
             })
         });
 
-        var barChartData = [{
+        let barChartData = [{
             x: [springTime],
             marker: {
                 color: "rgb(109, 179, 63)"
@@ -290,7 +318,7 @@ Methods for creating the charts displaying the results of the data processing
             orientation: "h"
         }];
 
-        var barChartLayout = {
+        let barChartLayout = {
             showlegend: false,
             font: {
                 family: "Oswald",
@@ -328,8 +356,8 @@ Methods for creating the charts displaying the results of the data processing
      * Fills in the general information about the observed tests
      */
     function showGeneralData() {
-        var createdSpringContexts = 0;
-        var testedMethods = 0;
+        let createdSpringContexts = 0;
+        let testedMethods = 0;
         classesDurations.forEach(function (currentClass) {
             createdSpringContexts += currentClass.newContexts;
             testedMethods += currentClass.tests.length;
@@ -343,7 +371,7 @@ Methods for creating the charts displaying the results of the data processing
      * Creates a plot that shows the time spent on different events for each test class individually
      */
     function drawPerTestBar() {
-        var colors = ["rgb(179, 77, 102)",
+        let colors = ["rgb(179, 77, 102)",
             "rgb(238, 223, 123)",
             "rgb(60, 125, 160)",
             "rgb(206, 148, 107)",
@@ -362,7 +390,7 @@ Methods for creating the charts displaying the results of the data processing
             "rgb(239, 219, 202)",
             "rgb(21, 21, 85)",
             "rgb(128, 128, 128)"];
-        var currentChart, chartDiv, chartLabel, chartLabelDiv;
+        let currentChart, chartDiv, chartLabel, chartLabelDiv;
 
         classesDurations.forEach(function (currentClass, i) {
             currentChart = [{
@@ -377,7 +405,7 @@ Methods for creating the charts displaying the results of the data processing
                 orientation: "h"
             }];
 
-            for (var j = 0; j < currentClass.tests.length; j++) {
+            for (let j = 0; j < currentClass.tests.length; j++) {
                 currentChart.push({
                     x: [currentClass.tests[j]],
                     text: currentClass.testNames[j] + "(" + currentClass.tests[j] + "ms)",
@@ -403,7 +431,7 @@ Methods for creating the charts displaying the results of the data processing
                 orientation: "h"
             });
 
-            var individualChartLayout = {
+            let individualChartLayout = {
                 showlegend: false,
                 font: {
                     family: "Oswald",
@@ -433,6 +461,10 @@ Methods for creating the charts displaying the results of the data processing
             chartLabelDiv.style.marginTop = "30px";
             chartLabel = document.createElement("h4");
             chartLabel.innerHTML = currentClass.name + " (" + currentClass.duration + "ms)";
+            if (currentClass.testStatus === "partial")
+                chartLabel.style.color = "orange";
+            else if (currentClass.testStatus === "failure")
+                chartLabel.style.color = "red";
             chartLabelDiv.appendChild(chartLabel);
             DOM.individualChartContainer().appendChild(chartLabelDiv);
 
@@ -516,44 +548,88 @@ Methods for creating the charts displaying the results of the data processing
                 <div class="col">
                     <div class="right-addon">
                         <span>%</span>
-                        <input type="number" class="form-control" id="min_spring_share" placeholder="min_spring_share">
+                        <input type="number" class="form-control" id="min_spring_share" placeholder="Min. Spring share"
+                               data-toggle="tooltip" title="The minimum portion of time spent on Spring initialization">
                     </div>
                 </div>
                 <div class="col">
                     <div class="right-addon">
                         <span>%</span>
-                        <input type="number" class="form-control" id="max_spring_share" placeholder="max_spring_share">
+                        <input type="number" class="form-control" id="max_spring_share" placeholder="Max. Spring share"
+                               data-toggle="tooltip" title="The maximum portion of time spent on Spring initialization">
                     </div>
                 </div>
                 <div class="col">
                     <div class="right-addon">
                         <span>ms</span>
-                        <input type="number" class="form-control" id="min_test_time" placeholder="min_test_time">
+                        <input type="number" class="form-control" id="min_test_time" placeholder="Min. test time"
+                               data-toggle="tooltip" title="The minimum total duration of a test class">
                     </div>
                 </div>
                 <div class="col">
                     <div class="right-addon">
                         <span>ms</span>
-                        <input type="number" class="form-control" id="max_test_time" placeholder="max_test_time">
+                        <input type="number" class="form-control" id="max_test_time" placeholder="Max. test time"
+                               data-toggle="tooltip" title="The maximum total duration of a test class">
                     </div>
                 </div>
-                <div class="col" style="white-space: nowrap;">
-                    <input type="checkbox" id="only_spring_tests" style="display: inline-block;">
-                    <label for="only_spring_tests" style="display: inline-block;">only_spring_tests</label>
+                <div class="button-group" data-toggle="tooltip"
+                     title="Filter tests that create their own Spring context and those that don't">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
+                            style="white-space: nowrap;">
+                        Context creation<span class="caret" style="display: inline-block;"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_spring_tests" checked style="display: inline-block;"/>
+                            <label for="include_spring_tests"
+                                   style="display: inline-block;">Include Spring tests</label>
+                        </li>
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_non_spring_tests" checked
+                                   style="display: inline-block;"/>
+                            <label for="include_non_spring_tests"
+                                   style="display: inline-block;">Include non Spring tests</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="button-group" style="margin-left: 10px;" data-toggle="tooltip"
+                     title="Filter tests based on their success">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"
+                            style="white-space: nowrap;">
+                        Test success<span class="caret" style="display: inline-block;"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_succeeded_tests" checked style="display: inline-block;"/>
+                            <label for="include_succeeded_tests"
+                                   style="display: inline-block;">Include succeeded tests</label>
+                        </li>
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_partial_tests" checked style="display: inline-block;"/>
+                            <label for="include_partial_tests"
+                                   style="display: inline-block;">Include partial succeeded tests</label>
+                        </li>
+                        <li style="white-space: nowrap;">
+                            <input type="checkbox" id="include_failed_tests" checked style="display: inline-block;"/>
+                            <label for="include_failed_tests"
+                                   style="display: inline-block;">Include failed tests</label>
+                        </li>
+                    </ul>
                 </div>
                 <div class="col"><input type="button" value="Clear" onclick="clearClicked()"></div>
                 <div class="col" style="white-space: nowrap;">
                     <label style="display: inline-block;">
                         Order by:
                         <select id="order_select" style="display: inline-block;">
-                            <option value="execution_order_down" selected>execution order &#8615</option>
-                            <option value="execution_order_up">execution order &#8613</option>
-                            <option value="duration_down">test duration &#8615</option>
-                            <option value="duration_up">test duration &#8613</option>
-                            <option value="spring_down">spring duration &#8615</option>
-                            <option value="spring_up">spring duration &#8613</option>
+                            <option value="execution_order" selected>execution order</option>
+                            <option value="duration">total duration</option>
+                            <option value="spring">spring duration</option>
+                            <option value="tests_only">test duration</option>
                         </select>
                     </label>
+                </div>
+                <div class="col"><input type="button" id="order_up_down" value="&#8615" onclick="orderToggled(this)"/>
                 </div>
                 <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
             </form>

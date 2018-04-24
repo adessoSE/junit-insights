@@ -2,6 +2,7 @@ package de.adesso.junitinsightstester
 
 import de.adesso.junitinsights.annotations.JUnitInsights
 import org.hamcrest.Matchers.equalTo
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.slf4j.Logger
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @JUnitInsights
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("Fancy example test")
 class HelloControllerTest {
 
     companion object {
@@ -33,6 +35,7 @@ class HelloControllerTest {
     lateinit var mvc: MockMvc
 
     @Test
+    @DisplayName("First test method")
     fun getHello() {
         logger.info("### Test 1 started ###")
         mvc.perform(MockMvcRequestBuilders
@@ -43,6 +46,7 @@ class HelloControllerTest {
     }
 
     @Test
+    @DisplayName("Second test method")
     fun getAnotherHello() {
         logger.info("### Test 2 started ###")
         mvc.perform(MockMvcRequestBuilders

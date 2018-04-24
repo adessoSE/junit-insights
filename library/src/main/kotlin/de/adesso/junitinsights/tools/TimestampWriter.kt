@@ -34,7 +34,7 @@ object TimestampWriter {
      * @param testClass In case of an event that belongs to a certain test class, this can be included here
      * @param testFunction In case of an event that belongs to a certain test function, this can be included here
      */
-    fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String) {
+    fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String, testFailing: Boolean = false) {
         var tstamp: Long = timestamp
         if (deltaMode) {
             if (lastTimestamp == 0.toLong()) {
@@ -44,7 +44,12 @@ object TimestampWriter {
                 lastTimestamp = timestamp
             }
         }
-        timestamps.append(tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction) + "\\n\" +\n\"")
+        timestamps.append(tstamp.toString() + ";"
+                + event + ";"
+                + trimObjectString(testClass) + ";"
+                + trimObjectString(testFunction) + ";"
+                + testFailing
+                + "\\n\" +\n\"")
         if (logOutput)
             logger.info("########" + tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction) + "\n")
     }

@@ -29,8 +29,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before all",
-                trimClassName(context),
-                trimMethodName(context))
+                context.displayName,
+                getMethodName(context))
     }
 
     /**
@@ -44,8 +44,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after all",
-                trimClassName(context),
-                trimMethodName(context))
+                context.displayName,
+                getMethodName(context))
         timestampWriter.createReport()
     }
 
@@ -60,8 +60,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before each",
-                trimClassName(context),
-                trimMethodName(context))
+                context.displayName,
+                getMethodName(context))
     }
 
     /**
@@ -75,8 +75,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after each",
-                trimClassName(context),
-                trimMethodName(context))
+                context.displayName,
+                getMethodName(context))
     }
 
     /**
@@ -93,8 +93,8 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "before test execution",
-                trimClassName(context),
-                trimMethodName(context))
+                context.displayName,
+                getMethodName(context))
     }
 
     /**
@@ -110,8 +110,9 @@ class TestBenchmarkExtension :
         }
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "after test execution",
-                trimClassName(context),
-                trimMethodName(context))
+                context.displayName,
+                getMethodName(context),
+                context.executionException.isPresent)
     }
 
     /**
@@ -126,19 +127,13 @@ class TestBenchmarkExtension :
     }
 
     /**
-     * Helper function to remove the "class" keyword in front of the class name.
-     * @param testContext Context provided by JUnit 5
-     */
-    private fun trimClassName(testContext: ExtensionContext): String {
-        return testContext.testClass.toString().replace("class", "")
-    }
-
-    /**
      * Helper function to remove the class and package names in front of the method name.
      * @param testContext Context provided by JUnit 5
      */
-    private fun trimMethodName(testContext: ExtensionContext): String {
-        val splitName = testContext.testMethod.toString().split(".")
-        return if (splitName.isEmpty()) "" else splitName.last()
+    private fun getMethodName(testContext: ExtensionContext): String {
+        if (testContext.testMethod.toString() == "Optional.empty")
+            return ""
+
+        return testContext.displayName
     }
 }
