@@ -20,7 +20,6 @@ class SpringContextListener {
      */
     @EventListener(ContextRefreshedEvent::class)
     fun catchContextStart(event: ContextRefreshedEvent) {
-        //TODO Check if first init before closing initial, so that its not a refresh
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "context refreshed",
                 "", "")
@@ -36,7 +35,6 @@ class SpringContextListener {
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "context closed",
                 "", "")
-        //TODO: Is this method really called only once at the end?
         timestampWriter.createReport()
     }
 }
