@@ -28,7 +28,7 @@ object TimestampWriter {
      * @param testFunction In case of an event that belongs to a certain test function, this can be included here
      */
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String, testFailing: Boolean = false) {
-        var tstamp: Long = timestamp
+        val tstamp: Long = timestamp
         timestamps.append(tstamp.toString() + ";"
                 + event + ";"
                 + trimObjectString(testClass) + ";"
@@ -49,9 +49,9 @@ object TimestampWriter {
         if (htmlReportFile.parentFile != null)
             htmlReportFile.parentFile.mkdirs()
         PrintWriter(htmlReportFile).use {
-            it.write(htmlString);
+            it.write(htmlString)
         }
-
+        logger.debug("Report created at " + htmlReportFile.absolutePath)
     }
 
     /**
