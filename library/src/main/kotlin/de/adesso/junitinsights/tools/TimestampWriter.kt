@@ -26,6 +26,7 @@ object TimestampWriter {
     private var lastTimestamp: Long = 0
     private var timestamps = StringBuilder()
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
+    private var testClassLogged = false
 
     /**
      * Writes a timestamp with some meta information into the buffer.
@@ -36,6 +37,11 @@ object TimestampWriter {
      */
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String, testFailing: Boolean = false) {
         var tstamp: Long = timestamp
+
+        if (testClass != "") {
+            testClassLogged = true
+        }
+
         if (deltaMode) {
             if (lastTimestamp == 0.toLong()) {
                 lastTimestamp = timestamp
@@ -44,12 +50,14 @@ object TimestampWriter {
                 lastTimestamp = timestamp
             }
         }
+
         timestamps.append(tstamp.toString() + ";"
                 + event + ";"
                 + trimObjectString(testClass) + ";"
                 + trimObjectString(testFunction) + ";"
                 + testFailing
                 + "\\n\" +\n\"")
+
         if (logOutput)
             logger.info("########" + tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction) + "\n")
     }
@@ -58,9 +66,13 @@ object TimestampWriter {
      * Creates the html file containing all the collected data.
      */
     fun createReport() {
+        if (!testClassLogged)
+            return
+
         val htmlTemplatePath = ClassPathResource(JUnitInsightsReportProperties.templatepath)
         var htmlString = InputStreamReader(htmlTemplatePath.inputStream, "UTF-8").readText()
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
+
         val htmlReportFile = File(JUnitInsightsReportProperties.path + "insight_$currentTime.html")
         if (htmlReportFile.parentFile != null)
             htmlReportFile.parentFile.mkdirs()
