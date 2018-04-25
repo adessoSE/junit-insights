@@ -12,10 +12,9 @@ import java.time.format.DateTimeFormatter
 
 
 /**
- * Configuration options for the logging of timestamps
+ * Configuration options
  */
 var deltaMode = false   // generates data with relative timestamps instead of absolute timestamps
-var logOutput = false   // adds logging messages when saving a csv timestamp
 
 /**
  * Singleton class that provides functions to save timestamps for events with the corresponding data.
@@ -50,8 +49,7 @@ object TimestampWriter {
                 + trimObjectString(testFunction) + ";"
                 + testFailing
                 + "\\n\" +\n\"")
-        if (logOutput)
-            logger.info("########" + tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction) + "\n")
+        logger.debug("Timestamp saved: " + tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction))
     }
 
     /**
