@@ -1,26 +1,4 @@
-buildscript {
-    ext {
-        kotlinVersion = '1.2.31'
-        springBootVersion = '2.0.0.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-        classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}"
-    }
-}
-
-apply plugin: 'kotlin'
-apply plugin: 'kotlin-spring'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven-publish'
-apply plugin: 'kotlin-jpa'
 
 publishing {
     publications {
@@ -62,24 +40,6 @@ bootJar {
 
 build.dependsOn fatJar
 assemble.dependsOn fatJar
-
-compileKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ['-Xjsr305=strict']
-        jvmTarget = '1.8'
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ['-Xjsr305=strict']
-        jvmTarget = '1.8'
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
 
 dependencies {
     compile('org.jetbrains.kotlin:kotlin-reflect')
