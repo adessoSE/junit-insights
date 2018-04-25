@@ -12,17 +12,11 @@ import java.time.format.DateTimeFormatter
 
 
 /**
- * Configuration options
- */
-var deltaMode = false   // generates data with relative timestamps instead of absolute timestamps
-
-/**
  * Singleton class that provides functions to save timestamps for events with the corresponding data.
  * This also includes the generation of the final html report file containing the collected data.
  */
 object TimestampWriter {
     private var currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
-    private var lastTimestamp: Long = 0
     private var timestamps = StringBuilder()
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -35,14 +29,6 @@ object TimestampWriter {
      */
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String, testFailing: Boolean = false) {
         var tstamp: Long = timestamp
-        if (deltaMode) {
-            if (lastTimestamp == 0.toLong()) {
-                lastTimestamp = timestamp
-            } else {
-                tstamp = timestamp - lastTimestamp
-                lastTimestamp = timestamp
-            }
-        }
         timestamps.append(tstamp.toString() + ";"
                 + event + ";"
                 + trimObjectString(testClass) + ";"
