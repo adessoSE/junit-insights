@@ -19,6 +19,7 @@ object TimestampWriter {
     private var currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
     private var timestamps = StringBuilder()
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
+    private var testClassLogged = false
 
     /**
      * Writes a timestamp with some meta information into the buffer.
