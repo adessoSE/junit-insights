@@ -19,6 +19,7 @@ object TimestampWriter {
     private var currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
     private var timestamps = StringBuilder()
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
+    private var testClassLogged = false
 
     /**
      * Writes a timestamp with some meta information into the buffer.
@@ -28,23 +29,30 @@ object TimestampWriter {
      * @param testFunction In case of an event that belongs to a certain test function, this can be included here
      */
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String, testFailing: Boolean = false) {
-        val tstamp: Long = timestamp
-        timestamps.append(tstamp.toString() + ";"
+	if (testClass != "") {
+            testClassLogged = true
+        }
+
+        timestamps.append(timestamp.toString() + ";"
                 + event + ";"
                 + trimObjectString(testClass) + ";"
                 + trimObjectString(testFunction) + ";"
                 + testFailing
                 + "\\n\" +\n\"")
-        logger.debug("Timestamp saved: " + tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction))
+        logger.debug("Timestamp saved: " + timestamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction))
     }
 
     /**
      * Creates the html file containing all the collected data.
      */
     fun createReport() {
+        if (!testClassLogged)
+            return
+
         val htmlTemplatePath = ClassPathResource(JUnitInsightsReportProperties.templatepath)
         var htmlString = InputStreamReader(htmlTemplatePath.inputStream, "UTF-8").readText()
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
+
         val htmlReportFile = File(JUnitInsightsReportProperties.path + "insight_$currentTime.html")
         if (htmlReportFile.parentFile != null)
             htmlReportFile.parentFile.mkdirs()
