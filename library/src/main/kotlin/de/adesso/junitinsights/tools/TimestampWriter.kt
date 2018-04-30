@@ -12,21 +12,13 @@ import java.time.format.DateTimeFormatter
 
 
 /**
- * Configuration options for the logging of timestamps
- */
-var deltaMode = false   // generates data with relative timestamps instead of absolute timestamps
-var logOutput = false   // adds logging messages when saving a csv timestamp
-
-/**
  * Singleton class that provides functions to save timestamps for events with the corresponding data.
  * This also includes the generation of the final html report file containing the collected data.
  */
 object TimestampWriter {
     private var currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
-    private var lastTimestamp: Long = 0
     private var timestamps = StringBuilder()
     private var logger: Logger = LoggerFactory.getLogger(this::class.java)
-    private var testClassLogged = false
 
     /**
      * Writes a timestamp with some meta information into the buffer.
@@ -36,30 +28,17 @@ object TimestampWriter {
      * @param testFunction In case of an event that belongs to a certain test function, this can be included here
      */
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String, testFailing: Boolean = false) {
-        var tstamp: Long = timestamp
-
-        if (testClass != "") {
+	if (testClass != "") {
             testClassLogged = true
         }
 
-        if (deltaMode) {
-            if (lastTimestamp == 0.toLong()) {
-                lastTimestamp = timestamp
-            } else {
-                tstamp = timestamp - lastTimestamp
-                lastTimestamp = timestamp
-            }
-        }
-
-        timestamps.append(tstamp.toString() + ";"
+        timestamps.append(timestamp.toString() + ";"
                 + event + ";"
                 + trimObjectString(testClass) + ";"
                 + trimObjectString(testFunction) + ";"
                 + testFailing
                 + "\\n\" +\n\"")
-
-        if (logOutput)
-            logger.info("########" + tstamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction) + "\n")
+        logger.debug("Timestamp saved: " + timestamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction))
     }
 
     /**
@@ -77,9 +56,9 @@ object TimestampWriter {
         if (htmlReportFile.parentFile != null)
             htmlReportFile.parentFile.mkdirs()
         PrintWriter(htmlReportFile).use {
-            it.write(htmlString);
+            it.write(htmlString)
         }
-
+        logger.debug("Report created at " + htmlReportFile.absolutePath)
     }
 
     /**
