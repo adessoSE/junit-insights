@@ -8,7 +8,6 @@ import org.springframework.context.annotation.PropertySource
 
 @Configuration
 @EnableConfigurationProperties(JUnitInsightsReportProperties::class)
-@PropertySource("classpath:application.properties")
 class JUnitInsightsConfiguration {
     @Bean
     fun springContextListener(): SpringContextListener {
