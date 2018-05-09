@@ -4,12 +4,10 @@ import de.adesso.junitinsights.tools.TimestampWriter
 import org.springframework.context.event.ContextClosedEvent
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.context.event.EventListener
-import org.springframework.stereotype.Component
 
 /**
  * Listens to the spring-context-events to register starting and stopping of the context
  */
-@Component
 class SpringContextListener {
     private val timestampWriter = TimestampWriter
 

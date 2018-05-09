@@ -1,6 +1,6 @@
 package de.adesso.junitinsights.tools
 
-import de.adesso.junitinsights.config.JUnitInsightsReportProperties
+import de.adesso.junitinsights.autoconfiguration.JUnitInsightsReportProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
