@@ -43,12 +43,9 @@ assemble.dependsOn fatJar
 
 dependencies {
     compile('org.jetbrains.kotlin:kotlin-reflect')
-    compile('org.junit.jupiter:junit-jupiter-api:5.1.0')
-    compile('org.junit.platform:junit-platform-launcher:1.1.0')
-    compile('org.springframework.boot:spring-boot-starter') {
-        exclude group: 'ch.qos.logback'
-        exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
-    }
+    compileOnly('org.junit.jupiter:junit-jupiter-api:5.1.0')
+    compileOnly('org.junit.platform:junit-platform-launcher:1.1.0')
+    compileOnly('org.springframework.boot:spring-boot-starter')
 
     // You can easily generate your own configuration metadata file from items annotated with
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
