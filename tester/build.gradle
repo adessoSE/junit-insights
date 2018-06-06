@@ -2,10 +2,16 @@ group = 'de.adesso.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
+test {
+    // Enable JUnit 5 (Gradle 4.6+).
+    useJUnitPlatform()
+}
+
 dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-api:5.1.0')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.junit.jupiter:junit-jupiter-engine:5.1.0')
 
     testCompile(project(':library'))
 }
