@@ -13,3 +13,5 @@ deploy:
   key: $BINTRAY_API_KEY
   dry-run: false
   skip_cleanup: true
+  on:
+    branch: include_all_classes
