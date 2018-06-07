@@ -50,3 +50,13 @@ dependencies {
 Add `@JUnitInsights` to the test-classes you want to benchmark.
 If you want to exclude methods from the benchmark, add `@NoJUnitInsights` to those.
 Be aware that ExtendsWith(SpringExtension::class) needs to be used as Runner-class.
+
+If you want to add the extension to all your test classes, you only have to activate the extension autodetection for JUnit 5.
+You can do this for example by adding the following to your `build.gradle` file.
+Further information can be found [here](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic)
+
+```
+test {
+	systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+}
+```
