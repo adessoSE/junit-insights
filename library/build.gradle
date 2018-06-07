@@ -38,6 +38,10 @@ bootJar {
     enabled = false
 }
 
+jar {
+    enabled = true
+}
+
 build.dependsOn fatJar
 assemble.dependsOn fatJar
 
