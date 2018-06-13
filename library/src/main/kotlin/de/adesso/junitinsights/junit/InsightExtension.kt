@@ -1,6 +1,7 @@
 package de.adesso.junitinsights.junit
 
 import de.adesso.junitinsights.annotations.NoJUnitInsights
+import de.adesso.junitinsights.tools.InsightProperties
 import de.adesso.junitinsights.tools.TimestampWriter
 import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
@@ -17,6 +18,7 @@ class InsightExtension :
         BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
     private val timestampWriter = TimestampWriter
+    private val insightProperties = InsightProperties
 
     /**
      * Triggered at the very beginning of each test class.
@@ -24,6 +26,7 @@ class InsightExtension :
      * @see BeforeAllCallback
      */
     override fun beforeAll(context: ExtensionContext) {
+        insightProperties.setConfiguration(context)
         if (shouldNotBeBenchmarked(context)) {
             return
         }

@@ -6,6 +6,7 @@ test {
     // Enable JUnit 5 (Gradle 4.6+).
     useJUnitPlatform()
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+    systemProperty 'de.adesso.junitinsights.reportpath', 'reports/'
 }
 
 dependencies {
