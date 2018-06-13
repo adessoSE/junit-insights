@@ -33,6 +33,5 @@ class SpringContextListener {
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "context closed",
                 "", "")
-        timestampWriter.createReport()
     }
 }

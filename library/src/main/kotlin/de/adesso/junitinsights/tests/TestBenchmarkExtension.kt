@@ -46,7 +46,6 @@ class TestBenchmarkExtension :
                 "after all",
                 context.displayName,
                 getMethodName(context))
-        timestampWriter.createReport()
     }
 
     /**

@@ -13,6 +13,7 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.junit.jupiter:junit-jupiter-engine:5.1.0')
+    testCompile('org.junit.platform:junit-platform-launcher:1.1.0')
 
     testCompile(project(':library'))
 }
