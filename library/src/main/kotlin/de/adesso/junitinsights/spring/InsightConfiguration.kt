@@ -1,4 +1,4 @@
-package de.adesso.junitinsights.autoconfiguration
+package de.adesso.junitinsights.spring
 
 import de.adesso.junitinsights.spring.ContextListener
 import org.springframework.boot.context.properties.EnableConfigurationProperties

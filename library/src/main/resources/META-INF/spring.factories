@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-de.adesso.junitinsights.autoconfiguration.InsightConfiguration
+de.adesso.junitinsights.spring.InsightConfiguration
