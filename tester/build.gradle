@@ -5,6 +5,7 @@ sourceCompatibility = 1.8
 test {
     // Enable JUnit 5 (Gradle 4.6+).
     useJUnitPlatform()
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 
 dependencies {
