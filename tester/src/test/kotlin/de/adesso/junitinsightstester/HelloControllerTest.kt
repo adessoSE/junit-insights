@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
  * Tests for the HelloController
  */
 @ExtendWith(SpringExtension::class)
-@JUnitInsights
+//@JUnitInsights
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("Fancy example test")
