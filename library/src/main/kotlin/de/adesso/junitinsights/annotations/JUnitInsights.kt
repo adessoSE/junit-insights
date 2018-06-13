@@ -1,6 +1,6 @@
 package de.adesso.junitinsights.annotations
 
-import de.adesso.junitinsights.tests.TestBenchmarkExtension
+import de.adesso.junitinsights.junit.InsightExtension
 import org.junit.jupiter.api.extension.ExtendWith
 
 /**
@@ -11,5 +11,5 @@ import org.junit.jupiter.api.extension.ExtendWith
  */
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS)
 @Retention(value = AnnotationRetention.RUNTIME)
-@ExtendWith(TestBenchmarkExtension::class)
+@ExtendWith(InsightExtension::class)
 annotation class JUnitInsights

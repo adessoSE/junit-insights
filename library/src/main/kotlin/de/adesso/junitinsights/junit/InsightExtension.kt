@@ -1,4 +1,4 @@
-package de.adesso.junitinsights.tests
+package de.adesso.junitinsights.junit
 
 import de.adesso.junitinsights.annotations.NoJUnitInsights
 import de.adesso.junitinsights.tools.TimestampWriter
@@ -11,7 +11,7 @@ import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
  *
  * It implements the callback-functions of the JUnit5 Jupiter API.
  */
-class TestBenchmarkExtension :
+class InsightExtension :
         BeforeAllCallback, AfterAllCallback,
         BeforeEachCallback, AfterEachCallback,
         BeforeTestExecutionCallback, AfterTestExecutionCallback {

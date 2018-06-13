@@ -1,4 +1,4 @@
-package de.adesso.junitinsights.listener
+package de.adesso.junitinsights.spring
 
 import de.adesso.junitinsights.tools.TimestampWriter
 import org.springframework.context.event.ContextClosedEvent
@@ -8,7 +8,7 @@ import org.springframework.context.event.EventListener
 /**
  * Listens to the spring-context-events to register starting and stopping of the context
  */
-class SpringContextListener {
+class ContextListener {
     private val timestampWriter = TimestampWriter
 
     /**

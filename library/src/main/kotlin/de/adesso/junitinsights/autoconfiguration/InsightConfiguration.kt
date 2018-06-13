@@ -1,15 +1,15 @@
 package de.adesso.junitinsights.autoconfiguration
 
-import de.adesso.junitinsights.listener.SpringContextListener
+import de.adesso.junitinsights.spring.ContextListener
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@EnableConfigurationProperties(JUnitInsightsReportProperties::class)
-class JUnitInsightsConfiguration {
+@EnableConfigurationProperties(InsightReportProperties::class)
+class InsightConfiguration {
     @Bean
-    fun springContextListener(): SpringContextListener {
-        return SpringContextListener()
+    fun springContextListener(): ContextListener {
+        return ContextListener()
     }
 }

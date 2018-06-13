@@ -1,6 +1,6 @@
 package de.adesso.junitinsights.tools
 
-import de.adesso.junitinsights.autoconfiguration.JUnitInsightsReportProperties
+import de.adesso.junitinsights.autoconfiguration.InsightReportProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
@@ -49,11 +49,11 @@ object TimestampWriter {
         if (!testClassLogged)
             return
 
-        val htmlTemplatePath = ClassPathResource(JUnitInsightsReportProperties.templatepath)
+        val htmlTemplatePath = ClassPathResource(InsightReportProperties.templatepath)
         var htmlString = InputStreamReader(htmlTemplatePath.inputStream, "UTF-8").readText()
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
 
-        val htmlReportFile = File(JUnitInsightsReportProperties.path + "insight_$currentTime.html")
+        val htmlReportFile = File(InsightReportProperties.path + "insight_$currentTime.html")
         if (htmlReportFile.parentFile != null)
             htmlReportFile.parentFile.mkdirs()
         PrintWriter(htmlReportFile).use {

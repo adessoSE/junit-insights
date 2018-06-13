@@ -1,4 +1,4 @@
-package de.adesso.junitinsights.tests
+package de.adesso.junitinsights.junit
 
 import de.adesso.junitinsights.tools.TimestampWriter
 import org.junit.platform.launcher.TestExecutionListener
