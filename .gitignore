@@ -29,4 +29,4 @@ dist/
 nbdist/
 .nb-gradle/
 
-insight**
+insight_**.html
