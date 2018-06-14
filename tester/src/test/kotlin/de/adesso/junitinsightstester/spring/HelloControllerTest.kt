@@ -1,6 +1,5 @@
-package de.adesso.junitinsightstester
+package de.adesso.junitinsightstester.spring
 
-import de.adesso.junitinsights.annotations.JUnitInsights
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

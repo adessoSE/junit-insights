@@ -1,6 +1,7 @@
-package de.adesso.junitinsights.tests
+package de.adesso.junitinsights.junit
 
 import de.adesso.junitinsights.annotations.NoJUnitInsights
+import de.adesso.junitinsights.tools.InsightProperties
 import de.adesso.junitinsights.tools.TimestampWriter
 import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
@@ -11,12 +12,13 @@ import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
  *
  * It implements the callback-functions of the JUnit5 Jupiter API.
  */
-class TestBenchmarkExtension :
+class InsightExtension :
         BeforeAllCallback, AfterAllCallback,
         BeforeEachCallback, AfterEachCallback,
         BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
     private val timestampWriter = TimestampWriter
+    private val insightProperties = InsightProperties
 
     /**
      * Triggered at the very beginning of each test class.
@@ -24,13 +26,8 @@ class TestBenchmarkExtension :
      * @see BeforeAllCallback
      */
     override fun beforeAll(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "before all",
-                context.displayName,
-                getMethodName(context))
+        insightProperties.setConfiguration(context)
+        saveTimestamp("before all", context)
     }
 
     /**
@@ -39,14 +36,7 @@ class TestBenchmarkExtension :
      * @see AfterAllCallback
      */
     override fun afterAll(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "after all",
-                context.displayName,
-                getMethodName(context))
-        timestampWriter.createReport()
+        saveTimestamp("after all", context)
     }
 
     /**
@@ -55,13 +45,7 @@ class TestBenchmarkExtension :
      * @see BeforeEachCallback
      */
     override fun beforeEach(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "before each",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("before each", context)
     }
 
     /**
@@ -70,13 +54,7 @@ class TestBenchmarkExtension :
      * @see AfterEachCallback
      */
     override fun afterEach(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "after each",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("after each", context)
     }
 
     /**
@@ -88,13 +66,7 @@ class TestBenchmarkExtension :
      */
     @Throws(Exception::class)
     override fun beforeTestExecution(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "before test execution",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("before test execution", context)
     }
 
     /**
@@ -105,14 +77,28 @@ class TestBenchmarkExtension :
      */
     @Throws(Exception::class)
     override fun afterTestExecution(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
+        saveTimestamp("after test execution", context, context.executionException.isPresent)
+    }
+
+    private fun saveTimestamp(event: String, context: ExtensionContext) {
+        if (shouldNotBeBenchmarked(context))
             return
-        }
+
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "after test execution",
+                event,
+                context.displayName,
+                getMethodName(context))
+    }
+
+    private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean) {
+        if (shouldNotBeBenchmarked(context))
+            return
+
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
+                event,
                 context.displayName,
                 getMethodName(context),
-                context.executionException.isPresent)
+                testFailing)
     }
 
     /**
