@@ -27,13 +27,7 @@ class InsightExtension :
      */
     override fun beforeAll(context: ExtensionContext) {
         insightProperties.setConfiguration(context)
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "before all",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("before all", context)
     }
 
     /**
@@ -42,13 +36,7 @@ class InsightExtension :
      * @see AfterAllCallback
      */
     override fun afterAll(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "after all",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("after all", context)
     }
 
     /**
@@ -57,13 +45,7 @@ class InsightExtension :
      * @see BeforeEachCallback
      */
     override fun beforeEach(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "before each",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("before each", context)
     }
 
     /**
@@ -72,13 +54,7 @@ class InsightExtension :
      * @see AfterEachCallback
      */
     override fun afterEach(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "after each",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("after each", context)
     }
 
     /**
@@ -90,13 +66,7 @@ class InsightExtension :
      */
     @Throws(Exception::class)
     override fun beforeTestExecution(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
-            return
-        }
-        timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "before test execution",
-                context.displayName,
-                getMethodName(context))
+        saveTimestamp("before test execution", context)
     }
 
     /**
@@ -107,14 +77,28 @@ class InsightExtension :
      */
     @Throws(Exception::class)
     override fun afterTestExecution(context: ExtensionContext) {
-        if (shouldNotBeBenchmarked(context)) {
+        saveTimestamp("after test execution", context, context.executionException.isPresent)
+    }
+
+    private fun saveTimestamp(event: String, context: ExtensionContext) {
+        if (shouldNotBeBenchmarked(context))
             return
-        }
+
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
-                "after test execution",
+                event,
+                context.displayName,
+                getMethodName(context))
+    }
+
+    private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean) {
+        if (shouldNotBeBenchmarked(context))
+            return
+
+        timestampWriter.writeTimestamp(System.currentTimeMillis(),
+                event,
                 context.displayName,
                 getMethodName(context),
-                context.executionException.isPresent)
+                testFailing)
     }
 
     /**
