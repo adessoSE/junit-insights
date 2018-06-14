@@ -33,5 +33,6 @@ class ContextListener {
         timestampWriter.writeTimestamp(System.currentTimeMillis(),
                 "context closed",
                 "", "")
+        timestampWriter.createReport()
     }
 }
