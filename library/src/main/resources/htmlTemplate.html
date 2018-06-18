@@ -1,10 +1,3 @@
-<!-- Activate the following entries to develop this application -->
-<!--<link rel="stylesheet" type="text/css" href="style.css">
-<script src="variables.js"></script>
-<script src="utility.js"></script>
-<script src="dataProcessing.js"></script>
-<script src="chartUtility.js"></script>-->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.7/papaparse.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -26,18 +19,19 @@
 <body>
 <div class="container-fluid">
     <h1 align="center">JUnit Insights</h1>
-
-    <div id="information" style="visibility: hidden">
+    <div id="information" v-show="visible">
         <div class="row">
             <div class="col">
                 <h2 align="center">Time spent on Spring initialization vs. test execution</h2>
-                <div id="overviewChart"></div>
+                <div id="overviewChart">
+                    <p v-show="showNoTime">The test took no measurable time to complete</p>
+                </div>
             </div>
             <div class="col" align="center">
                 <h2>General information:</h2>
-                <p id="createdSpringContexts">Created Spring contexts: </p>
-                <p id="testedClasses">Tested classes: </p>
-                <p id="testedMethods">Tested methods: </p>
+                <p id="createdSpringContexts">Created Spring contexts: {{ general.createdSpringContexts }}</p>
+                <p id="testedClasses">Tested classes: {{ general.testedClasses }}</p>
+                <p id="testedMethods">Tested methods: {{ general.testedMethods }}</p>
             </div>
         </div>
         <h2 align="center" style="margin-top: 30px;">Time spent on individual test classes</h2>
@@ -137,3 +131,11 @@
 </div>
 </body>
 </html>
+
+<!-- Activate the following entries to develop this application -->
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="variables.js"></script>
+<script src="vueObjects.js"></script>
+<script src="utility.js"></script>
+<script src="dataProcessing.js"></script>
+<script src="chartUtility.js"></script>

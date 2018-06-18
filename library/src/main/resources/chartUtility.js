@@ -87,9 +87,7 @@ function drawOverviewBar() {
     };
 
     if (testTime + springTime + otherTime <= 0) {
-        infoText = document.createElement("p");
-        infoText.innerHTML = "The test took no measurable time to complete";
-        document.getElementById("overviewChart").appendChild(infoText);
+        information.showNoTime = true;
     } else {
         Plotly.newPlot("overviewChart", barChartData, barChartLayout);
     }
@@ -105,9 +103,9 @@ function showGeneralData() {
         createdSpringContexts += currentClass.newContexts;
         testedMethods += currentClass.tests.length;
     });
-    document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
-    document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesDurations.length;
-    document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
+    information.general.createdSpringContexts = createdSpringContexts;
+    information.general.testedMethods = testedMethods;
+    information.general.testedClasses = classesDurations.length;
 }
 
 /**

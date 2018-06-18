@@ -17,11 +17,10 @@ function processData(csvData) {
             let classesTimestamps = splitIntoClasses(data);
             allClassesDurations = calculateDurations(classesTimestamps);
             classesDurations = allClassesDurations;     // by default all test classes should be displayed
-            console.log(classesDurations);
             drawOverviewBar();
             drawPerTestBar();
             showGeneralData();
-            document.getElementById("information").style.visibility = "visible";
+            information.visible = true;
         }
     });
 }
