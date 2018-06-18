@@ -20,7 +20,6 @@ function processData(csvData) {
             drawOverviewBar();
             drawPerTestBar();
             showGeneralData();
-            information.visible = true;
         }
     });
 }

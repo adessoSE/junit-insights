@@ -8,7 +8,7 @@ let DOM = {};
 DOM._individualChartContainer = null;
 DOM.individualChartContainer = function () {
     if (DOM._individualChartContainer == null) {
-        DOM._individualChartContainer = document.getElementById("individualChart");
+        DOM._individualChartContainer = document.getElementById("individualCharts");
     }
     return DOM._individualChartContainer;
 };
@@ -29,62 +29,24 @@ function drawOverviewBar() {
         })
     });
 
-    let barChartData = [{
-        x: [springTime],
-        marker: {
-            color: "rgb(109, 179, 63)"
+    function getChartObject(x, text, color) {
+        return {
+            x: [x],
+                marker: {
+            color: color
         },
-        text: "Spring (" + springTime + "ms)",
-        textposition: "auto",
-        hoverinfo: "none",
-        type: "bar",
-        orientation: "h"
-    }, {
-        x: [testTime],
-        marker: {
-            color: "rgb(220, 82, 74)"
-        },
-        text: "Tests (" + testTime + "ms)",
-        textposition: "auto",
-        hoverinfo: "none",
-        type: "bar",
-        orientation: "h"
-    }, {
-        x: [otherTime],
-        marker: {
-            color: "rgb(180, 180, 180)"
-        },
-        text: "Other (" + otherTime + "ms)",
-        textposition: "auto",
-        hoverinfo: "none",
-        type: "bar",
-        orientation: "h"
-    }];
+            text: text + " (" + x + "ms)",
+                textposition: "auto",
+            hoverinfo: "none",
+            type: "bar",
+            orientation: "h"
+        }
+    }
 
-    let barChartLayout = {
-        showlegend: false,
-        font: {
-            family: "Oswald",
-            size: 16
-        },
-        barmode: "stack",
-        xaxis: {
-            zeroline: false,
-            showgrid: false,
-            showticklabels: false
-        },
-        yaxis: {
-            showticklabels: false
-        },
-        margin: {
-            l: 10,
-            r: 10,
-            b: 10,
-            t: 10,
-            pad: 4
-        },
-        height: 200
-    };
+    let barChartData = [
+        getChartObject(springTime, "Spring", "rgb(109, 179, 63)"),
+        getChartObject(testTime, "Tests", "rgb(220, 82, 74)"),
+        getChartObject(otherTime, "Other", "rgb(180, 180, 180)")];
 
     if (testTime + springTime + otherTime <= 0) {
         information.showNoTime = true;
@@ -112,122 +74,68 @@ function showGeneralData() {
  * Creates a plot that shows the time spent on different events for each test class individually
  */
 function drawPerTestBar() {
-    let colors = ["rgb(179, 77, 102)",
-        "rgb(238, 223, 123)",
-        "rgb(60, 125, 160)",
-        "rgb(206, 148, 107)",
-        "rgb(123, 66, 141)",
-        "rgb(137, 222, 222)",
-        "rgb(198, 103, 193)",
-        "rgb(215, 232, 140)",
-        "rgb(229, 199, 199)",
-        "rgb(53, 117, 117)",
-        "rgb(220, 200, 232)",
-        "rgb(148, 118, 83)",
-        "rgb(250, 248, 223)",
-        "rgb(98, 34, 34)",
-        "rgb(198, 240, 210)",
-        "rgb(124, 124, 60)",
-        "rgb(239, 219, 202)",
-        "rgb(21, 21, 85)",
-        "rgb(128, 128, 128)"];
     let currentChart, chartDiv, chartLabel, chartLabelDiv;
 
-    classesDurations.forEach(function (currentClass, i) {
-        currentChart = [{
-            x: [currentClass.spring],
-            text: "Spring (" + currentClass.spring + "ms)",
+    function getChartObject(x, text, color) {
+        return {
+            x: [x],
+            text: text + " (" + x + "ms)",
             textposition: "inside",
             marker: {
-                color: "rgb(109, 179, 63)"
+                color: color
             },
             hoverinfo: "none",
             type: "bar",
             orientation: "h"
-        }];
+        }
+    }
 
-        for (let j = 0; j < currentClass.tests.length; j++) {
-            currentChart.push({
-                x: [currentClass.tests[j]],
-                text: currentClass.testNames[j] + "(" + currentClass.tests[j] + "ms)",
-                textposition: "inside",
-                marker: {
-                    color: colors[j]
-                },
-                hoverinfo: "none",
-                type: "bar",
-                orientation: "h"
-            });
+    classesDurations.forEach(function (currentClass, i) {
+        currentChart = [getChartObject(currentClass.spring, "Spring", "rgb(109, 179, 63)")];
+
+        for (let j = 0, col = 0; j < currentClass.tests.length; j++) {
+            currentChart.push(getChartObject(currentClass.tests[j], currentClass.testNames[j], colors[col]));
+            col = col < 18 ? col+1 : 0;
         }
 
-        currentChart.push({
-            x: [currentClass.other],
-            text: "Other (" + currentClass.other + "ms)",
-            textposition: "inside",
-            marker: {
-                color: "rgb(180, 180, 180)"
-            },
-            hoverinfo: "none",
-            type: "bar",
-            orientation: "h"
-        });
+        currentChart.push(getChartObject(currentClass.other, "Other", "rgb(180, 180, 180)"));
 
-        let individualChartLayout = {
-            showlegend: false,
-            font: {
-                family: "Oswald",
-                size: 16
-            },
-            barmode: "stack",
-            xaxis: {
-                zeroline: false,
-                showgrid: false,
-                showticklabels: false
-            },
-            yaxis: {
-                showticklabels: false
-            },
-            margin: {
-                l: 10,
-                r: 10,
-                b: 10,
-                t: 10,
-                pad: 4
-            },
-            height: 150
-        };
-
-        chartLabelDiv = document.createElement("div");
-        chartLabelDiv.setAttribute("class", "row");
-        chartLabelDiv.style.marginTop = "30px";
-        chartLabel = document.createElement("h4");
-        chartLabel.innerHTML = currentClass.name + " (" + currentClass.duration + "ms)";
+        let col;
         if (currentClass.testStatus === "partial")
-            chartLabel.style.color = "orange";
+            col ="orange";
         else if (currentClass.testStatus === "failure")
-            chartLabel.style.color = "red";
-        chartLabelDiv.appendChild(chartLabel);
-        DOM.individualChartContainer().appendChild(chartLabelDiv);
+            col ="red";
+        else
+            col ="black";
 
-        if (currentClass.duration <= 0) {
-            chartDiv = document.createElement("p");
-            chartDiv.innerHTML = "The test took no measurable time to complete";
-            chartDiv.setAttribute("id", i);
-            DOM.individualChartContainer().appendChild(chartDiv);
-        } else {
-            chartDiv = document.createElement("div");
-            chartDiv.setAttribute("class", "row");
-            chartDiv.setAttribute("id", "individualChart" + i);
-            DOM.individualChartContainer().appendChild(chartDiv);
-            Plotly.newPlot("individualChart" + i, currentChart, individualChartLayout);
+        information.individualCharts.push({
+            data: currentClass,
+            chart: currentChart,
+            col: col,
+            chartid: "individualChart" + i
+        })
+
+        /*chartDiv = document.createElement("individual-chart");
+        chartDiv.setAttribute("current", currentClass);
+        if (currentClass.testStatus === "partial")
+            chartDiv.setAttribute("col", "orange");
+        else if (currentClass.testStatus === "failure")
+            chartDiv.setAttribute("col", "red");
+        else
+            chartDiv.setAttribute("col", "black");
+        chartDiv.setAttribute("chartid", "individualChart" + i);
+        DOM.individualChartContainer().appendChild(chartDiv);*/
+        //Plotly.newPlot("individualChart" + i, currentChart, individualChartLayout);
+        //Plotly.relayout("individualChart" + i, {width: window.innerWidth, height: 150});
+    });
+}
+
+function resize() {
+    DOM.individualChartContainer().childNodes.forEach(function (child) {
+        if (child.id.startsWith("individualChart")) {
+            Plotly.relayout(child.id, {width: window.innerWidth, height: 150});   // fit the plots in a resized window again
         }
     });
 }
 
-window.onresize = function () {
-    DOM.individualChartContainer().childNodes.forEach(function (child) {
-        if (child.id.startsWith("individualChart")) {
-            Plotly.relayout(child.id, {autosize: true});   // fit the plots in a resized window again
-        }
-    });
-};
+window.onresize = resize;

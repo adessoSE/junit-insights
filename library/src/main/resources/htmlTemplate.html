@@ -5,6 +5,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
+<!-- Activate the following entries to develop this application (don't forget the entries at the bottom of this file) -->
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="vueComponents.js"></script>
+<script src="variables.js"></script>
+<script src="utility.js"></script>
+<script src="dataProcessing.js"></script>
+<script src="chartLayouts.js"></script>
+<script src="chartUtility.js"></script>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
 <!DOCTYPE html>
@@ -19,7 +28,7 @@
 <body>
 <div class="container-fluid">
     <h1 align="center">JUnit Insights</h1>
-    <div id="information" v-show="visible">
+    <div id="information">
         <div class="row">
             <div class="col">
                 <h2 align="center">Time spent on Spring initialization vs. test execution</h2>
@@ -126,16 +135,17 @@
                 <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
             </form>
         </div>
-        <div id="individualChart"></div>
+        <div id="individualCharts">
+            <individual-chart v-for="item in individualCharts"
+                              v-bind:key="item.chartid"
+                              v-bind:data="item.data"
+                              v-bind:col="item.col"
+                              v-bind:chartid="item.chartid"></individual-chart>
+        </div>
     </div>
 </div>
 </body>
 </html>
 
 <!-- Activate the following entries to develop this application -->
-<link rel="stylesheet" type="text/css" href="style.css">
-<script src="variables.js"></script>
 <script src="vueObjects.js"></script>
-<script src="utility.js"></script>
-<script src="dataProcessing.js"></script>
-<script src="chartUtility.js"></script>
