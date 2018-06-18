@@ -18,10 +18,12 @@ DOM.individualChartContainer = function () {
  */
 function drawOverviewBar() {
     let springTime = 0;
+    let otherTime = 0;
     let testTime = 0;
     let infoText;
     classesDurations.forEach(function (currentClass) {
         springTime += currentClass.spring;
+        otherTime += currentClass.other;
         currentClass.tests.forEach(function (currentTest) {
             testTime += currentTest;
         })
@@ -43,6 +45,16 @@ function drawOverviewBar() {
             color: "rgb(220, 82, 74)"
         },
         text: "Tests (" + testTime + "ms)",
+        textposition: "auto",
+        hoverinfo: "none",
+        type: "bar",
+        orientation: "h"
+    }, {
+        x: [otherTime],
+        marker: {
+            color: "rgb(180, 180, 180)"
+        },
+        text: "Other (" + otherTime + "ms)",
         textposition: "auto",
         hoverinfo: "none",
         type: "bar",
@@ -74,7 +86,7 @@ function drawOverviewBar() {
         height: 200
     };
 
-    if (springTime + testTime <= 0) {
+    if (testTime + springTime + otherTime <= 0) {
         infoText = document.createElement("p");
         infoText.innerHTML = "The test took no measurable time to complete";
         document.getElementById("overviewChart").appendChild(infoText);
