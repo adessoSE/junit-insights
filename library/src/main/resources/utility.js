@@ -128,7 +128,3 @@ function orderList() {
     if (orderUpDown.value === "\u21A5")
         information.individualCharts = information.individualCharts.reverse();
 }
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}

@@ -15,10 +15,9 @@ function processData(csvData) {
                 return element.length === 5;    // remove irrelevant lines like blank lines
             });
             let classesTimestamps = splitIntoClasses(data);
-            allClassesDurations = calculateDurations(classesTimestamps);
-            classesDurations = allClassesDurations;     // by default all test classes should be displayed
-            drawOverviewBar();
-            prepareChartElements();
+            let classesDurations = calculateDurations(classesTimestamps);
+            prepareChartElements(classesDurations);
+            drawOverviewChart();
             drawPerTestCharts();
             showGeneralData();
         }

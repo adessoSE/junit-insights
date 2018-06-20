@@ -7,12 +7,13 @@
 /**
  * Creates a plot that shows the time spent on spring initialization vs. actual test execution
  */
-function drawOverviewBar() {
+function drawOverviewChart() {
     let springTime = 0;
     let otherTime = 0;
     let testTime = 0;
-    let infoText;
-    classesDurations.forEach(function (currentClass) {
+
+    information.individualCharts.forEach(function (currentChart) {
+        let currentClass = currentChart.data;
         springTime += currentClass.spring;
         otherTime += currentClass.other;
         currentClass.tests.forEach(function (currentTest) {
@@ -52,19 +53,19 @@ function drawOverviewBar() {
 function showGeneralData() {
     let createdSpringContexts = 0;
     let testedMethods = 0;
-    classesDurations.forEach(function (currentClass) {
-        createdSpringContexts += currentClass.newContexts;
-        testedMethods += currentClass.tests.length;
+    information.individualCharts.forEach(function (currentChart) {
+        createdSpringContexts += currentChart.data.newContexts;
+        testedMethods += currentChart.data.tests.length;
     });
     information.general.createdSpringContexts = createdSpringContexts;
     information.general.testedMethods = testedMethods;
-    information.general.testedClasses = classesDurations.length;
+    information.general.testedClasses = information.individualCharts.length;
 }
 
 /**
  * Creates a plot that shows the time spent on different events for each test class individually
  */
-function prepareChartElements() {
+function prepareChartElements(classesDurations) {
     let currentChart;
 
     function getChartObject(x, text, color) {
@@ -91,18 +92,18 @@ function prepareChartElements() {
 
         currentChart.push(getChartObject(currentClass.other, "Other", "rgb(180, 180, 180)"));
 
-        let col;
+        let textColor;
         if (currentClass.testStatus === "partial")
-            col = "orange";
+            textColor = "orange";
         else if (currentClass.testStatus === "failure")
-            col = "red";
+            textColor = "red";
         else
-            col = "black";
+            textColor = "black";
 
         let individualChart = {
             data: currentClass,
             chart: currentChart,
-            col: col,
+            col: textColor,
             chartid: "individualChart" + i
         };
 
@@ -112,7 +113,7 @@ function prepareChartElements() {
 }
 
 async function drawPerTestCharts() {
-    await sleep(50);
+    await new Promise(resolve => setTimeout(resolve, 50));      //sleep for 50ms to ensure that the divs are created first
     information.individualCharts.forEach(function (element) {
         Plotly.newPlot(element.chartid, element.chart, individualChartLayout);
     });
@@ -124,10 +125,10 @@ function removePerTestCharts() {
     })
 }
 
-function resize() {
+function resizePerTestCharts() {
     information.individualCharts.forEach(function (element) {
         Plotly.relayout(element.chartid, {width: window.innerWidth, height: 150});
     });
 }
 
-window.onresize = resize;
+window.onresize = resizePerTestCharts;
