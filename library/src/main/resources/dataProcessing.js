@@ -56,13 +56,14 @@ function calculateDurations(classesTimestamps) {
         currentClass.begin = currentClassTimestamps[0][0];
         currentClass.end = currentClassTimestamps[currentClassTimestamps.length - 1][0];
         currentClass.newContexts = 0;
+        currentClass.spring = 0;
         testDurations = [];
         testNames = [];
         testSuccess = [];
         testDurationSum = 0;
         testBegin = 0;
 
-        currentClassTimestamps.forEach(function (currentEvent) {
+        currentClassTimestamps.forEach(function (currentEvent, index) {
             if (currentEvent[1] === "before test execution") {    // "before test execution" is the first event for each test
                 if (testBegin === 0) {
                     testBegin = currentEvent[0];
@@ -80,6 +81,7 @@ function calculateDurations(classesTimestamps) {
                     testSuccess.push(currentEvent[4] === "false")
                 }
             } else if (currentEvent[1] === "context refreshed") {
+                currentClass.spring += currentEvent[0] - currentClassTimestamps[index-1][0];
                 currentClass.newContexts++;
             }
         });
@@ -87,13 +89,7 @@ function calculateDurations(classesTimestamps) {
         currentClass.tests = testDurations;
         currentClass.testNames = testNames;
         currentClass.duration = currentClass.end - currentClass.begin;
-        if (currentClass.newContexts > 0) {
-            currentClass.spring = currentClass.duration - testDurationSum;
-            currentClass.other = 0;
-        } else {
-            currentClass.spring = 0;
-            currentClass.other = currentClass.duration - testDurationSum;
-        }
+        currentClass.other = currentClass.duration - testDurationSum - currentClass.spring;
 
         currentClass.testSuccess = testSuccess;
         if (currentClass.testSuccess.every(t => t))
