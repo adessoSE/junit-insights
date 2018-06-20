@@ -10,6 +10,7 @@
 window.onload = function () {
     processData(csvString);
     $('[data-toggle="tooltip"]').tooltip();     // enable bootstrap tooltips on initialization
+    drawPerTestCharts();
 };
 
 /**
@@ -25,7 +26,7 @@ function refreshClicked() {
     applyFilters();
     orderList();
 
-    drawPerTestBar();
+    prepareChartElements();
 }
 
 /**
@@ -131,4 +132,8 @@ function orderList() {
     }
     if (orderUpDown.value === "\u21A5")
         classesDurations = classesDurations.reverse();
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

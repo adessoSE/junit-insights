@@ -18,7 +18,7 @@ function processData(csvData) {
             allClassesDurations = calculateDurations(classesTimestamps);
             classesDurations = allClassesDurations;     // by default all test classes should be displayed
             drawOverviewBar();
-            drawPerTestBar();
+            prepareChartElements();
             showGeneralData();
         }
     });

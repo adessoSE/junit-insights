@@ -73,7 +73,7 @@ function showGeneralData() {
 /**
  * Creates a plot that shows the time spent on different events for each test class individually
  */
-function drawPerTestBar() {
+function prepareChartElements() {
     let currentChart, chartDiv, chartLabel, chartLabelDiv;
 
     function getChartObject(x, text, color) {
@@ -114,19 +114,13 @@ function drawPerTestBar() {
             col: col,
             chartid: "individualChart" + i
         })
+    });
+}
 
-        /*chartDiv = document.createElement("individual-chart");
-        chartDiv.setAttribute("current", currentClass);
-        if (currentClass.testStatus === "partial")
-            chartDiv.setAttribute("col", "orange");
-        else if (currentClass.testStatus === "failure")
-            chartDiv.setAttribute("col", "red");
-        else
-            chartDiv.setAttribute("col", "black");
-        chartDiv.setAttribute("chartid", "individualChart" + i);
-        DOM.individualChartContainer().appendChild(chartDiv);*/
-        //Plotly.newPlot("individualChart" + i, currentChart, individualChartLayout);
-        //Plotly.relayout("individualChart" + i, {width: window.innerWidth, height: 150});
+async function drawPerTestCharts() {
+    await sleep(50);
+    information.individualCharts.forEach(function(element) {
+        Plotly.newPlot(element.chartid, element.chart, individualChartLayout);
     });
 }
 
