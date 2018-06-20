@@ -4,5 +4,6 @@
  */
 let csvString = "$timestampCsvString";
 
-let classesDurations;
-let allClassesDurations;
+let classesDurations = [];
+let allClassesDurations = [];
+let allIndividualCharts = [];

@@ -10,7 +10,6 @@
 window.onload = function () {
     processData(csvString);
     $('[data-toggle="tooltip"]').tooltip();     // enable bootstrap tooltips on initialization
-    drawPerTestCharts();
 };
 
 /**
@@ -18,15 +17,10 @@ window.onload = function () {
  * Applies filters and ordering for the individual test charts
  */
 function refreshClicked() {
-    let individualChart = document.getElementById("individualChart");
-    while (individualChart.firstChild) {
-        individualChart.removeChild(individualChart.firstChild);
-    }
-
+    removePerTestCharts();
     applyFilters();
     orderList();
-
-    prepareChartElements();
+    drawPerTestCharts();
 }
 
 /**
@@ -84,8 +78,9 @@ function applyFilters() {
         maxTestTime = Infinity;
     }
 
-    classesDurations = [];
-    allClassesDurations.forEach(function (currentClass) {
+    information.individualCharts = [];
+    allIndividualCharts.forEach(function (currentChart) {
+        let currentClass = currentChart.data;
         if (currentClass.spring / currentClass.duration < minSpringShare / 100 ||
             currentClass.spring / currentClass.duration > maxSpringShare / 100 ||
             currentClass.duration < minTestTime ||
@@ -97,7 +92,7 @@ function applyFilters() {
             (!includePartialTests && currentClass.testStatus === "partial")
         )
             return;
-        classesDurations.push(currentClass);
+        information.individualCharts.push(currentChart);
     });
 }
 
@@ -110,19 +105,19 @@ function orderList() {
         case "execution_order":
             break;
         case "duration":
-            classesDurations = classesDurations.sort(function (a, b) {
-                return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
+            information.individualCharts = information.individualCharts.sort(function (a, b) {
+                return (a.data.duration > b.data.duration) ? 1 : ((b.data.duration > a.data.duration) ? -1 : 0)
             });
             break;
         case "spring":
-            classesDurations = classesDurations.sort(function (a, b) {
-                return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
+            information.individualCharts = information.individualCharts.sort(function (a, b) {
+                return (a.data.spring > b.data.spring) ? 1 : ((b.data.spring > a.data.spring) ? -1 : 0)
             });
             break;
         case "tests_only":
-            classesDurations = classesDurations.sort(function (a, b) {
-                let actualA = a.duration - a.spring - a.other;
-                let actualB = b.duration - b.spring - b.other;
+            information.individualCharts = information.individualCharts.sort(function (a, b) {
+                let actualA = a.data.duration - a.data.spring - a.data.other;
+                let actualB = b.data.duration - b.data.spring - b.data.other;
                 return (actualA > actualB) ? 1 : ((actualB > actualA) ? -1 : 0)
             });
             break;
@@ -131,7 +126,7 @@ function orderList() {
             return
     }
     if (orderUpDown.value === "\u21A5")
-        classesDurations = classesDurations.reverse();
+        information.individualCharts = information.individualCharts.reverse();
 }
 
 function sleep(ms) {

@@ -74,7 +74,7 @@ function showGeneralData() {
  * Creates a plot that shows the time spent on different events for each test class individually
  */
 function prepareChartElements() {
-    let currentChart, chartDiv, chartLabel, chartLabelDiv;
+    let currentChart;
 
     function getChartObject(x, text, color) {
         return {
@@ -108,13 +108,16 @@ function prepareChartElements() {
         else
             col ="black";
 
-        information.individualCharts.push({
+        let individualChart = {
             data: currentClass,
             chart: currentChart,
             col: col,
             chartid: "individualChart" + i
-        })
+        };
+
+        allIndividualCharts.push(individualChart);
     });
+    information.individualCharts = allIndividualCharts;
 }
 
 async function drawPerTestCharts() {
@@ -122,6 +125,12 @@ async function drawPerTestCharts() {
     information.individualCharts.forEach(function(element) {
         Plotly.newPlot(element.chartid, element.chart, individualChartLayout);
     });
+}
+
+function removePerTestCharts() {
+    information.individualCharts.forEach(function(element) {
+        Plotly.purge(element.chartid);
+    })
 }
 
 function resize() {
