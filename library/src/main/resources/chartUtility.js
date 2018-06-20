@@ -4,15 +4,6 @@
  * Methods for creating the charts displaying the results of the data processing
  */
 
-let DOM = {};
-DOM._individualChartContainer = null;
-DOM.individualChartContainer = function () {
-    if (DOM._individualChartContainer == null) {
-        DOM._individualChartContainer = document.getElementById("individualCharts");
-    }
-    return DOM._individualChartContainer;
-};
-
 /**
  * Creates a plot that shows the time spent on spring initialization vs. actual test execution
  */
@@ -134,10 +125,8 @@ function removePerTestCharts() {
 }
 
 function resize() {
-    DOM.individualChartContainer().childNodes.forEach(function (child) {
-        if (child.id.startsWith("individualChart")) {
-            Plotly.relayout(child.id, {width: window.innerWidth, height: 150});   // fit the plots in a resized window again
-        }
+    information.individualCharts.forEach(function (element) {
+        Plotly.relayout(element.chartid, {width: window.innerWidth, height: 150});
     });
 }
 
