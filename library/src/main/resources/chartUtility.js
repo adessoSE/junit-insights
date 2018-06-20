@@ -32,11 +32,11 @@ function drawOverviewBar() {
     function getChartObject(x, text, color) {
         return {
             x: [x],
-                marker: {
-            color: color
-        },
+            marker: {
+                color: color
+            },
             text: text + " (" + x + "ms)",
-                textposition: "auto",
+            textposition: "auto",
             hoverinfo: "none",
             type: "bar",
             orientation: "h"
@@ -95,18 +95,18 @@ function prepareChartElements() {
 
         for (let j = 0, col = 0; j < currentClass.tests.length; j++) {
             currentChart.push(getChartObject(currentClass.tests[j], currentClass.testNames[j], colors[col]));
-            col = col < 18 ? col+1 : 0;
+            col = col < 18 ? col + 1 : 0;
         }
 
         currentChart.push(getChartObject(currentClass.other, "Other", "rgb(180, 180, 180)"));
 
         let col;
         if (currentClass.testStatus === "partial")
-            col ="orange";
+            col = "orange";
         else if (currentClass.testStatus === "failure")
-            col ="red";
+            col = "red";
         else
-            col ="black";
+            col = "black";
 
         let individualChart = {
             data: currentClass,
@@ -122,13 +122,13 @@ function prepareChartElements() {
 
 async function drawPerTestCharts() {
     await sleep(50);
-    information.individualCharts.forEach(function(element) {
+    information.individualCharts.forEach(function (element) {
         Plotly.newPlot(element.chartid, element.chart, individualChartLayout);
     });
 }
 
 function removePerTestCharts() {
-    information.individualCharts.forEach(function(element) {
+    information.individualCharts.forEach(function (element) {
         Plotly.purge(element.chartid);
     })
 }
