@@ -1,523 +1,24 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.7/papaparse.min.js"></script>
+<!-- Activate the following entries to develop this application (don't forget the entries at the bottom of this file) -->
+<!-- Attention: If you are changing/adding libraries, make sure to also do this in the libraries.html file!-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.7/papaparse.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
-<!--
-Global variables
--->
-<script>
-    /**
-     * The csv data gets injected into this string when applying this template
-     * @type {string}
-     */
-    let csvString = "$timestampCsvString";
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="vueComponents.js"></script>
+<script src="variables.js"></script>
+<script src="utility.js"></script>
+<script src="dataProcessing.js"></script>
+<script src="chartLayouts.js"></script>
+<script src="chartUtility.js"></script>-->
 
-    let classesDurations;
-    let allClassesDurations;
-</script>
-
-<!--
-General application specific methods
--->
-<script>
-    "use strict";
-
-    /**
-     * Starts processing the data after the site fully loaded
-     */
-    window.onload = function () {
-        processData(csvString);
-        $('[data-toggle="tooltip"]').tooltip();     // enable bootstrap tooltips on initialization
-    };
-
-    /**
-     * Click handler for the refresh button
-     * Applies filters and ordering for the individual test charts
-     */
-    function refreshClicked() {
-        let individualChart = document.getElementById("individualChart");
-        while (individualChart.firstChild) {
-            individualChart.removeChild(individualChart.firstChild);
-        }
-
-        applyFilters();
-        orderList();
-
-        drawPerTestBar();
-    }
-
-    /**
-     * Click handler for the clear button
-     * Clears the filter fields and refreshes the list of test classes
-     */
-    function clearClicked() {
-        let formData = document.getElementById("filter_form");
-        formData.elements[0].value = "";
-        formData.elements[1].value = "";
-        formData.elements[2].value = "";
-        formData.elements[3].value = "";
-        formData.elements[4].checked = false;
-        formData.elements[6].checked = true;
-        formData.elements[7].checked = true;
-        formData.elements[8].checked = true;
-
-        refreshClicked()
-    }
-
-    function orderToggled(button) {
-        if (button.value === "\u21A7")
-            button.value = "\u21A5";
-        else
-            button.value = "\u21A7";
-    }
-
-    /**
-     * Refreshes the set of currently displayed test classes
-     * according to the filter and ordering settings the user applied.
-     */
-    function applyFilters() {
-        let formData = document.getElementById("filter_form");
-        let minSpringShare = formData.elements[0].value;
-        let maxSpringShare = formData.elements[1].value;
-        let minTestTime = formData.elements[2].value;
-        let maxTestTime = formData.elements[3].value;
-        let includeSpringTests = formData.elements[5].checked;
-        let includeNonSpringTests = formData.elements[6].checked;
-        let includeSucceededTests = formData.elements[8].checked;
-        let includePartialTests = formData.elements[9].checked;
-        let includeFailedTests = formData.elements[10].checked;
-
-        // set default values if the fields are left blank
-        if (minSpringShare === "") {
-            minSpringShare = 0;
-        }
-        if (maxSpringShare === "") {
-            maxSpringShare = 100;
-        }
-        if (minTestTime === "") {
-            minTestTime = 0;
-        }
-        if (maxTestTime === "") {
-            maxTestTime = Infinity;
-        }
-
-        classesDurations = [];
-        allClassesDurations.forEach(function (currentClass) {
-            if (currentClass.spring / currentClass.duration < minSpringShare / 100 ||
-                currentClass.spring / currentClass.duration > maxSpringShare / 100 ||
-                currentClass.duration < minTestTime ||
-                currentClass.duration > maxTestTime ||
-                (!includeSpringTests && currentClass.newContexts > 0) ||
-                (!includeNonSpringTests && currentClass.newContexts < 1) ||
-                (!includeSucceededTests && currentClass.testStatus === "success") ||
-                (!includeFailedTests && currentClass.testStatus === "failure") ||
-                (!includePartialTests && currentClass.testStatus === "partial")
-            )
-                return;
-            classesDurations.push(currentClass);
-        });
-    }
-
-    function orderList() {
-        let selector = document.getElementById("order_select");
-        let orderUpDown = document.getElementById("order_up_down");
-        let orderBy = selector.options[selector.selectedIndex].value;
-
-        switch (orderBy) {
-            case "execution_order":
-                break;
-            case "duration":
-                classesDurations = classesDurations.sort(function (a, b) {
-                    return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0)
-                });
-                break;
-            case "spring":
-                classesDurations = classesDurations.sort(function (a, b) {
-                    return (a.spring > b.spring) ? 1 : ((b.spring > a.spring) ? -1 : 0)
-                });
-                break;
-            case "tests_only":
-                classesDurations = classesDurations.sort(function (a, b) {
-                    let actualA = a.duration - a.spring - a.other;
-                    let actualB = b.duration - b.spring - b.other;
-                    return (actualA > actualB) ? 1 : ((actualB > actualA) ? -1 : 0)
-                });
-                break;
-            default:
-                console.log("Something went wrong with the order selection element.");
-                return
-        }
-        if (orderUpDown.value === "\u21A5")
-            classesDurations = classesDurations.reverse();
-    }
-</script>
-
-<!--
-Methods for processing the csv data before it can be displayed
--->
-<script>
-    "use strict";
-
-    /**
-     * Kicks off the processing of the csv data and the creation of the plots
-     * @param csvData The csv string containing all timestamps
-     */
-    function processData(csvData) {
-        Papa.parse(csvData, {
-            complete: function (content) {
-                let data = content.data.filter(function (element) {
-                    return element.length === 5;    // remove irrelevant lines like blank lines
-                });
-                let classesTimestamps = splitIntoClasses(data);
-                allClassesDurations = calculateDurations(classesTimestamps);
-                classesDurations = allClassesDurations;     // by default all test classes should be displayed
-                console.log(classesDurations);
-                drawOverviewBar();
-                drawPerTestBar();
-                showGeneralData();
-                document.getElementById("information").style.visibility = "visible";
-            }
-        });
-    }
-
-    /**
-     * Splits the raw timestamp data into test classes for further processing
-     * @param rawData Raw timestamp data from the input file
-     * @returns {Array}
-     */
-    function splitIntoClasses(rawData) {
-        let classesTimestamps = [];
-        let currentClass = [];
-        rawData.forEach(function (entry) {
-            currentClass.push(entry);
-            if (entry[1] === "after all") {     // each class terminates with "after all"
-                classesTimestamps.push(currentClass);
-                currentClass = [];              // and the next class starts immediately after that
-            }
-        });
-        return classesTimestamps;
-    }
-
-    /**
-     * Calculates durations for the important events from raw timestamp data
-     * @param classesTimestamps Input which is already split into test classes
-     * @returns {Array}
-     */
-    function calculateDurations(classesTimestamps) {
-        let classesDurations = [];
-        let currentClass, testDurations, testNames, testSuccess, testDurationSum, testBegin;
-        classesTimestamps.forEach(function (currentClassTimestamps) {
-            currentClass = {};
-            currentClass.name = currentClassTimestamps[0][2];
-            currentClass.begin = currentClassTimestamps[0][0];
-            currentClass.end = currentClassTimestamps[currentClassTimestamps.length - 1][0];
-            currentClass.newContexts = 0;
-            testDurations = [];
-            testNames = [];
-            testSuccess = [];
-            testDurationSum = 0;
-            testBegin = 0;
-
-            currentClassTimestamps.forEach(function (currentEvent) {
-                if (currentEvent[1] === "before test execution") {    // "before test execution" is the first event for each test
-                    if (testBegin === 0) {
-                        testBegin = currentEvent[0];
-                    } else {
-                        console.error("An error occurred while parsing the file!");
-                    }
-                } else if (currentEvent[1] === "after test execution") {  // "after test execution" marks termination of the test
-                    if (testBegin === 0) {
-                        console.error("An error occurred while parsing the file!");
-                    } else {
-                        testDurations.push(currentEvent[0] - testBegin);
-                        testNames.push(currentEvent[3]);
-                        testDurationSum += currentEvent[0] - testBegin;
-                        testBegin = 0;
-                        testSuccess.push(currentEvent[4] === "false")
-                    }
-                } else if (currentEvent[1] === "context refreshed") {
-                    currentClass.newContexts++;
-                }
-            });
-
-            currentClass.tests = testDurations;
-            currentClass.testNames = testNames;
-            currentClass.duration = currentClass.end - currentClass.begin;
-            if (currentClass.newContexts > 0) {
-                currentClass.spring = currentClass.duration - testDurationSum;
-                currentClass.other = 0;
-            } else {
-                currentClass.spring = 0;
-                currentClass.other = currentClass.duration - testDurationSum;
-            }
-
-            currentClass.testSuccess = testSuccess;
-            if (currentClass.testSuccess.every(t => t))
-                currentClass.testStatus = "success";
-            else if (currentClass.testSuccess.every(t => !t))
-                currentClass.testStatus = "failure";
-            else
-                currentClass.testStatus = "partial";
-
-            classesDurations.push(currentClass);
-        });
-        return classesDurations;
-    }
-</script>
-
-<!--
-Methods for creating the charts displaying the results of the data processing
--->
-<script>
-    "use strict";
-
-    let DOM = {};
-    DOM._individualChartContainer = null;
-    DOM.individualChartContainer = function () {
-        if (DOM._individualChartContainer == null) {
-            DOM._individualChartContainer = document.getElementById("individualChart");
-        }
-        return DOM._individualChartContainer;
-    };
-
-    /**
-     * Creates a plot that shows the time spent on spring initialization vs. actual test execution
-     */
-    function drawOverviewBar() {
-        let springTime = 0;
-        let testTime = 0;
-        let infoText;
-        classesDurations.forEach(function (currentClass) {
-            springTime += currentClass.spring;
-            currentClass.tests.forEach(function (currentTest) {
-                testTime += currentTest;
-            })
-        });
-
-        let barChartData = [{
-            x: [springTime],
-            marker: {
-                color: "rgb(109, 179, 63)"
-            },
-            text: "Spring (" + springTime + "ms)",
-            textposition: "auto",
-            hoverinfo: "none",
-            type: "bar",
-            orientation: "h"
-        }, {
-            x: [testTime],
-            marker: {
-                color: "rgb(220, 82, 74)"
-            },
-            text: "Tests (" + testTime + "ms)",
-            textposition: "auto",
-            hoverinfo: "none",
-            type: "bar",
-            orientation: "h"
-        }];
-
-        let barChartLayout = {
-            showlegend: false,
-            font: {
-                family: "Oswald",
-                size: 16
-            },
-            barmode: "stack",
-            xaxis: {
-                zeroline: false,
-                showgrid: false,
-                showticklabels: false
-            },
-            yaxis: {
-                showticklabels: false
-            },
-            margin: {
-                l: 10,
-                r: 10,
-                b: 10,
-                t: 10,
-                pad: 4
-            },
-            height: 200
-        };
-
-        if (springTime + testTime <= 0) {
-            infoText = document.createElement("p");
-            infoText.innerHTML = "The test took no measurable time to complete";
-            document.getElementById("overviewChart").appendChild(infoText);
-        } else {
-            Plotly.newPlot("overviewChart", barChartData, barChartLayout);
-        }
-    }
-
-    /**
-     * Fills in the general information about the observed tests
-     */
-    function showGeneralData() {
-        let createdSpringContexts = 0;
-        let testedMethods = 0;
-        classesDurations.forEach(function (currentClass) {
-            createdSpringContexts += currentClass.newContexts;
-            testedMethods += currentClass.tests.length;
-        });
-        document.getElementById("createdSpringContexts").innerHTML = "Created Spring contexts: " + createdSpringContexts;
-        document.getElementById("testedClasses").innerHTML = "Tested classes: " + classesDurations.length;
-        document.getElementById("testedMethods").innerHTML = "Tested methods: " + testedMethods;
-    }
-
-    /**
-     * Creates a plot that shows the time spent on different events for each test class individually
-     */
-    function drawPerTestBar() {
-        let colors = ["rgb(179, 77, 102)",
-            "rgb(238, 223, 123)",
-            "rgb(60, 125, 160)",
-            "rgb(206, 148, 107)",
-            "rgb(123, 66, 141)",
-            "rgb(137, 222, 222)",
-            "rgb(198, 103, 193)",
-            "rgb(215, 232, 140)",
-            "rgb(229, 199, 199)",
-            "rgb(53, 117, 117)",
-            "rgb(220, 200, 232)",
-            "rgb(148, 118, 83)",
-            "rgb(250, 248, 223)",
-            "rgb(98, 34, 34)",
-            "rgb(198, 240, 210)",
-            "rgb(124, 124, 60)",
-            "rgb(239, 219, 202)",
-            "rgb(21, 21, 85)",
-            "rgb(128, 128, 128)"];
-        let currentChart, chartDiv, chartLabel, chartLabelDiv;
-
-        classesDurations.forEach(function (currentClass, i) {
-            currentChart = [{
-                x: [currentClass.spring],
-                text: "Spring (" + currentClass.spring + "ms)",
-                textposition: "inside",
-                marker: {
-                    color: "rgb(109, 179, 63)"
-                },
-                hoverinfo: "none",
-                type: "bar",
-                orientation: "h"
-            }];
-
-            for (let j = 0; j < currentClass.tests.length; j++) {
-                currentChart.push({
-                    x: [currentClass.tests[j]],
-                    text: currentClass.testNames[j] + "(" + currentClass.tests[j] + "ms)",
-                    textposition: "inside",
-                    marker: {
-                        color: colors[j]
-                    },
-                    hoverinfo: "none",
-                    type: "bar",
-                    orientation: "h"
-                });
-            }
-
-            currentChart.push({
-                x: [currentClass.other],
-                text: "Other (" + currentClass.other + "ms)",
-                textposition: "inside",
-                marker: {
-                    color: "rgb(180, 180, 180)"
-                },
-                hoverinfo: "none",
-                type: "bar",
-                orientation: "h"
-            });
-
-            let individualChartLayout = {
-                showlegend: false,
-                font: {
-                    family: "Oswald",
-                    size: 16
-                },
-                barmode: "stack",
-                xaxis: {
-                    zeroline: false,
-                    showgrid: false,
-                    showticklabels: false
-                },
-                yaxis: {
-                    showticklabels: false
-                },
-                margin: {
-                    l: 10,
-                    r: 10,
-                    b: 10,
-                    t: 10,
-                    pad: 4
-                },
-                height: 150
-            };
-
-            chartLabelDiv = document.createElement("div");
-            chartLabelDiv.setAttribute("class", "row");
-            chartLabelDiv.style.marginTop = "30px";
-            chartLabel = document.createElement("h4");
-            chartLabel.innerHTML = currentClass.name + " (" + currentClass.duration + "ms)";
-            if (currentClass.testStatus === "partial")
-                chartLabel.style.color = "orange";
-            else if (currentClass.testStatus === "failure")
-                chartLabel.style.color = "red";
-            chartLabelDiv.appendChild(chartLabel);
-            DOM.individualChartContainer().appendChild(chartLabelDiv);
-
-            if (currentClass.duration <= 0) {
-                chartDiv = document.createElement("p");
-                chartDiv.innerHTML = "The test took no measurable time to complete";
-                chartDiv.setAttribute("id", i);
-                DOM.individualChartContainer().appendChild(chartDiv);
-            } else {
-                chartDiv = document.createElement("div");
-                chartDiv.setAttribute("class", "row");
-                chartDiv.setAttribute("id", "individualChart" + i);
-                DOM.individualChartContainer().appendChild(chartDiv);
-                Plotly.newPlot("individualChart" + i, currentChart, individualChartLayout);
-            }
-        });
-    }
-
-    window.onresize = function () {
-        DOM.individualChartContainer().childNodes.forEach(function (child) {
-            if (child.id.startsWith("individualChart")) {
-                Plotly.relayout(child.id, {autosize: true});   // fit the plots in a resized window again
-            }
-        });
-    };
-</script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
 <!DOCTYPE html>
 <html lang="en">
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<style>
-    @import url(http://fonts.googleapis.com/css?family=Oswald:400,300,700);
-
-    body {
-        font-family: 'Oswald', sans-serif !important;
-    }
-
-    .right-addon {
-        position: relative;
-    }
-
-    .right-addon input {
-        padding-right: 30px;
-    }
-
-    .right-addon span {
-        position: absolute;
-        right: 0;
-        padding: 7px 12px;
-        pointer-events: none;
-    }
-</style>
 
 <head>
     <meta charset="UTF-8">
@@ -528,18 +29,19 @@ Methods for creating the charts displaying the results of the data processing
 <body>
 <div class="container-fluid">
     <h1 align="center">JUnit Insights</h1>
-
-    <div id="information" style="visibility: hidden">
+    <div id="information">
         <div class="row">
             <div class="col">
                 <h2 align="center">Time spent on Spring initialization vs. test execution</h2>
-                <div id="overviewChart"></div>
+                <div id="overviewChart">
+                    <p v-show="showNoTime">The test took no measurable time to complete</p>
+                </div>
             </div>
             <div class="col" align="center">
                 <h2>General information:</h2>
-                <p id="createdSpringContexts">Created Spring contexts: </p>
-                <p id="testedClasses">Tested classes: </p>
-                <p id="testedMethods">Tested methods: </p>
+                <p id="createdSpringContexts">Created Spring contexts: {{ general.createdSpringContexts }}</p>
+                <p id="testedClasses">Tested classes: {{ general.testedClasses }}</p>
+                <p id="testedMethods">Tested methods: {{ general.testedMethods }}</p>
             </div>
         </div>
         <h2 align="center" style="margin-top: 30px;">Time spent on individual test classes</h2>
@@ -634,8 +136,17 @@ Methods for creating the charts displaying the results of the data processing
                 <div class="col"><input type="button" value="Refresh" onclick="refreshClicked()"></div>
             </form>
         </div>
-        <div id="individualChart"></div>
+        <div id="individualCharts">
+            <individual-chart v-for="item in individualCharts"
+                              v-bind:key="item.chartid"
+                              v-bind:data="item.data"
+                              v-bind:col="item.col"
+                              v-bind:chartid="item.chartid"></individual-chart>
+        </div>
     </div>
 </div>
 </body>
 </html>
+
+<!-- Activate the following entries to develop this application -->
+<!--<script src="vueObjects.js"></script>-->

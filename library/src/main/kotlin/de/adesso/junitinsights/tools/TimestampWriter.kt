@@ -48,8 +48,19 @@ object TimestampWriter {
         if (!testClassLogged)
             return
 
-        val htmlTemplatePath = ClassPathResource(InsightProperties.templatepath)
-        var htmlString = InputStreamReader(htmlTemplatePath.inputStream, "UTF-8").readText()
+        var htmlString = ""
+        InsightProperties.templates!!.forEach {
+            val path = ClassPathResource(it)
+            val fileString = InputStreamReader(path.inputStream, "UTF-8").readText()
+
+            if (path.filename!!.substringAfterLast(".") == "js")
+                htmlString = "$htmlString \n <script> $fileString </script>"
+            else if (path.filename!!.substringAfterLast(".") == "css")
+                htmlString = "$htmlString \n <style> $fileString </style>"
+            else
+                htmlString = "$htmlString \n $fileString"
+        }
+
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())
 
         val htmlReportFile = File(InsightProperties.reportpath + "insight_$currentTime.html")
