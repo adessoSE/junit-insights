@@ -60,3 +60,15 @@ test {
 	systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 ```
+
+## Troubleshooting
+
+If you get an error complaining about a missing JUnit platform launcher, for example
+
+```
+java.lang.ClassNotFoundException: org.junit.platform.launcher.TestExecutionListener
+```
+
+you need to add the dependency for the [appropriate package](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher).
+
+If you have any other issues, feel free to open an issue in our issue tracker.
