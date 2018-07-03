@@ -43,7 +43,7 @@ function drawOverviewChart() {
     if (testTime + springTime + otherTime <= 0) {
         information.showNoTime = true;
     } else {
-        Plotly.newPlot("overviewChart", barChartData, barChartLayout);
+        Plotly.newPlot("overviewChart", barChartData, overviewChartLayout);
     }
 }
 
@@ -117,6 +117,7 @@ async function drawPerTestCharts() {
     information.individualCharts.forEach(function (element) {
         Plotly.newPlot(element.chartid, element.chart, individualChartLayout);
     });
+    resizePerTestCharts();
 }
 
 function removePerTestCharts() {
@@ -127,7 +128,7 @@ function removePerTestCharts() {
 
 function resizePerTestCharts() {
     information.individualCharts.forEach(function (element) {
-        Plotly.relayout(element.chartid, {width: window.innerWidth, height: 150});
+        Plotly.Plots.resize(element.chartid, {});
     });
 }
 

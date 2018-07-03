@@ -18,3 +18,33 @@ body {
     padding: 7px 12px;
     pointer-events: none;
 }
+
+.test-class-container {
+    border: 1px;
+    border-style: solid;
+    border-color: lightgrey;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+#overviewChart {
+    border: 1px;
+    border-style: solid;
+    border-color: lightgrey;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.js-plotly-plot .plotly .modebar {
+    left: 20px;
+    right: 50%;
+}
+
+.test-class-container .row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
