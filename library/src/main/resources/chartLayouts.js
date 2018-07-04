@@ -42,8 +42,7 @@ let individualChartLayout = {
         r: 0,
         b: 0,
         t: 0
-    },
-    height: 100
+    }
 };
 
 let colors = ["rgb(179, 77, 102)",

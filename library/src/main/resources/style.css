@@ -19,7 +19,7 @@ body {
     pointer-events: none;
 }
 
-.test-class-container {
+.test-class-container, #overviewChart {
     border: 1px;
     border-style: solid;
     border-color: lightgrey;
@@ -29,14 +29,8 @@ body {
     border-radius: 4px;
 }
 
-#overviewChart {
-    border: 1px;
-    border-style: solid;
-    border-color: lightgrey;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 5px;
-    border-radius: 4px;
+.chartrow {
+    height: 100px;
 }
 
 .js-plotly-plot .plotly .modebar {
