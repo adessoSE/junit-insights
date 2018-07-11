@@ -23,8 +23,8 @@ body {
     border: 1px;
     border-style: solid;
     border-color: lightgrey;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     padding: 5px;
     padding-left: 15px;
     border-radius: 4px;
@@ -32,11 +32,6 @@ body {
 
 .chartrow {
     height: 100px;
-}
-
-.js-plotly-plot .plotly .modebar {
-    left: 20px;
-    right: 50%;
 }
 
 .test-class-container .row {
