@@ -17,7 +17,7 @@ function drawOverviewChart() {
         springTime += currentClass.spring;
         otherTime += currentClass.other;
         currentClass.tests.forEach(function (currentTest) {
-            testTime += currentTest;
+            testTime += currentTest.duration;
         })
     });
 
@@ -86,7 +86,7 @@ function prepareChartElements(classesDurations) {
         currentChart = [getChartObject(currentClass.spring, "Spring", "rgb(109, 179, 63)")];
 
         for (let j = 0, col = 0; j < currentClass.tests.length; j++) {
-            currentChart.push(getChartObject(currentClass.tests[j], currentClass.testNames[j], colors[col]));
+            currentChart.push(getChartObject(currentClass.tests[j].duration, currentClass.tests[j].name, colors[col]));
             col = col < 18 ? col + 1 : 0;
         }
 

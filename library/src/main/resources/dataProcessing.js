@@ -49,7 +49,7 @@ function splitIntoClasses(rawData) {
  */
 function calculateDurations(classesTimestamps) {
     let classesDurations = [];
-    let currentClass, testDurations, testNames, testSuccess, testDurationSum, testBegin;
+    let currentClass, testDurationSum, testBegin;
     classesTimestamps.forEach(function (currentClassTimestamps) {
         currentClass = {};
         currentClass.name = currentClassTimestamps[0][2];
@@ -57,9 +57,7 @@ function calculateDurations(classesTimestamps) {
         currentClass.end = currentClassTimestamps[currentClassTimestamps.length - 1][0];
         currentClass.newContexts = 0;
         currentClass.spring = 0;
-        testDurations = [];
-        testNames = [];
-        testSuccess = [];
+        currentClass.tests = []
         testDurationSum = 0;
         testBegin = 0;
 
@@ -76,11 +74,13 @@ function calculateDurations(classesTimestamps) {
                     if (testBegin === 0) {
                         console.error("An error occurred while parsing the file!");
                     } else {
-                        testDurations.push(currentEvent[0] - testBegin);
-                        testNames.push(currentEvent[3]);
+                        currentClass.tests.push({
+                            name: currentEvent[3],
+                            duration: currentEvent[0] - testBegin,
+                            succeeded: currentEvent[4] === "false"
+                        });
                         testDurationSum += currentEvent[0] - testBegin;
                         testBegin = 0;
-                        testSuccess.push(currentEvent[4] === "false")
                     }
                 }; break;
                 case "context refreshed": {
@@ -90,15 +90,12 @@ function calculateDurations(classesTimestamps) {
             }
         });
 
-        currentClass.tests = testDurations;
-        currentClass.testNames = testNames;
         currentClass.duration = currentClass.end - currentClass.begin;
         currentClass.other = currentClass.duration - testDurationSum - currentClass.spring;
 
-        currentClass.testSuccess = testSuccess;
-        if (currentClass.testSuccess.every(t => t))
+        if (currentClass.tests.every(test => test.succeeded))
             currentClass.testStatus = "success";
-        else if (currentClass.testSuccess.every(t => !t))
+        else if (currentClass.tests.every(test => !test.succeeded))
             currentClass.testStatus = "failure";
         else
             currentClass.testStatus = "partial";

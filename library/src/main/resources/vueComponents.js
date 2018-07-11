@@ -17,9 +17,9 @@ Vue.component('individual-chart', {
         <button type="button" class="btn" v-on:click="expanded = !expanded">{{expanded ? "&#x25BC;" : "&#x25BA;"}}</button>
         <single-test-case-chart 
             v-if="expanded"
-            v-for="i in [1,2,3]"
-            v-bind:key="i"
-            v-bind:data="i"
+            v-for="i in data.tests.length"
+            v-bind:key="i-1"
+            v-bind:test="data.tests[i-1]"
         >
         </single-test-case-chart>
     </div>`
@@ -31,11 +31,11 @@ Vue.component('individual-chart', {
     (TODO: Migrate to x-templates?)
 */
 Vue.component('single-test-case-chart', {
-    props: ['data', 'chartid'],
+    props: ['test', 'chartid'],
     template: `
     <div class="single-test-case-chart">
-        <div class="row"><h5>{{ data }} ({{ data }}ms)</h5></div>
-        <p v-if="data.duration <= 0" v-bind:id="chartid">The test took no measurable time to complete</p>
+        <div class="row"><h5>{{ test.name }} ({{ test.duration }}ms)</h5></div>
+        <p v-if="test.duration <= 0" v-bind:id="chartid">The test took no measurable time to complete</p>
         <div v-else class="row" v-bind:id="chartid"></div>
     </div>`
 });
