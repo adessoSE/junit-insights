@@ -25,11 +25,6 @@ Vue.component('individual-chart', {
     </div>`
 });
 
-/*
-    Almost the same thing but with a smaller heading and a different CSS class for styling
-    (TODO: What is 'col' above?)
-    (TODO: Migrate to x-templates?)
-*/
 Vue.component('single-test-case-chart', {
     props: ['test', 'chartid'],
     template: `
