@@ -28,17 +28,14 @@ object TimestampWriter {
      * @param testFunction In case of an event that belongs to a certain test function, this can be included here
      */
     fun writeTimestamp(timestamp: Long, event: String, testClass: String, testFunction: String, testFailing: Boolean = false) {
-	if (testClass != "") {
+        if (!testClass.isEmpty()) {
             testClassLogged = true
         }
 
-        timestamps.append(timestamp.toString() + ";"
-                + event + ";"
-                + trimObjectString(testClass) + ";"
-                + trimObjectString(testFunction) + ";"
-                + testFailing
-                + "\\n\" +\n\"")
-        logger.debug("Timestamp saved: " + timestamp.toString() + ";" + event + ";" + trimObjectString(testClass) + ";" + trimObjectString(testFunction))
+        val entry = "$timestamp;$event;${trimObjectString(testClass)};${trimObjectString(testFunction)};$testFailing\\n\" +\n\""
+
+        timestamps.append(entry)
+        logger.debug("Timestamp saved: $entry")
     }
 
     /**
@@ -53,12 +50,11 @@ object TimestampWriter {
             val path = ClassPathResource(it)
             val fileString = InputStreamReader(path.inputStream, "UTF-8").readText()
 
-            if (path.filename!!.substringAfterLast(".") == "js")
-                htmlString = "$htmlString \n <script> $fileString </script>"
-            else if (path.filename!!.substringAfterLast(".") == "css")
-                htmlString = "$htmlString \n <style> $fileString </style>"
-            else
-                htmlString = "$htmlString \n $fileString"
+            htmlString = when {
+                path.filename!!.substringAfterLast(".") == "js" -> "$htmlString \n <script> $fileString </script>"
+                path.filename!!.substringAfterLast(".") == "css" -> "$htmlString \n <style> $fileString </style>"
+                else -> "$htmlString \n $fileString"
+            }
         }
 
         htmlString = htmlString.replace("\$timestampCsvString", timestamps.toString())

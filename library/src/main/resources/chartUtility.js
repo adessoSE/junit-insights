@@ -17,7 +17,7 @@ function drawOverviewChart() {
         springTime += currentClass.spring;
         otherTime += currentClass.other;
         currentClass.tests.forEach(function (currentTest) {
-            testTime += currentTest;
+            testTime += currentTest.duration;
         })
     });
 
@@ -43,7 +43,7 @@ function drawOverviewChart() {
     if (testTime + springTime + otherTime <= 0) {
         information.showNoTime = true;
     } else {
-        Plotly.newPlot("overviewChart", barChartData, barChartLayout);
+        Plotly.newPlot("overviewChart", barChartData, overviewChartLayout);
     }
 }
 
@@ -86,7 +86,7 @@ function prepareChartElements(classesDurations) {
         currentChart = [getChartObject(currentClass.spring, "Spring", "rgb(109, 179, 63)")];
 
         for (let j = 0, col = 0; j < currentClass.tests.length; j++) {
-            currentChart.push(getChartObject(currentClass.tests[j], currentClass.testNames[j], colors[col]));
+            currentChart.push(getChartObject(currentClass.tests[j].duration, currentClass.tests[j].name, colors[col]));
             col = col < 18 ? col + 1 : 0;
         }
 
@@ -117,6 +117,7 @@ async function drawPerTestCharts() {
     information.individualCharts.forEach(function (element) {
         Plotly.newPlot(element.chartid, element.chart, individualChartLayout);
     });
+    resizePerTestCharts();
 }
 
 function removePerTestCharts() {
@@ -127,7 +128,7 @@ function removePerTestCharts() {
 
 function resizePerTestCharts() {
     information.individualCharts.forEach(function (element) {
-        Plotly.relayout(element.chartid, {width: window.innerWidth, height: 150});
+        Plotly.Plots.resize(element.chartid, {});
     });
 }
 

@@ -1,4 +1,4 @@
-let barChartLayout = {
+let overviewChartLayout = {
     showlegend: false,
     font: {
         family: "Oswald",
@@ -14,11 +14,10 @@ let barChartLayout = {
         showticklabels: false
     },
     margin: {
-        l: 10,
-        r: 10,
-        b: 10,
-        t: 10,
-        pad: 4
+        l: 0,
+        r: 0,
+        b: 0,
+        t: 0
     },
     height: 200
 };
@@ -39,13 +38,11 @@ let individualChartLayout = {
         showticklabels: false
     },
     margin: {
-        l: 10,
-        r: 10,
-        b: 10,
-        t: 10,
-        pad: 4
-    },
-    height: 150
+        l: 0,
+        r: 0,
+        b: 0,
+        t: 0
+    }
 };
 
 let colors = ["rgb(179, 77, 102)",

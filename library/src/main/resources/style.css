@@ -18,3 +18,23 @@ body {
     padding: 7px 12px;
     pointer-events: none;
 }
+
+.test-class-container, #overviewChart {
+    border: 1px;
+    /* border-style: solid;*/
+    border-color: lightgrey;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 5px;
+    padding-left: 15px;
+    border-radius: 4px;
+}
+
+.chartrow {
+    height: 100px;
+}
+
+.test-class-container .row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
