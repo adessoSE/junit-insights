@@ -42,10 +42,10 @@ function clearClicked() {
 }
 
 function orderToggled(button) {
-    if (button.value === "\u21A7")
-        button.value = "\u21A5";
+    if(button.firstChild.data === "\u2193")
+        button.firstChild.data = "\u2191";
     else
-        button.value = "\u21A7";
+        button.firstChild.data = "\u2193";
 }
 
 /**
@@ -125,6 +125,6 @@ function orderList() {
             console.log("Something went wrong with the order selection element.");
             return
     }
-    if (orderUpDown.value === "\u21A5")
+    if (orderUpDown.firstChild.data === "\u2191")
         information.individualCharts = information.individualCharts.reverse();
 }

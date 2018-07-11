@@ -14,7 +14,7 @@ Vue.component('individual-chart', {
         </div>
         <p v-if="data.duration <= 0" v-bind:id="chartid">The test took no measurable time to complete</p>
         <div v-else class="row chartrow" v-bind:id="chartid"></div>
-        <button type="button" class="btn" v-on:click="expanded = !expanded">{{expanded ? "▼" : "►"}}</button>
+        <button type="button" class="btn" v-on:click="expanded = !expanded">{{expanded ? "&#x25BC;" : "&#x25BA;"}}</button>
         <single-test-case-chart 
             v-if="expanded"
             v-for="i in [1,2,3]"
