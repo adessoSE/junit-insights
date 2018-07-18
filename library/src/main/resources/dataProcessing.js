@@ -48,50 +48,55 @@ function splitIntoClasses(rawData) {
  * @returns {Array}
  */
 function calculateDurations(classesTimestamps) {
-    let classesDurations = [];
-    let currentClass, testDurationSum, testBegin;
+    let durations = [];
+    let currentClass;
+
     classesTimestamps.forEach(function (currentClassTimestamps) {
-        currentClass = {};
-        currentClass.name = currentClassTimestamps[0][2];
-        currentClass.begin = currentClassTimestamps[0][0];
-        currentClass.end = currentClassTimestamps[currentClassTimestamps.length - 1][0];
-        currentClass.newContexts = 0;
-        currentClass.spring = 0;
-        currentClass.tests = []
-        testDurationSum = 0;
-        testBegin = 0;
+        currentClass = {
+            name: currentClassTimestamps[0][2],
+            timeBeforeFirst: 0,
+            timeSumOfBefore: 0,
+            timeForExecution: 0,
+            timeBetweenAll: 0,
+            timeAfterAll: 0,
+            tests: []
+        };
+
+        currentClass.timeBeforeFirst = findTimeBeforeFirstForClass(currentClassTimestamps);
+        currentClass.timeAfterAll = findTimeAfterAllForClass(currentClassTimestamps);
+
+        let timestampBeforeEach = 0,
+            timestampBeforeExecution = 0,
+            timestampAfterExecution = 0,
+            timestampAfterEach = 0;
 
         currentClassTimestamps.forEach(function (currentEvent, index) {
             switch (currentEvent[1]) {
-                case "before test execution": {
-                    if (testBegin === 0) {
-                        testBegin = currentEvent[0];
-                    } else {
-                        console.error("An error occurred while parsing the file!");
-                    }
+                case "before each": timestampBeforeEach = currentEvent[0]; break;
+                case "before test execution": { assert(timestampBeforeExecution === 0); timestampBeforeExecution = currentEvent[0];}; break;
+                case "after test execution": { assert(timestampBeforeExecution !== 0); timestampAfterExecution = currentEvent[0];}; break;
+                case "after each": {
+                    timestampAfterEach = currentEvent[0];
+                    timestampBeforeExecution = 0;
+
+                    let timeSpentBeforeTest = timestampBeforeExecution - timestampBeforeEach;
+                    let timeSpentForExecution = timestampAfterExecution - timestampBeforeExecution;
+                    let timeSpentAfterTest = timestampAfterEach - timestampAfterExecution;
+
+                    currentClass.tests.push({
+                        name: currentEvent[3],
+                        timeSpentBeforeTest: timeSpentBeforeTest,
+                        timeSpentForExecution: timeSpentForExecution,
+                        timeSpentAfterTest: timeSpentAfterTest,
+                        succeeded: currentEvent[4] === "false"
+                    });
+
+                    currentClass.timeSumOfBefore += timeSpentBeforeTest;
+                    currentClass.timeForExecution += timeSpentForExecution;
+                    currentClass.timeBetweenAll += timestampBeforeEach - timestampAfterEach;
                 }; break;
-                case "after test execution": {
-                    if (testBegin === 0) {
-                        console.error("An error occurred while parsing the file!");
-                    } else {
-                        currentClass.tests.push({
-                            name: currentEvent[3],
-                            duration: currentEvent[0] - testBegin,
-                            succeeded: currentEvent[4] === "false"
-                        });
-                        testDurationSum += currentEvent[0] - testBegin;
-                        testBegin = 0;
-                    }
-                }; break;
-                case "context refreshed": {
-                    currentClass.spring += currentEvent[0] - currentClassTimestamps[index-1][0];
-                    currentClass.newContexts++;
-                };
             }
         });
-
-        currentClass.duration = currentClass.end - currentClass.begin;
-        currentClass.other = currentClass.duration - testDurationSum - currentClass.spring;
 
         if (currentClass.tests.every(test => test.succeeded))
             currentClass.testStatus = "success";
@@ -100,7 +105,34 @@ function calculateDurations(classesTimestamps) {
         else
             currentClass.testStatus = "partial";
 
-        classesDurations.push(currentClass);
+        durations.push(currentClass);
     });
-    return classesDurations;
+    return durations;
+}
+
+function findTimeBeforeFirstForClass(currentClassTimestamps) {
+    let timestampOfFirstBeforeEach = currentClassTimestamps.filter(entry => entry[1] === "before each")[0][0];
+    assert(currentClassTimestamps[0][1] === "before all", "First event for class is not 'before all'");
+    let timestampOfBeforeAll = currentClassTimestamps[0][0];
+    return timestampOfFirstBeforeEach - timestampOfBeforeAll;
+}
+
+function findTimeAfterAllForClass(currentClassTimestamps) {
+    var afterEachEvents = currentClassTimestamps.filter(entry => entry[1] === "after each");
+    var lastAfterEachEvent = afterEachEvents[afterEachEvents.length - 1];
+
+    var afterAllEvents = currentClassTimestamps.filter(entry => entry[1] === "after all");
+    var lastAfterAllEvent = afterAllEvents[afterAllEvents.length - 1];
+
+    return lastAfterAllEvent[0] - lastAfterEachEvent[0];
+}
+
+function assert(condition, message) {
+    if (!condition) {
+        message = message || "Assertion failed";
+        if (typeof Error !== "undefined") {
+            throw new Error(message);
+        }
+        throw message; // Fallback
+    }
 }
