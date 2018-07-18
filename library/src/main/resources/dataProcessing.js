@@ -49,10 +49,9 @@ function splitIntoClasses(rawData) {
  */
 function calculateDurations(classesTimestamps) {
     let durations = [];
-    let currentClass;
 
     classesTimestamps.forEach(function (currentClassTimestamps) {
-        currentClass = {
+        let currentClass = {
             name: currentClassTimestamps[0][2],
             timeBeforeFirst: 0,
             timeSumOfBefore: 0,
@@ -72,12 +71,15 @@ function calculateDurations(classesTimestamps) {
 
         currentClassTimestamps.forEach(function (currentEvent, index) {
             switch (currentEvent[1]) {
-                case "before each": timestampBeforeEach = currentEvent[0]; break;
-                case "before test execution": { assert(timestampBeforeExecution === 0); timestampBeforeExecution = currentEvent[0];}; break;
-                case "after test execution": { assert(timestampBeforeExecution !== 0); timestampAfterExecution = currentEvent[0];}; break;
+                case "before each": {
+                    timestampBeforeEach = currentEvent[0];
+                    if (timestampAfterEach)
+                        currentClass.timeBetweenAll += timestampBeforeEach - timestampAfterEach;
+                }; break;
+                case "before test execution": { assert(timestampBeforeExecution === 0); timestampBeforeExecution = currentEvent[0]; }; break;
+                case "after test execution": { assert(timestampBeforeExecution !== 0); timestampAfterExecution = currentEvent[0]; }; break;
                 case "after each": {
                     timestampAfterEach = currentEvent[0];
-                    timestampBeforeExecution = 0;
 
                     let timeSpentBeforeTest = timestampBeforeExecution - timestampBeforeEach;
                     let timeSpentForExecution = timestampAfterExecution - timestampBeforeExecution;
@@ -93,7 +95,8 @@ function calculateDurations(classesTimestamps) {
 
                     currentClass.timeSumOfBefore += timeSpentBeforeTest;
                     currentClass.timeForExecution += timeSpentForExecution;
-                    currentClass.timeBetweenAll += timestampBeforeEach - timestampAfterEach;
+
+                    timestampBeforeExecution = 0;
                 }; break;
             }
         });
