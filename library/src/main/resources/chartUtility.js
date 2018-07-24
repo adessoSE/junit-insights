@@ -8,17 +8,15 @@
  * Creates a plot that shows the time spent on spring initialization vs. actual test execution
  */
 function drawOverviewChart() {
-    let springTime = 0;
-    let otherTime = 0;
-    let testTime = 0;
+    let preparationTime = 0;
+    let executionTime = 0;
+    let tearDownTime = 0;
 
     information.individualCharts.forEach(function (currentChart) {
         let currentClass = currentChart.data;
-        springTime += currentClass.spring;
-        otherTime += currentClass.other;
-        currentClass.tests.forEach(function (currentTest) {
-            testTime += currentTest.duration;
-        })
+        preparationTime += currentClass.tests.reduce((sum, test) => sum + test.timeSpentBeforeTest, 0);
+        executionTime += currentClass.tests.reduce((sum, test) => sum + test.timeSpentForExecution, 0);
+        tearDownTime += currentClass.tests.reduce((sum, test) => sum + test.timeSpentAfterTest, 0);
     });
 
     function getChartObject(x, text, color) {
@@ -28,7 +26,7 @@ function drawOverviewChart() {
                 color: color
             },
             text: text + " (" + x + "ms)",
-            textposition: "auto",
+            textposition: "inside",
             hoverinfo: "none",
             type: "bar",
             orientation: "h"
@@ -36,11 +34,11 @@ function drawOverviewChart() {
     }
 
     let barChartData = [
-        getChartObject(springTime, "Spring", "rgb(109, 179, 63)"),
-        getChartObject(testTime, "Tests", "rgb(220, 82, 74)"),
-        getChartObject(otherTime, "Other", "rgb(180, 180, 180)")];
+        getChartObject(preparationTime, "Preparation", "rgb(109, 179, 63)"),
+        getChartObject(executionTime, "Execution", "rgb(220, 82, 74)"),
+        getChartObject(tearDownTime, "Tear-Down", "rgb(180, 180, 180)")];
 
-    if (testTime + springTime + otherTime <= 0) {
+    if (preparationTime + tearDownTime + executionTime <= 0) {
         information.showNoTime = true;
     } else {
         Plotly.newPlot("overviewChart", barChartData, overviewChartLayout);
@@ -66,8 +64,6 @@ function showGeneralData() {
  * Creates a plot that shows the time spent on different events for each test class individually
  */
 function prepareChartElements(classesDurations) {
-    let currentChart;
-
     function getChartObject(x, text, color) {
         return {
             x: [x],
@@ -83,10 +79,10 @@ function prepareChartElements(classesDurations) {
     }
 
     classesDurations.forEach(function (currentClass, i) {
-        currentChart = [getChartObject(currentClass.spring, "Spring", "rgb(109, 179, 63)")];
+        let currentChart = [];
 
         for (let j = 0, col = 0; j < currentClass.tests.length; j++) {
-            currentChart.push(getChartObject(currentClass.tests[j].duration, currentClass.tests[j].name, colors[col]));
+            currentChart.push(getChartObject(currentClass.tests[j].totalTime, currentClass.tests[j].name, colors[col]));
             col = col < 18 ? col + 1 : 0;
         }
 

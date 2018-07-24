@@ -58,6 +58,7 @@ function calculateDurations(classesTimestamps) {
             timeForExecution: 0,
             timeBetweenAll: 0,
             timeAfterAll: 0,
+            totalTime: 0,
             tests: []
         };
 
@@ -90,6 +91,7 @@ function calculateDurations(classesTimestamps) {
                         timeSpentBeforeTest: timeSpentBeforeTest,
                         timeSpentForExecution: timeSpentForExecution,
                         timeSpentAfterTest: timeSpentAfterTest,
+                        totalTime: timeSpentBeforeTest + timeSpentForExecution + timeSpentAfterTest,
                         succeeded: currentEvent[4] === "false"
                     });
 
@@ -107,6 +109,8 @@ function calculateDurations(classesTimestamps) {
             currentClass.testStatus = "failure";
         else
             currentClass.testStatus = "partial";
+
+        currentClass.totalTime = currentClass.tests.reduce((sum, test) => sum + test.totalTime, 0)
 
         durations.push(currentClass);
     });

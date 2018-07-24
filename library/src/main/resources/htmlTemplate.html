@@ -133,7 +133,7 @@
                 </div>
                 <div class="col"><button class="btn" type="button" onclick="orderToggled(this)" id="order_up_down">&darr;</button>
                 </div>
-                <div class="col"><button class="btn" type="button" onclick="refreshClicked()">Refresh</button></div>
+                <div class="col"><button class="btn btn-primary" type="button" onclick="refreshClicked()">Refresh</button></div>
             </form>
         </div>
         <div id="individualCharts">
@@ -152,7 +152,7 @@
 <script type="text/x-template" id="individualCharts-template">
     <div class="test-class-container">
         <div class="row">
-            <h4 v-bind:style="{color: col}">{{ data.name }} ({{ data.duration }}ms)</h4>
+            <h4 v-bind:style="{color: col}">{{ data.name }} ({{ data.totalTime }}ms)</h4>
         </div>
         <p v-if="data.duration <= 0" v-bind:id="chartid">The test took no measurable time to complete</p>
         <div v-else class="row chartrow" v-bind:id="chartid"></div>
@@ -169,7 +169,7 @@
 
 <script type="text/x-template" id="single-test-case-chart-template">
     <div class="single-test-case-chart">
-        <div class="row"><h5>{{ test.name }} ({{ test.duration }}ms)</h5></div>
+        <div class="row"><h5>{{ test.name }} ({{ test.totalTime }}ms)</h5></div>
         <p v-if="test.duration <= 0" v-bind:id="chartid">The test took no measurable time to complete</p>
         <div v-else class="row" v-bind:id="chartid"></div>
     </div>
