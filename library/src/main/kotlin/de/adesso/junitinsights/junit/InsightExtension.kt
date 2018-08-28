@@ -1,10 +1,13 @@
 package de.adesso.junitinsights.junit
 
 import de.adesso.junitinsights.annotations.NoJUnitInsights
+import de.adesso.junitinsights.tools.Event
+import de.adesso.junitinsights.tools.EventLog
 import de.adesso.junitinsights.tools.InsightProperties
 import de.adesso.junitinsights.tools.TimestampWriter
 import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
+import java.util.*
 
 
 /**
@@ -88,6 +91,8 @@ class InsightExtension :
                 event,
                 context.displayName,
                 getMethodName(context))
+
+        EventLog.log(Event(event, Date(), getClassName(context), getMethodName(context), true))
     }
 
     private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean) {
@@ -99,6 +104,8 @@ class InsightExtension :
                 context.displayName,
                 getMethodName(context),
                 testFailing)
+
+        EventLog.log(Event(event, Date(), getClassName(context), getMethodName(context), !testFailing))
     }
 
     /**
@@ -121,5 +128,9 @@ class InsightExtension :
             return ""
 
         return testContext.displayName
+    }
+
+    private fun getClassName(context: ExtensionContext): String {
+        return context.testClass.get().toString().substringAfterLast(".")
     }
 }
