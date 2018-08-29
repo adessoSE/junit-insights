@@ -1,4 +1,4 @@
-package de.adesso.junitinsights.tools
+package de.adesso.junitinsights.model
 
 object EventLog {
     var events: ArrayList<Event> = ArrayList()

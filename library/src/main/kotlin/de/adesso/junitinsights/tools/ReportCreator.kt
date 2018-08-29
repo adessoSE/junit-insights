@@ -1,5 +1,9 @@
 package de.adesso.junitinsights.tools
 
+import de.adesso.junitinsights.model.Event
+import de.adesso.junitinsights.model.Report
+import de.adesso.junitinsights.model.TestClass
+import de.adesso.junitinsights.model.TestMethod
 import java.util.*
 import kotlin.collections.ArrayList
 
