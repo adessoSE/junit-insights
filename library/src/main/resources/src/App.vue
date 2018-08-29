@@ -1,11 +1,12 @@
 <template>
   <div id="app">
+    <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
     <test-class-sorter @changed="sortFunction = $event"/>
     <test-class-filter @changed="filterFunction = $event"/>
-    <div v-for="testClass in filteredAndSorted" v-bind:key="testClass.name">
-      <p>{{ testClass }}</p>
-    </div>
-    <overview-chart v-bind:chartId="'someChart'" :data="{}" />
+    <class-chart v-for="testClass in filteredAndSorted" 
+      :key="testClass.name"
+      :test-class="testClass"
+      :chartId="testClass.name"/>
   </div>
 </template>
 
@@ -13,6 +14,7 @@
 import TestClassSorter from "./components/TestClassSorter.vue";
 import TestClassFilter from "./components/TestClassFilter.vue";
 import OverviewChart from "./components/OverviewChart.vue";
+import ClassChart from "./components/ClassChart.vue";
 
 export default {
   name: "app",
@@ -33,7 +35,8 @@ export default {
   components: {
     TestClassSorter,
     TestClassFilter,
-    OverviewChart
+    OverviewChart,
+    ClassChart
   }
 };
 </script>
