@@ -37,22 +37,16 @@ export default {
   },
   mounted: function() {
     if (this.shouldDraw()) {
-      window.addEventListener("resize", this.handleResize);
       Plotly.newPlot(this.chartId, this.chartEntries, this.layout);
-    }
-  },
-  beforeDestroy: function() {
-    if (this.shouldDraw()) {
-      window.removeEventListener("resize", this.handleResize);
-      Plotly.purge(this.chartId);
+      this.$on("resize", () => Plotly.Plots.resize(this.chartId, {}));
+      // Commented out to prevent error messages in browser console
+      // Might lead to memory leak
+      // this.$once("hook:beforeDestroy", () => Plotly.purge(this.chartId))
     }
   },
   methods: {
     // Override in inheriting component to define specific logic
     shouldDraw: function() { return true },
-    handleResize: function() {
-      Plotly.Plots.resize(this.chartId, {});
-    },
     getChartEntry(data, text, color) {
       return {
         x: [data],

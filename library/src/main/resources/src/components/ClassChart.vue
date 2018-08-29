@@ -3,7 +3,13 @@
         <h1>{{this.testClass.name}}</h1>
         <div v-if="shouldDraw()">
             <div :id="chartId" class="chartCanvas"></div>
-            <!-- TODO: Dropdown diagrams for individual methods -->
+            <button @click="expanded = !expanded">Toggle</button>
+            <keep-alive v-if="expanded">
+                <method-chart v-for="method in testClass.methods"
+                    :key="method.name"
+                    :test-method="method"
+                    :chartId="method.name"/>
+            </keep-alive>
         </div>
         <div v-else>
             The tests took no measurable time to run.
@@ -13,11 +19,18 @@
 
 <script>
 import ChartBase from "./ChartBase.vue";
+import MethodChart from "./MethodChart.vue";
+
 export default {
   extends: ChartBase,
   props: ["testClass"],
+  data() {
+    return {
+      expanded: false
+    };
+  },
   created: function() {
-    this.layout.height = 60;
+    this.layout.height = 80;
     this.chartEntries = [
       this.getChartEntry(
         this.testClass.beforeAll,
@@ -34,6 +47,9 @@ export default {
         .reduce((sum, time) => (sum += time), 0);
       return classTime >= 5;
     }
+  },
+  components: {
+    MethodChart
   }
 };
 </script>
