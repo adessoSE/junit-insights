@@ -27,7 +27,7 @@ class JUnitCallbacks :
         saveTimestamp("before all", context)
     }
 
-    override fun testPlanExecutionFinished(testPlan: TestPlan) = TimestampWriter.createReport()
+    override fun testPlanExecutionFinished(testPlan: TestPlan) = TimestampWriter.writeReport()
 
     override fun afterAll(context: ExtensionContext) = saveTimestamp("after all", context)
     override fun beforeEach(context: ExtensionContext) = saveTimestamp("before each", context)
@@ -38,12 +38,6 @@ class JUnitCallbacks :
     private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean = false) {
         if (shouldNotBeBenched(context))
             return
-
-        TimestampWriter.writeTimestamp(System.currentTimeMillis(),
-                event,
-                context.displayName,
-                getMethodName(context),
-                testFailing)
 
         EventLog.log(Event(event, Date(), getClassName(context), getMethodName(context), !testFailing))
     }
