@@ -2,7 +2,6 @@ package de.adesso.junitinsights.spring
 
 import de.adesso.junitinsights.model.Event
 import de.adesso.junitinsights.model.EventLog
-import de.adesso.junitinsights.tools.TimestampWriter
 import org.springframework.context.event.ContextClosedEvent
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.context.event.EventListener
