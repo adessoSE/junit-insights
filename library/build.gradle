@@ -42,6 +42,34 @@ jar {
     enabled = true
 }
 
+task npmInstall(type: Exec) {
+    inputs.files(
+            'src/main/resources/package-lock.json',
+            'src/main/resources/webpack.config.js'
+    )
+    outputs.dir 'src/main/resources/node_modules/'
+
+    workingDir = 'src/main/resources/'
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'npm install'
+    } else {
+        commandLine 'npm install'
+    }
+}
+
+task npmRunBuild(type: Exec) {
+    dependsOn npmInstall
+    inputs.dir 'src/main/resources/src'
+    outputs.file 'src/main/resources/dist/index.html'
+    workingDir = 'src/main/resources'
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'npm run build'
+    } else {
+        commandLine 'npm run build'
+    }
+}
+
+build.dependsOn npmRunBuild
 build.dependsOn fatJar
 assemble.dependsOn fatJar
 
