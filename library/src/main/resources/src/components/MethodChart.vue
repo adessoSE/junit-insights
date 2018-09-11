@@ -13,7 +13,6 @@ export default {
   props: ["testMethod"],
   created: function() {
     this.layout.height = 30;
-    // this.getChartEntry(this.preparationTime, "Preparation", "rgb(109, 179, 63)"),
     this.chartEntries = [
       this.getChartEntry(this.testMethod.before, "Before", "rgb(109, 179, 63)"),
       this.getChartEntry(this.testMethod.exec, "Execution", "rgb(180, 79, 63)"),
