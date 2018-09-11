@@ -1,11 +1,12 @@
 <template>
-    <div>
+    <div class=filter>
+        <h2>Filter</h2>
         <label>Minimum test time (ms)</label>
         <input type="number" v-model="minTime" @change="updateFunc">
-
+        <br>
         <label>Maximum test time (ms)</label>
         <input type="number" v-model="maxTime" @change="updateFunc">
-
+        <br>
         <label>Test class outcome</label>
         <input type="checkbox" @change="updateFunc" v-model="includeSuccess"> Success
         <input type="checkbox" @change="updateFunc" v-model="includePartial"> Partial failure
@@ -42,3 +43,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .filter {
+    display: inline;
+  }
+</style>

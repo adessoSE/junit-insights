@@ -31,22 +31,31 @@ export default {
           b: 0,
           t: 0
         },
-        height: 200
+        height: 80,
       }
     };
   },
   mounted: function() {
     if (this.shouldDraw()) {
       Plotly.newPlot(this.chartId, this.chartEntries, this.layout);
-      this.$on("resize", () => Plotly.Plots.resize(this.chartId, {}));
-      // Commented out to prevent error messages in browser console
-      // Might lead to memory leak
-      // this.$once("hook:beforeDestroy", () => Plotly.purge(this.chartId))
+      window.addEventListener("resize", this.handleResize);
+      this.handleResize();
+    }
+  },
+  beforeDestroy: function() {
+    if (this.shouldDraw()) {
+      window.removeEventListener("resize", this.handleResize);
+      // Plotly.purge(this.chartId);
     }
   },
   methods: {
     // Override in inheriting component to define specific logic
-    shouldDraw: function() { return true },
+    shouldDraw: function() {
+      return true;
+    },
+    handleResize() {
+      Plotly.Plots.resize(this.chartId);
+    },
     getChartEntry(data, text, color) {
       return {
         x: [data],

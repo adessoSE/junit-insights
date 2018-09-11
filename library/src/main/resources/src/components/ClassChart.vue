@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <h1>{{this.testClass.name}}</h1>
+    <div class="classChart">
+        <h2>{{this.testClass.name}} ({{ this.totalTime(this.testClass) }}ms)</h2>
         <div v-if="shouldDraw()">
             <div :id="chartId" class="chartCanvas"></div>
             <button @click="expanded = !expanded">Toggle</button>
@@ -20,17 +20,18 @@
 <script>
 import ChartBase from "./ChartBase.vue";
 import MethodChart from "./MethodChart.vue";
+import TotalTime from "../mixins/TotalTime.js"
 
 export default {
   extends: ChartBase,
   props: ["testClass"],
+  mixins: [TotalTime],
   data() {
     return {
       expanded: false
     };
   },
   created: function() {
-    this.layout.height = 80;
     this.chartEntries = [
       this.getChartEntry(
         this.testClass.beforeAll,
@@ -53,3 +54,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .classChart {
+    border: solid 1px lightgray;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px;
+  }
+</style>

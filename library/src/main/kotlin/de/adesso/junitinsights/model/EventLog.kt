@@ -24,7 +24,7 @@ object EventLog {
     }
 
     private fun generateJsonFromEvents(): String {
-        val report = ReportCreator.createReport("test", events)
+        val report = ReportCreator.createReport("JUnit Insights Report ${getFormattedDateTimeString()}", events)
         return Gson().toJson(report)
     }
 

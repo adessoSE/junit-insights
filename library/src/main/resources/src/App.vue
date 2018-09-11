@@ -1,8 +1,11 @@
 <template>
   <div id="app">
+    <h1>{{ this.report.projectName }}</h1>
     <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
-    <test-class-sorter @changed="sortFunction = $event"/>
-    <test-class-filter @changed="filterFunction = $event"/>
+    <div class="toolbar">
+      <test-class-sorter @changed="sortFunction = $event"/>
+      <test-class-filter @changed="filterFunction = $event"/>
+    </div>
     <class-chart v-for="testClass in filteredAndSorted" 
       :key="testClass.name"
       :test-class="testClass"
@@ -40,3 +43,15 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  h1 {
+    margin: 10px;
+  }
+  .toolbar {
+    border: solid 1px lightgray;
+    border-radius: 6px;
+    margin: 10px;
+    padding: 10px;
+  }
+</style>
