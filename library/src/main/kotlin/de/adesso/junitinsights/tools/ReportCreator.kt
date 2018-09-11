@@ -8,12 +8,22 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object ReportCreator {
+
+    /**
+     * Takes a list of events and turns them into a full Report object
+     * @param reportName The name of the report which is included in the Report object
+     * @param events The full event list for multiple test classes
+     */
     fun createReport(reportName: String, events: List<Event>): Report {
         val eventsGroupedByClass = groupEventsByClass(events)
         val testClasses = eventsGroupedByClass.map { classEvents -> processClassEvents(classEvents) }
         return Report(reportName, Date(), testClasses)
     }
 
+    /**
+     * Takes a list of events for a class and turns them into into a TestClass object.
+     * This also includes the processing of TestMethod objects.
+     */
     private fun processClassEvents(events: List<Event>): TestClass {
         val beforeAll = events[0].timeStamp.time
         val afterAll = events.last().timeStamp.time
@@ -36,6 +46,10 @@ object ReportCreator {
         )
     }
 
+    /**
+     * Takes a list of events for a single test method call and turns them into a TestMethod object.
+     * The time-spans for each test are calculated in this method.
+     */
     private fun processMethodEvents(events: List<Event>): TestMethod {
         var beforeEach = 0L
         var beforeTestExecution = 0L
