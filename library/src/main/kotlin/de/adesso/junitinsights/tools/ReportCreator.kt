@@ -17,7 +17,8 @@ object ReportCreator {
     fun createReport(reportName: String, events: List<Event>): Report {
         val eventsGroupedByClass = groupEventsByClass(events)
         val testClasses = eventsGroupedByClass.map { classEvents -> processClassEvents(classEvents) }
-        return Report(reportName, Date(), testClasses)
+        val springContextCreated = countCreatedSpringContexts(events)
+        return Report(reportName, Date(), springContextCreated, testClasses)
     }
 
     /**
@@ -88,5 +89,11 @@ object ReportCreator {
             }
         }
         return result
+    }
+
+    private fun countCreatedSpringContexts(events: List<Event>): Int {
+        return events
+                .filter { it.name == "context created" || it.name == "context refreshed" }
+                .size
     }
 }

@@ -9,5 +9,6 @@ import java.util.*
 data class Report(
         var projectName: String,
         var created: Date,
+        var springContextsCreated: Int,
         var testClasses: List<TestClass>
 )
