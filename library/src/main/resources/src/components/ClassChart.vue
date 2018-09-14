@@ -43,10 +43,7 @@ export default {
   },
   methods: {
     shouldDraw: function() {
-      var classTime = this.testClass.methods
-        .map(method => method.before + method.exec + method.after)
-        .reduce((sum, time) => (sum += time), 0);
-      return classTime >= 5;
+      return this.totalTime(this.testClass) >= 5;
     }
   },
   components: {
