@@ -36,6 +36,7 @@ module.exports = {
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             inlineSource: '.(js|css)$',
+            title: "JUnit Insights Report",
             template: 'src/index_template.html'
         }),
         new HtmlWebpackInlineSourcePlugin()
