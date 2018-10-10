@@ -33,13 +33,13 @@
         },
         created: function () {
             this.chartEntries = [
-                this.getChartEntry(this.testClass.spring, "Spring", "rgb(109, 12, 63)"),
-                this.getChartEntry(this.testClass.beforeAll, "Before All", "rgb(109, 179, 63)"),
-                this.getChartEntry(this.testClass.before, "Before", "rgb(109, 12, 63)"),
-                this.getChartEntry(this.testClass.exec, "Exec", "rgb(109, 179, 63)"),
-                this.getChartEntry(this.testClass.after, "After", "rgb(109, 12, 63)"),
-                this.getChartEntry(this.testClass.between, "Between", "rgb(109, 179, 63)"),
-                this.getChartEntry(this.testClass.afterAll, "After All", "rgb(109, 12, 63)")
+                this.getChartEntry(this.testClass.spring, "Spring", this.SPRING_COLOR),
+                this.getChartEntry(this.testClass.beforeAll, "Before All", this.BEFORE_ALL_COLOR),
+                this.getChartEntry(this.testClass.before, "Before", this.BEFORE_COLOR),
+                this.getChartEntry(this.testClass.exec, "Exec", this.EXEC_COLOR),
+                this.getChartEntry(this.testClass.after, "After", this.AFTER_COLOR),
+                this.getChartEntry(this.testClass.between, "Between", this.BETWEEN_COLOR),
+                this.getChartEntry(this.testClass.afterAll, "After All", this.AFTER_ALL_COLOR)
             ];
         },
         methods: {

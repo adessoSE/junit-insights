@@ -34,10 +34,10 @@
             this.tearDownTime += flatMethods.reduce((sum, method) => (sum += method.after), 0);
 
             this.chartEntries = [
-                this.getChartEntry(this.springTime, "Spring", "rgb(109, 82, 180"),
-                this.getChartEntry(this.preparationTime, "Preparation", "rgb(109, 179, 63)"),
-                this.getChartEntry(this.executionTime, "Execution", "rgb(220, 82, 74)"),
-                this.getChartEntry(this.tearDownTime, "Tear-Down", "rgb(180, 180, 180)")
+                this.getChartEntry(this.springTime, "Spring", this.SPRING_COLOR),
+                this.getChartEntry(this.preparationTime, "Preparation", this.BEFORE_COLOR),
+                this.getChartEntry(this.executionTime, "Execution", this.EXEC_COLOR),
+                this.getChartEntry(this.tearDownTime, "Tear-Down", this.AFTER_COLOR)
             ];
         }
     };

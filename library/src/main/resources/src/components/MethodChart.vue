@@ -15,9 +15,9 @@
         created: function () {
             this.layout.height = 30;
             this.chartEntries = [
-                this.getChartEntry(this.testMethod.before, "Before", "rgb(109, 179, 63)"),
-                this.getChartEntry(this.testMethod.exec, "Execution", "rgb(180, 79, 63)"),
-                this.getChartEntry(this.testMethod.after, "After", "rgb(169, 179, 163)")
+                this.getChartEntry(this.testMethod.before, "Before", this.BEFORE_COLOR),
+                this.getChartEntry(this.testMethod.exec, "Execution", this.EXEC_COLOR),
+                this.getChartEntry(this.testMethod.after, "After", this.AFTER_COLOR)
             ];
         },
         methods: {
