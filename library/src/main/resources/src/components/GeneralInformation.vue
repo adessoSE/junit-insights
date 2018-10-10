@@ -10,30 +10,30 @@
 </template>
 
 <script>
-export default {
-  props: {
-    springContextsCreated: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    testedClasses: {
-      type: Number,
-      required: true
-    },
-    testedMethods: {
-      type: Number,
-      required: true
-    }
-  }
-};
+    export default {
+        props: {
+            springContextsCreated: {
+                type: Number,
+                required: false,
+                default: 0
+            },
+            testedClasses: {
+                type: Number,
+                required: true
+            },
+            testedMethods: {
+                type: Number,
+                required: true
+            }
+        }
+    };
 </script>
 
 <style scoped>
-.generalInformation {
-  border: solid 1px lightgray;
-  border-radius: 6px;
-  margin: 10px;
-  padding: 10px;
-}
+    .generalInformation {
+        border: solid 1px lightgray;
+        border-radius: 6px;
+        margin: 10px;
+        padding: 10px;
+    }
 </style>

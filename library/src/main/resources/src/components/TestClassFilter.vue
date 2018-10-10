@@ -15,37 +15,38 @@
 </template>
 
 <script>
-import TestStatus from "../mixins/TestStatus"
-import TotalTime from "../mixins/TotalTime"
-export default {
-  mixins: [TestStatus, TotalTime],
-  data() {
-    return {
-      minTime: 0,
-      maxTime: 1000000,
-      includeSuccess: true,
-      includePartial: true,
-      includeFailure: true,
-      func: () => true
+    import TestStatus from "../mixins/TestStatus"
+    import TotalTime from "../mixins/TotalTime"
+
+    export default {
+        mixins: [TestStatus, TotalTime],
+        data() {
+            return {
+                minTime: 0,
+                maxTime: 1000000,
+                includeSuccess: true,
+                includePartial: true,
+                includeFailure: true,
+                func: () => true
+            };
+        },
+        methods: {
+            updateFunc: function () {
+                this.func = testClass => {
+                    return this.totalTime(testClass) >= this.minTime &&
+                        this.totalTime(testClass) <= this.maxTime &&
+                        ((this.testStatus(testClass) == "success" && this.includeSuccess) ||
+                            (this.testStatus(testClass) == "partial" && this.includePartial) ||
+                            (this.testStatus(testClass) == "failure" && this.includeFailure));
+                };
+                this.$emit("changed", this.func);
+            }
+        }
     };
-  },
-  methods: {
-    updateFunc: function() {
-      this.func = testClass => {
-        return this.totalTime(testClass) >= this.minTime &&
-          this.totalTime(testClass) <= this.maxTime &&
-          ((this.testStatus(testClass) == "success" && this.includeSuccess) ||
-            (this.testStatus(testClass) == "partial" && this.includePartial) ||
-            (this.testStatus(testClass) == "failure" && this.includeFailure));
-      };
-      this.$emit("changed", this.func);
-    }
-  }
-};
 </script>
 
 <style scoped>
-  .filter {
-    display: inline;
-  }
+    .filter {
+        display: inline;
+    }
 </style>
