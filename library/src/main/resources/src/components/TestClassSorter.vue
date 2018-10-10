@@ -14,10 +14,10 @@
 </template>
 
 <script>
-    import TotalTime from "../mixins/TotalTime"
+    import ClassProcessing from "../mixins/ClassProcessing"
 
     export default {
-        mixins: [TotalTime],
+        mixins: [ClassProcessing],
         data() {
             return {
                 sortByValue: "name",

@@ -1,6 +1,12 @@
 <template>
     <div class=filter>
         <h2>Filter</h2>
+        <label>Minimum Spring share (%)</label>
+        <input type="number" v-model="minSpringShare" @change="updateFunc">
+        <br>
+        <label>Maximum Spring share (%)</label>
+        <input type="number" v-model="maxSpringShare" @change="updateFunc">
+        <br>
         <label>Minimum test time (ms)</label>
         <input type="number" v-model="minTime" @change="updateFunc">
         <br>
@@ -15,13 +21,14 @@
 </template>
 
 <script>
-    import TestStatus from "../mixins/TestStatus"
-    import TotalTime from "../mixins/TotalTime"
+    import ClassProcessing from "../mixins/ClassProcessing"
 
     export default {
-        mixins: [TestStatus, TotalTime],
+        mixins: [ClassProcessing],
         data() {
             return {
+                minSpringShare: 0,
+                maxSpringShare: 100,
                 minTime: 0,
                 maxTime: 1000000,
                 includeSuccess: true,
@@ -35,6 +42,8 @@
                 this.func = testClass => {
                     return this.totalTime(testClass) >= this.minTime &&
                         this.totalTime(testClass) <= this.maxTime &&
+                        this.springShare(testClass) >= this.minSpringShare/100 &&
+                        this.springShare(testClass) <= this.maxSpringShare/100 &&
                         ((this.testStatus(testClass) == "success" && this.includeSuccess) ||
                             (this.testStatus(testClass) == "partial" && this.includePartial) ||
                             (this.testStatus(testClass) == "failure" && this.includeFailure));

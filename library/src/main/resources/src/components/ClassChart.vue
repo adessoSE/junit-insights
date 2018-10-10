@@ -20,12 +20,12 @@
 <script>
     import ChartBase from "./ChartBase.vue";
     import MethodChart from "./MethodChart.vue";
-    import TotalTime from "../mixins/TotalTime.js"
+    import ClassProcessing from "../mixins/ClassProcessing.js"
 
     export default {
         extends: ChartBase,
         props: ["testClass"],
-        mixins: [TotalTime],
+        mixins: [ClassProcessing],
         data() {
             return {
                 expanded: false
