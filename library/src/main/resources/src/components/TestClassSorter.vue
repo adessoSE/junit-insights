@@ -4,6 +4,7 @@
         <select v-model="sortByValue" @change="updateFunc">
             <option value="name">Test class name</option>
             <option value="totalTime">Total Duration</option>
+            <option value="springTime">Spring Duration</option>
         </select>
         <select v-model="ascending" @change="updateFunc">
             <option v-bind:value="true">Ascending</option>
@@ -37,7 +38,14 @@
                         this.func = (a, b) =>
                             this.totalTime(a) < this.totalTime(b)
                                 ? -1
-                                : this.totalTime(a) == this.totalTime(b) ? 0 : 1;
+                                : this.totalTime(a) === this.totalTime(b) ? 0 : 1;
+                        break;
+                    case "springTime":
+                        this.func = (a,b) =>
+                            a.spring < b.spring
+                            ? -1
+                            : a.spring === b.spring ? 0 : 1;
+                        break;
                 }
                 this.$emit(
                     "changed",
