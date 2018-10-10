@@ -21,6 +21,8 @@
         <input type="checkbox" @change="updateFunc" v-model="includeSuccess"> Success
         <input type="checkbox" @change="updateFunc" v-model="includePartial"> Partial failure
         <input type="checkbox" @change="updateFunc" v-model="includeFailure"> Failure
+        <br>
+        <button type="button" v-on:click="clearClicked()">Clear</button>
     </div>
 </template>
 
@@ -60,6 +62,17 @@
                         return true;
                 };
                 this.$emit("changed", this.func);
+            },
+            clearClicked: function() {
+                this.minSpringShare = "";
+                this.maxSpringShare = "";
+                this.minTime = "";
+                this.maxTime = "";
+                this.includeSpring = true;
+                this.includeNonSpring = true;
+                this.includeSuccess = true;
+                this.includePartial = true;
+                this.includeFailure = true;
             }
         }
     };
