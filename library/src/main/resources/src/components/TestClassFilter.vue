@@ -31,10 +31,10 @@
         mixins: [ClassProcessing],
         data() {
             return {
-                minSpringShare: 0,
-                maxSpringShare: 100,
-                minTime: 0,
-                maxTime: 1000000,
+                minSpringShare: "",
+                maxSpringShare: "",
+                minTime: "",
+                maxTime: "",
                 includeSpring: true,
                 includeNonSpring: true,
                 includeSuccess: true,
@@ -46,15 +46,18 @@
         methods: {
             updateFunc: function () {
                 this.func = testClass => {
-                    return this.totalTime(testClass) >= this.minTime &&
-                        this.totalTime(testClass) <= this.maxTime &&
-                        this.springShare(testClass) >= this.minSpringShare/100 &&
-                        this.springShare(testClass) <= this.maxSpringShare/100 &&
-                        ((testClass.spring > 0 && this.includeSpring) ||
-                            (testClass.spring <= 0 && this.includeNonSpring)) &&
-                        ((this.testStatus(testClass) == "success" && this.includeSuccess) ||
-                            (this.testStatus(testClass) == "partial" && this.includePartial) ||
-                            (this.testStatus(testClass) == "failure" && this.includeFailure));
+                    if ((this.minSpringShare !== "" && this.springShare(testClass) < this.minSpringShare/100) ||
+                    (this.maxSpringShare !== "" && this.springShare(testClass) > this.maxSpringShare/100) ||
+                    (this.minTime !== "" && this.totalTime(testClass) < this.minTime) ||
+                    (this.maxTime !== "" && this.totalTime(testClass) > this.maxTime) ||
+                    (testClass.spring > 0 && !this.includeSpring) ||
+                    (testClass.spring <= 0 && !this.includeNonSpring) ||
+                    (this.testStatus(testClass) === "success" && !this.includeSuccess) ||
+                    (this.testStatus(testClass) === "partial" && !this.includePartial) ||
+                    (this.testStatus(testClass) === "failure" && !this.includeFailure))
+                        return false;
+                    else
+                        return true;
                 };
                 this.$emit("changed", this.func);
             }
