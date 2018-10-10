@@ -33,12 +33,12 @@
         },
         created: function () {
             this.chartEntries = [
-                this.getChartEntry(
-                    this.testClass.beforeAll,
-                    "Before All",
-                    "rgb(109, 179, 63)"
-                ),
-                this.getChartEntry(this.testClass.before, "Before", "rgb(109, 12, 63)")
+                this.getChartEntry(this.testClass.beforeAll, "Before All", "rgb(109, 179, 63)"),
+                this.getChartEntry(this.testClass.before, "Before", "rgb(109, 12, 63)"),
+                this.getChartEntry(this.testClass.exec, "Exec", "rgb(109, 179, 63)"),
+                this.getChartEntry(this.testClass.after, "After", "rgb(109, 12, 63)"),
+                this.getChartEntry(this.testClass.between, "Between", "rgb(109, 179, 63)"),
+                this.getChartEntry(this.testClass.afterAll, "After All", "rgb(109, 12, 63)")
             ];
         },
         methods: {
