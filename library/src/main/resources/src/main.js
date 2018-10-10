@@ -25,12 +25,13 @@ var report = {
                     "successful": true
                 }
             ],
-            "beforeAll": 3195,
+            "beforeAll": 75,
             "before": 125,
             "exec": 78,
             "after": 0,
             "afterAll": 16,
-            "between": 0
+            "between": 0,
+            "spring": 3120
         },
         {
             "name": "HelloControllerTest",
@@ -55,7 +56,8 @@ var report = {
             "exec": 0,
             "after": 31,
             "afterAll": 0,
-            "between": 0
+            "between": 0,
+            "spring": 0
         },
         {
             "name": "NewTest",
@@ -82,12 +84,13 @@ var report = {
                     "successful": true
                 }
             ],
-            "beforeAll": 984,
+            "beforeAll": 114,
             "before": 15,
             "exec": 329,
             "after": 0,
             "afterAll": 0,
-            "between": 0
+            "between": 0,
+            "spring": 870
         },
         {
             "name": "CalculatorTest",
@@ -105,7 +108,8 @@ var report = {
             "exec": 0,
             "after": 0,
             "afterAll": 0,
-            "between": 0
+            "between": 0,
+            "spring": 0
         }
     ]
 }

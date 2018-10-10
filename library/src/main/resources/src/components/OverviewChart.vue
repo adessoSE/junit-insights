@@ -13,31 +13,29 @@
         props: ["testClasses"],
         data() {
             return {
-                preparationTime: 120,
-                executionTime: 50,
-                tearDownTime: 75
+                preparationTime: 0,
+                executionTime: 0,
+                tearDownTime: 0,
+                springTime: 0
             };
         },
         created: function () {
             this.layout.height = 200;
-            this.preparationTime = this.testClasses
+
+            this.preparationTime = this.testClasses.reduce((sum, testClass) => sum += testClass.beforeAll, 0);
+            this.tearDownTime = this.testClasses.reduce((sum, testClass) => sum += testClass.afterAll, 0);
+            this.springTime = this.testClasses.reduce((sum, testClass) => sum += testClass.spring, 0);
+
+            let flatMethods = this.testClasses
                 .map(tc => tc.methods)
-                .reduce((acc, val) => acc.concat(val), []) // .flat() not yet implemented
-                .reduce((sum, method) => (sum += method.before), 0);
-            this.executionTime = this.testClasses
-                .map(tc => tc.methods)
-                .reduce((acc, val) => acc.concat(val), []) // .flat() not yet implemented
-                .reduce((sum, method) => (sum += method.exec), 0);
-            this.tearDownTime = this.testClasses
-                .map(tc => tc.methods)
-                .reduce((acc, val) => acc.concat(val), []) // .flat() not yet implemented
-                .reduce((sum, method) => (sum += method.after), 0);
+                .reduce((acc, val) => acc.concat(val), []); // .flat() not yet implemented
+            this.preparationTime += flatMethods.reduce((sum, method) => (sum += method.before), 0);
+            this.executionTime = flatMethods.reduce((sum, method) => (sum += method.exec), 0);
+            this.tearDownTime += flatMethods.reduce((sum, method) => (sum += method.after), 0);
+
             this.chartEntries = [
-                this.getChartEntry(
-                    this.preparationTime,
-                    "Preparation",
-                    "rgb(109, 179, 63)"
-                ),
+                this.getChartEntry(this.springTime, "Spring", "rgb(109, 82, 180"),
+                this.getChartEntry(this.preparationTime, "Preparation", "rgb(109, 179, 63)"),
                 this.getChartEntry(this.executionTime, "Execution", "rgb(220, 82, 74)"),
                 this.getChartEntry(this.tearDownTime, "Tear-Down", "rgb(180, 180, 180)")
             ];
