@@ -1,7 +1,6 @@
 <template>
     <div class="sorter">
         <h2>Order</h2>
-        <label>Test class outcome</label>
         <select v-model="sortByValue" @change="updateFunc">
             <option value="name">Test class name</option>
             <option value="totalTime">Total Duration</option>
