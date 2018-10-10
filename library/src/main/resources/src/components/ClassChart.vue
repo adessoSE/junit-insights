@@ -3,7 +3,7 @@
         <h2>{{this.testClass.name}} ({{ this.totalTime(this.testClass) }}ms)</h2>
         <div v-if="shouldDraw()">
             <div :id="chartId" class="chartCanvas"></div>
-            <button @click="expanded = !expanded">Toggle</button>
+            <button @click="expanded = !expanded">{{expanded ? "-" : "+"}}</button>
             <keep-alive v-if="expanded">
                 <method-chart v-for="method in testClass.methods"
                               :key="method.name"
