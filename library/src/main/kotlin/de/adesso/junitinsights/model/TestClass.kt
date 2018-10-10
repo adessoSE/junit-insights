@@ -12,5 +12,6 @@ data class TestClass(
         var exec: Long,
         var after: Long,
         var afterAll: Long,
-        var between: Long
+        var between: Long,
+        var spring: Long
 )

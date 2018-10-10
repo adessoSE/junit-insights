@@ -27,6 +27,7 @@ object ReportCreator {
      */
     private fun processClassEvents(events: List<Event>): TestClass {
         val beforeAll = events[0].timeStamp.time
+        val spring = if (events[1].name.equals("context refreshed")) events[1].timeStamp.time else events[0].timeStamp.time
         val afterAll = events.last().timeStamp.time
         val eventsGroupedByMethods = groupEventsByMethod(events)
         val methods = eventsGroupedByMethods.map { methodEvents -> processMethodEvents(methodEvents) }
@@ -38,12 +39,13 @@ object ReportCreator {
         return TestClass(
                 events.last().className,
                 methods,
-                methods[0].timestampBefore - beforeAll,
+                methods[0].timestampBefore - spring,
                 methods.map { method -> method.before }.sum(),
                 methods.map { method -> method.exec }.sum(),
                 methods.map { method -> method.after }.sum(),
                 afterAll - methods.last().timestampAfter,
-                between
+                between,
+                spring - beforeAll
         )
     }
 
