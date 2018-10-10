@@ -13,6 +13,10 @@
         <label>Maximum test time (ms)</label>
         <input type="number" v-model="maxTime" @change="updateFunc">
         <br>
+        <label>Context creation</label>
+        <input type="checkbox" @change="updateFunc" v-model="includeSpring"> Spring tests
+        <input type="checkbox" @change="updateFunc" v-model="includeNonSpring"> Non-Spring tests
+        <br>
         <label>Test class outcome</label>
         <input type="checkbox" @change="updateFunc" v-model="includeSuccess"> Success
         <input type="checkbox" @change="updateFunc" v-model="includePartial"> Partial failure
@@ -31,6 +35,8 @@
                 maxSpringShare: 100,
                 minTime: 0,
                 maxTime: 1000000,
+                includeSpring: true,
+                includeNonSpring: true,
                 includeSuccess: true,
                 includePartial: true,
                 includeFailure: true,
@@ -44,6 +50,8 @@
                         this.totalTime(testClass) <= this.maxTime &&
                         this.springShare(testClass) >= this.minSpringShare/100 &&
                         this.springShare(testClass) <= this.maxSpringShare/100 &&
+                        ((testClass.spring > 0 && this.includeSpring) ||
+                            (testClass.spring <= 0 && this.includeNonSpring)) &&
                         ((this.testStatus(testClass) == "success" && this.includeSuccess) ||
                             (this.testStatus(testClass) == "partial" && this.includePartial) ||
                             (this.testStatus(testClass) == "failure" && this.includeFailure));
