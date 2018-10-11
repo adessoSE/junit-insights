@@ -32,7 +32,7 @@ task fatJar(type: Jar) {
     baseName = 'junit-insights'
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
-    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "dist/main.js")
+    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
 }
 
 bootJar {
@@ -41,17 +41,17 @@ bootJar {
 
 jar {
     enabled = true
-    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "dist/main.js")
+    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
 }
 
 task npmInstall(type: Exec) {
     inputs.files(
-            'src/main/resources/package-lock.json',
-            'src/main/resources/webpack.config.js'
+            'src/frontend/package-lock.json',
+            'src/frontend/webpack.config.js'
     )
-    outputs.dir 'src/main/resources/node_modules/'
+    outputs.dir 'src/frontend/node_modules/'
 
-    workingDir = 'src/main/resources/'
+    workingDir = 'src/frontend/'
     if (System.getProperty('os.name').toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', 'npm install'
     } else {
@@ -61,9 +61,9 @@ task npmInstall(type: Exec) {
 
 task npmRunBuild(type: Exec) {
     dependsOn npmInstall
-    inputs.dir 'src/main/resources/src'
-    outputs.file 'src/main/resources/dist/index.html'
-    workingDir = 'src/main/resources'
+    inputs.dir 'src/frontend/src'
+    outputs.file 'src/main/resources/index.html'
+    workingDir = 'src/frontend'
     if (System.getProperty('os.name').toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', 'npm run build'
     } else {

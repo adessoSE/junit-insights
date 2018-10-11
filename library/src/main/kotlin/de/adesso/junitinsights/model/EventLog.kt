@@ -29,7 +29,7 @@ object EventLog {
     }
 
     private fun insertJsonInTemplate(json: String): String {
-        val template = InputStreamReader(ClassPathResource("dist/index.html").inputStream).readText()
+        val template = InputStreamReader(ClassPathResource("index.html").inputStream).readText()
         return template.replace("var OVERRIDE_REPORT = {}", "var OVERRIDE_REPORT = $json")
     }
 
