@@ -32,6 +32,7 @@ task fatJar(type: Jar) {
     baseName = 'junit-insights'
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
 }
 
 bootJar {
@@ -40,8 +41,37 @@ bootJar {
 
 jar {
     enabled = true
+    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
 }
 
+task npmInstall(type: Exec) {
+    inputs.files(
+            'src/frontend/package-lock.json',
+            'src/frontend/webpack.config.js'
+    )
+    outputs.dir 'src/frontend/node_modules/'
+
+    workingDir = 'src/frontend/'
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'npm install'
+    } else {
+        commandLine 'npm install'
+    }
+}
+
+task npmRunBuild(type: Exec) {
+    dependsOn npmInstall
+    inputs.dir 'src/frontend/src'
+    outputs.file 'src/main/resources/index.html'
+    workingDir = 'src/frontend'
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'npm run build'
+    } else {
+        commandLine 'npm run build'
+    }
+}
+
+build.dependsOn npmRunBuild
 build.dependsOn fatJar
 assemble.dependsOn fatJar
 
@@ -50,6 +80,8 @@ dependencies {
     compileOnly('org.junit.jupiter:junit-jupiter-api:5.1.0')
     compileOnly('org.junit.platform:junit-platform-launcher:1.1.0')
     compileOnly('org.springframework.boot:spring-boot-starter')
+
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
 
     // You can easily generate your own configuration metadata file from items annotated with
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
