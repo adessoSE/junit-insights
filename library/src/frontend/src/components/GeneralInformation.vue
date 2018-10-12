@@ -32,7 +32,7 @@
 <style scoped>
     .generalInformation {
         border: solid 1px lightgray;
-        border-radius: 6px;
+        border-radius: 2px;
         margin: 10px;
         padding: 10px;
     }
