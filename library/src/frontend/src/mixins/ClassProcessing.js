@@ -6,7 +6,7 @@ var ClassProcessing = {
                 return "failure";
             return "partial";
         },
-        totalTime(testClass) {
+        totalTimeClass(testClass) {
             return (
                 testClass.beforeAll +
                 testClass.before +
@@ -17,10 +17,17 @@ var ClassProcessing = {
                 testClass.spring
             );
         },
+        totalTimeMethod(testMethod) {
+            return (
+                testMethod.before +
+                testMethod.exec +
+                testMethod.after
+            );
+        },
         springShare(testClass) {
-            if (this.totalTime(testClass) <= 0)
+            if (this.totalTimeClass(testClass) <= 0)
                 return 0;
-            return testClass.spring / this.totalTime(testClass);
+            return testClass.spring / this.totalTimeClass(testClass);
         }
     }
 };

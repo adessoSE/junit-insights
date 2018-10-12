@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>{{this.testMethod.name}}</h3>
+        <h3>{{this.testMethod.name}} ({{this.totalTimeMethod(this.testMethod)}}ms)</h3>
         <div :id="chartId" v-if="shouldDraw()"></div>
         <div v-else>The method took no measurable time to run.</div>
     </div>
@@ -8,10 +8,12 @@
 
 <script>
     import ChartBase from "./ChartBase.vue";
+    import ClassProcessing from "../mixins/ClassProcessing.js"
 
     export default {
         extends: ChartBase,
         props: ["testMethod"],
+        mixins: [ClassProcessing],
         created: function () {
             this.layout.height = 30;
             this.chartEntries = [

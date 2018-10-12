@@ -35,11 +35,11 @@
                     case "name":
                         this.func = (a, b) => a.name.localeCompare(b.name);
                         break;
-                    case "totalTime":
+                    case "totalTimeClass":
                         this.func = (a, b) =>
-                            this.totalTime(a) < this.totalTime(b)
+                            this.totalTimeClass(a) < this.totalTimeClass(b)
                                 ? -1
-                                : this.totalTime(a) === this.totalTime(b) ? 0 : 1;
+                                : this.totalTimeClass(a) === this.totalTimeClass(b) ? 0 : 1;
                         break;
                     case "springTime":
                         this.func = (a,b) =>
@@ -49,9 +49,9 @@
                         break;
                     case "nonSpringTime":
                         this.func = (a,b) =>
-                            (this.totalTime(a) - a.spring) < (this.totalTime(b) - b.spring)
+                            (this.totalTimeClass(a) - a.spring) < (this.totalTimeClass(b) - b.spring)
                                 ? -1
-                                : (this.totalTime(a) - a.spring) === (this.totalTime(b) - b.spring) ? 0 : 1;
+                                : (this.totalTimeClass(a) - a.spring) === (this.totalTimeClass(b) - b.spring) ? 0 : 1;
                         break;
                 }
                 this.$emit(

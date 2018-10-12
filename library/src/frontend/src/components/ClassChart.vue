@@ -1,6 +1,6 @@
 <template>
     <div class="classChart">
-        <h2>{{this.testClass.name}} ({{ this.totalTime(this.testClass) }}ms)</h2>
+        <h2>{{this.testClass.name}} ({{ this.totalTimeClass(this.testClass) }}ms)</h2>
         <div v-if="shouldDraw()">
             <div :id="chartId" class="chartCanvas"></div>
             <button @click="expanded = !expanded">{{expanded ? "-" : "+"}}</button>
@@ -44,7 +44,7 @@
         },
         methods: {
             shouldDraw: function () {
-                return this.totalTime(this.testClass) >= 5;
+                return this.totalTimeClass(this.testClass) >= 5;
             }
         },
         components: {

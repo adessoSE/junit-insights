@@ -50,8 +50,8 @@
                 this.func = testClass => {
                     if ((this.minSpringShare !== "" && this.springShare(testClass) < this.minSpringShare/100) ||
                     (this.maxSpringShare !== "" && this.springShare(testClass) > this.maxSpringShare/100) ||
-                    (this.minTime !== "" && this.totalTime(testClass) < this.minTime) ||
-                    (this.maxTime !== "" && this.totalTime(testClass) > this.maxTime) ||
+                    (this.minTime !== "" && this.totalTimeClass(testClass) < this.minTime) ||
+                    (this.maxTime !== "" && this.totalTimeClass(testClass) > this.maxTime) ||
                     (testClass.spring > 0 && !this.includeSpring) ||
                     (testClass.spring <= 0 && !this.includeNonSpring) ||
                     (this.testStatus(testClass) === "success" && !this.includeSuccess) ||
