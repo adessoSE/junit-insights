@@ -28,7 +28,7 @@
                 layout: {
                     showlegend: false,
                     font: {
-                        family: "Oswald",
+                        family: "Nunito",
                         size: 16
                     },
                     barmode: "stack",
