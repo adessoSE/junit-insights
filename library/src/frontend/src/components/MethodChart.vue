@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>{{this.testMethod.name}}</h2>
+        <h3>{{this.testMethod.name}}</h3>
         <div :id="chartId" v-if="shouldDraw()"></div>
         <div v-else>The method took no measurable time to run.</div>
     </div>
