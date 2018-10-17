@@ -39,6 +39,8 @@
                 this.getChartEntry(this.executionTime, "Execution", this.EXEC_COLOR),
                 this.getChartEntry(this.tearDownTime, "Tear-Down", this.AFTER_COLOR)
             ];
+
+            this.layout.xaxis.range = [0,this.preparationTime + this.executionTime + this.tearDownTime + this.springTime]
         }
     };
 </script>

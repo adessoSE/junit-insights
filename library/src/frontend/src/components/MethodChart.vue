@@ -21,6 +21,7 @@
                 this.getChartEntry(this.testMethod.exec, "Execution", this.EXEC_COLOR),
                 this.getChartEntry(this.testMethod.after, "After", this.AFTER_COLOR)
             ];
+            this.layout.xaxis.range = [0,this.totalTimeMethod(this.testMethod)]
         },
         methods: {
             shouldDraw() {
