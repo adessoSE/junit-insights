@@ -10,7 +10,7 @@
                     <option value="nonSpringTime">Non-Spring duration</option>
                 </select>
             </label>
-            <div class="col" style="display: inline-block;">
+            <div class="col" style="display: inline;">
                 <button class="btn btn-light" style="background-color: #FFFFFF;" type="button" @click="ascending = !ascending; updateFunc();">
                     {{ascending ? "&darr;" : "&uarr;"}}
                 </button>
