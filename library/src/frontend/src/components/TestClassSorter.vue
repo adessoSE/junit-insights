@@ -1,16 +1,21 @@
 <template>
     <div class="sorter">
-        <h2>Order</h2>
-        <select v-model="sortByValue" @change="updateFunc">
-            <option value="name">Test class name</option>
-            <option value="totalTime">Total duration</option>
-            <option value="springTime">Spring duration</option>
-            <option value="nonSpringTime">Non-Spring duration</option>
-        </select>
-        <select v-model="ascending" @change="updateFunc">
-            <option v-bind:value="true">Ascending</option>
-            <option v-bind:value="false">Decending</option>
-        </select>
+        <div class="col" style="white-space: nowrap; margin-top: 10px;">
+            <label style="display: inline-block;">
+                Order by:
+                <select class="form-control" v-model="sortByValue" @change="updateFunc" style="display: inline-block; width: 75%">
+                    <option value="name">Test class name</option>
+                    <option value="totalTime">Total duration</option>
+                    <option value="springTime">Spring duration</option>
+                    <option value="nonSpringTime">Non-Spring duration</option>
+                </select>
+            </label>
+            <div class="col" style="display: inline-block;">
+                <button class="btn" type="button" @click="ascending = !ascending; updateFunc();">
+                    {{ascending ? "&darr;" : "&uarr;"}}
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
