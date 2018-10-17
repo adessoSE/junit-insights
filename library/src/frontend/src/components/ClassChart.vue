@@ -1,9 +1,9 @@
 <template>
     <div class="classChart">
-        <h2>{{this.testClass.name}} ({{ this.totalTimeClass(this.testClass) }}ms)</h2>
+        <button class="btn btn-sm btn-light expandButton" @click="expanded = !expanded">{{expanded ? "-" : "+"}}</button>
+        <h2 style="display: inline;">{{this.testClass.name}} ({{ this.totalTimeClass(this.testClass) }}ms)</h2>
         <div v-if="shouldDraw()">
             <div :id="chartId" class="chartCanvas"></div>
-            <button @click="expanded = !expanded">{{expanded ? "-" : "+"}}</button>
             <keep-alive v-if="expanded">
                 <method-chart v-for="method in testClass.methods"
                               :key="method.name"
@@ -60,5 +60,14 @@
         border-radius: 2px;
         padding: 10px;
         margin: 10px;
+    }
+
+    .expandButton {
+        display: inline;
+        margin-top: -13px;
+        font-size: 20px;
+        background-color: #FFFFFF;
+        width: 38px;
+        height: 38px;
     }
 </style>

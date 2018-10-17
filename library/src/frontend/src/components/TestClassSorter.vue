@@ -11,7 +11,7 @@
                 </select>
             </label>
             <div class="col" style="display: inline-block;">
-                <button class="btn" type="button" @click="ascending = !ascending; updateFunc();">
+                <button class="btn btn-light" style="background-color: #FFFFFF;" type="button" @click="ascending = !ascending; updateFunc();">
                     {{ascending ? "&darr;" : "&uarr;"}}
                 </button>
             </div>

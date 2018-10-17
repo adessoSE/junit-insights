@@ -87,7 +87,7 @@
             </div>
             <div class="col">
                 <div class="col">
-                    <button type="button" class="btn" v-on:click="clearClicked()">Clear</button>
+                    <button type="button" class="btn btn-light" v-on:click="clearClicked()" style="background-color: #FFFFFF; ">Clear</button>
                 </div>
             </div>
         </div>
