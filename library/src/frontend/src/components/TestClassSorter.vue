@@ -40,7 +40,7 @@
                     case "name":
                         this.func = (a, b) => a.name.localeCompare(b.name);
                         break;
-                    case "totalTimeClass":
+                    case "totalTime":
                         this.func = (a, b) =>
                             this.totalTimeClass(a) < this.totalTimeClass(b)
                                 ? -1
