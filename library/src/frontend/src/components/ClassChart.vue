@@ -41,7 +41,7 @@
                 this.getChartEntry(this.testClass.between, "Between", this.BETWEEN_COLOR),
                 this.getChartEntry(this.testClass.afterAll, "After All", this.AFTER_ALL_COLOR)
             ];
-            this.layout.xaxis.range = [0,this.totalTimeClass(this.testClass)]
+            this.layout.xaxis.range = [0,this.totalTimeClass(this.testClass)];
         },
         methods: {
             shouldDraw: function () {

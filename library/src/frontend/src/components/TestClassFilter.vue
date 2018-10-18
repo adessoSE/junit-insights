@@ -1,5 +1,5 @@
 <template>
-    <div class=filter>
+    <div class="filter">
         <div class="form-inline" style="max-width: 1450px;">
             <div class="col">
                 <div class="right-addon">
