@@ -21,7 +21,6 @@
         },
         created: function () {
             this.layout.height = 200;
-            this.layout.xaxis.range = [0,this.preparationTime + this.executionTime + this.tearDownTime + this.springTime];
 
             this.preparationTime = this.testClasses.reduce((sum, testClass) => sum += testClass.beforeAll, 0);
             this.tearDownTime = this.testClasses.reduce((sum, testClass) => sum += testClass.afterAll, 0);
@@ -33,6 +32,8 @@
             this.preparationTime += flatMethods.reduce((sum, method) => (sum += method.before), 0);
             this.executionTime = flatMethods.reduce((sum, method) => (sum += method.exec), 0);
             this.tearDownTime += flatMethods.reduce((sum, method) => (sum += method.after), 0);
+
+            this.layout.xaxis.range = [0,this.preparationTime + this.executionTime + this.tearDownTime + this.springTime];
 
             this.chartEntries = [
                 this.getChartEntry(this.springTime, "Spring", this.SPRING_COLOR),
