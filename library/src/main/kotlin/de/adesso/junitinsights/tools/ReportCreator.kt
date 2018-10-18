@@ -32,6 +32,9 @@ object ReportCreator {
         val eventsGroupedByMethods = groupEventsByMethod(events)
         val methods = eventsGroupedByMethods.map { methodEvents -> processMethodEvents(methodEvents) }
 
+        if (methods.isEmpty())
+            return TestClass(events.last().className, methods, 0, 0, 0, 0, 0, 0, 0)
+
         var between = 0L
         for (i in 1..methods.lastIndex)
             between += methods[i].timestampBefore - methods[i - 1].timestampAfter
