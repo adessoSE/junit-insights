@@ -4,12 +4,12 @@
         <h2 style="display: inline;">{{this.testClass.name}} ({{ this.totalTimeClass(this.testClass) }}ms)</h2>
         <div v-if="shouldDraw()">
             <div :id="chartId" class="chartCanvas"></div>
-            <keep-alive v-if="expanded">
+            <div v-if="expanded">
                 <method-chart v-for="method in testClass.methods"
                               :key="method.name"
                               :test-method="method"
                               :chartId="method.name"/>
-            </keep-alive>
+            </div>
         </div>
         <div v-else>
             The tests took no measurable time to run.
