@@ -1,14 +1,15 @@
 <template>
     <div id="app">
-        <h1>{{ this.report.projectName }}</h1>
+        <h1 style="font-size: 50px;">{{ this.report.projectName }}</h1>
         <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
         <general-information
                 :spring-contexts-created="this.report.springContextsCreated"
                 :tested-classes="this.numberOfTestedClasses"
                 :tested-methods="this.numberOfTestedMethods"/>
-        <div class="toolbar">
-            <test-class-sorter @changed="sortFunction = $event"/>
+        <div>
+            <h1 style="margin-top: 30px;">Time spent on individual test classes</h1>
             <test-class-filter @changed="filterFunction = $event"/>
+            <test-class-sorter @changed="sortFunction = $event"/>
         </div>
         <class-chart v-for="testClass in filteredAndSorted"
                      :key="testClass.name"
@@ -61,12 +62,5 @@
 <style scoped>
     h1 {
         margin: 10px;
-    }
-
-    .toolbar {
-        border: solid 1px lightgray;
-        border-radius: 6px;
-        margin: 10px;
-        padding: 10px;
     }
 </style>

@@ -1,16 +1,21 @@
 <template>
     <div class="sorter">
-        <h2>Order</h2>
-        <select v-model="sortByValue" @change="updateFunc">
-            <option value="name">Test class name</option>
-            <option value="totalTime">Total duration</option>
-            <option value="springTime">Spring duration</option>
-            <option value="nonSpringTime">Non-Spring duration</option>
-        </select>
-        <select v-model="ascending" @change="updateFunc">
-            <option v-bind:value="true">Ascending</option>
-            <option v-bind:value="false">Decending</option>
-        </select>
+        <div class="col" style="white-space: nowrap; margin-top: 10px;">
+            <label style="display: inline-block;">
+                Order by:
+                <select class="form-control" v-model="sortByValue" @change="updateFunc" style="display: inline-block; width: 75%">
+                    <option value="name">Test class name</option>
+                    <option value="totalTime">Total duration</option>
+                    <option value="springTime">Spring duration</option>
+                    <option value="nonSpringTime">Non-Spring duration</option>
+                </select>
+            </label>
+            <div class="col" style="display: inline;">
+                <button class="btn btn-light" style="background-color: #FFFFFF;" type="button" @click="ascending = !ascending; updateFunc();">
+                    {{ascending ? "&darr;" : "&uarr;"}}
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -37,9 +42,9 @@
                         break;
                     case "totalTime":
                         this.func = (a, b) =>
-                            this.totalTime(a) < this.totalTime(b)
+                            this.totalTimeClass(a) < this.totalTimeClass(b)
                                 ? -1
-                                : this.totalTime(a) === this.totalTime(b) ? 0 : 1;
+                                : this.totalTimeClass(a) === this.totalTimeClass(b) ? 0 : 1;
                         break;
                     case "springTime":
                         this.func = (a,b) =>
@@ -49,9 +54,9 @@
                         break;
                     case "nonSpringTime":
                         this.func = (a,b) =>
-                            (this.totalTime(a) - a.spring) < (this.totalTime(b) - b.spring)
+                            (this.totalTimeClass(a) - a.spring) < (this.totalTimeClass(b) - b.spring)
                                 ? -1
-                                : (this.totalTime(a) - a.spring) === (this.totalTime(b) - b.spring) ? 0 : 1;
+                                : (this.totalTimeClass(a) - a.spring) === (this.totalTimeClass(b) - b.spring) ? 0 : 1;
                         break;
                 }
                 this.$emit(

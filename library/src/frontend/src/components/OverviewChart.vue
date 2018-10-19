@@ -33,6 +33,8 @@
             this.executionTime = flatMethods.reduce((sum, method) => (sum += method.exec), 0);
             this.tearDownTime += flatMethods.reduce((sum, method) => (sum += method.after), 0);
 
+            this.layout.xaxis.range = [0,this.preparationTime + this.executionTime + this.tearDownTime + this.springTime];
+
             this.chartEntries = [
                 this.getChartEntry(this.springTime, "Spring", this.SPRING_COLOR),
                 this.getChartEntry(this.preparationTime, "Preparation", this.BEFORE_COLOR),
@@ -46,7 +48,7 @@
 <style scoped>
     .overviewChart {
         border: solid 1px lightgray;
-        border-radius: 6px;
+        border-radius: 2px;
         padding: 10px;
         margin: 10px;
     }

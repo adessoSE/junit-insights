@@ -55,7 +55,7 @@ task npmInstall(type: Exec) {
     if (System.getProperty('os.name').toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', 'npm install'
     } else {
-        commandLine 'npm install'
+        commandLine 'sh', '-c', 'npm install'
     }
 }
 
@@ -67,7 +67,7 @@ task npmRunBuild(type: Exec) {
     if (System.getProperty('os.name').toLowerCase().contains('windows')) {
         commandLine 'cmd', '/c', 'npm run build'
     } else {
-        commandLine 'npm run build'
+        commandLine 'sh', '-c', 'npm run build'
     }
 }
 

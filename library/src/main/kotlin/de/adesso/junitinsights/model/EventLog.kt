@@ -13,18 +13,20 @@ import java.time.format.DateTimeFormatter
 
 object EventLog {
     var events: ArrayList<Event> = ArrayList()
+    var currentDate: LocalDateTime = LocalDateTime.now()
 
     fun log(e: Event) = events.add(e)
 
     fun writeReport() {
+        currentDate = LocalDateTime.now() // Reset time to accommodate time between EventLog creation and writing
         val json = generateJsonFromEvents()
         val html = insertJsonInTemplate(json)
         val reportFile = writeHtmlToFile(html)
-        LoggerFactory.getLogger(this::class.java).debug("Report created at " + reportFile.absolutePath)
+        LoggerFactory.getLogger(this::class.java).debug("Report created at ${reportFile.absolutePath}")
     }
 
     private fun generateJsonFromEvents(): String {
-        val report = ReportCreator.createReport("JUnit Insights Report ${getFormattedDateTimeString()}", events)
+        val report = ReportCreator.createReport(getPageTitle(), events)
         return Gson().toJson(report)
     }
 
@@ -33,15 +35,17 @@ object EventLog {
         return template.replace("var OVERRIDE_REPORT = {}", "var OVERRIDE_REPORT = $json")
     }
 
-    private fun getFormattedDateTimeString(): String =
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
-
     private fun writeHtmlToFile(html: String): File {
-        val currentTime = getFormattedDateTimeString()
-        val htmlReportFile = File(InsightProperties.reportpath + "insight_$currentTime.html")
+        val htmlReportFile = File("${InsightProperties.reportpath}${getReportFileName()}")
         if (htmlReportFile.parentFile != null)
             htmlReportFile.parentFile.mkdirs()
         PrintWriter(htmlReportFile).use { it.write(html) }
         return htmlReportFile
     }
+
+    private val filenameDatePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
+    private val titleDatePattern = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
+
+    private fun getPageTitle() = "JUnit Insights Report ${currentDate.format(titleDatePattern)}"
+    private fun getReportFileName() = "JUnit_Insights_${currentDate.format(filenameDatePattern)}.html"
 }
