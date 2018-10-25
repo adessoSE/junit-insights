@@ -17,13 +17,13 @@
                     <input type="number" class="form-control" v-model="minTime" @change="updateFunc"
                            placeholder="Min. test time"
                            data-toggle="tooltip" title="The minimum total duration of a test class">
-                    <div class="input-group-append"><span class="input-group-text">%</span></div>
+                    <div class="input-group-append"><span class="input-group-text">ms</span></div>
                 </div>
                 <div class="right-addon input-group">
                     <input type="number" class="form-control" v-model="maxTime" @change="updateFunc"
                            placeholder="Max. test time"
                            data-toggle="tooltip" title="The maximum total duration of a test class">
-                    <div class="input-group-append"><span class="input-group-text">%</span></div>
+                    <div class="input-group-append"><span class="input-group-text">ms</span></div>
                 </div>
                 <div class="button-group input-group" data-toggle="tooltip"
                      title="Filter tests that create their own Spring context and those that don't">
