@@ -1,11 +1,13 @@
 <template>
     <div id="app">
         <h1 style="font-size: 50px;">{{ this.report.projectName }}</h1>
-        <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
-        <general-information
+        <div class="overview-info">
+            <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
+            <general-information
                 :spring-contexts-created="this.report.springContextsCreated"
                 :tested-classes="this.numberOfTestedClasses"
                 :tested-methods="this.numberOfTestedMethods"/>
+        </div>
         <div>
             <h1 style="margin-top: 30px;">Time spent on individual test classes</h1>
             <test-class-filter @changed="filterFunction = $event"/>
@@ -62,5 +64,9 @@
 <style scoped>
     h1 {
         margin: 10px;
+    }
+    .overview-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
     }
 </style>
