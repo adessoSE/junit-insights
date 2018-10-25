@@ -12,8 +12,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 object EventLog {
-    var events: ArrayList<Event> = ArrayList()
-    var currentDate: LocalDateTime = LocalDateTime.now()
+    private var events: ArrayList<Event> = ArrayList()
+    private var currentDate: LocalDateTime = LocalDateTime.now()
 
     fun log(e: Event) = events.add(e)
 
