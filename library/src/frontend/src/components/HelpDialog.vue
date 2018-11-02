@@ -5,13 +5,33 @@
 
                 <div class="modal-header">
                     <slot name="header">
-                        <h1>Help</h1>
+                        <h1>JUnit Insights help</h1>
                     </slot>
                 </div>
 
                 <div class="modal-body">
                     <slot name="body">
-                        Example text
+                        The information provided on this site is collected by using the <a href="https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/api/extension/package-summary.html">JUnit Jupiter extension callbacks</a>.
+                        <br>
+                        The <b>Overview</b> chart breaks down the total test time into the following components:
+                        <ul>
+                            <li><b>Spring:</b> startup time for all Spring application contexts</li>
+                            <li><b>Preparation:</b> sum of all time that passed before the BeforeAll and BeforeEach callbacks</li>
+                            <li><b>Execution:</b> sum of all time that passed between the BeforeEach and AfterEach callbacks</li>
+                            <li><b>Tear-Down:</b> like preparation but after the execution</li>
+                        </ul>
+                        <br>
+                        The list down below shows an overview of the individual tested classes and the time spent on different tasks:
+                        <ul>
+                            <li><b>Spring:</b> startup time of the possibly created Spring application context</li>
+                            <li><b>Before All:</b> tasks executed before any of the test methods are executed</li>
+                            <li><b>Before:</b> sum of the time used before each individual test method</li>
+                            <li><b>Exec:</b> sum of the execution time of all test methods</li>
+                            <li><b>After:</b> like before but after the execution</li>
+                            <li><b>After All:</b> like before all but after the execution</li>
+                        </ul>
+                        <br>
+                        You can also expand the test classes and get the information about <b>Before</b>, <b>Execution</b> and <b>After</b> for the individual test methods.
                     </slot>
                 </div>
 
@@ -45,7 +65,7 @@
     }
 
     .modal-container {
-        width: 600px;
+        width: 800px;
         margin: 0px auto;
         padding: 20px 30px;
         background-color: #fff;
