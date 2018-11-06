@@ -6,6 +6,7 @@ package de.adesso.junitinsights.model
  */
 data class TestClass(
         var name: String,
+        var firstTimestamp: Long,
         var methods: List<TestMethod>,
         var beforeAll: Long,
         var before: Long,
