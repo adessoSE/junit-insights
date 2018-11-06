@@ -8,6 +8,9 @@ JUnit Insights is an extension for the use of JUnit 5 in combination with the Sp
 For the user of the test classes, it looks like some tests take a long time to execute, although the actual test runs fairly quickly.
 To make this behavior transparent, a report is created.
 
+# Screenshots
+![Screenshot 1](./screenshots/screen1.png)
+
 # How to use
 
 You can add the extension via the provided [bintray package](https://bintray.com/adesso/junit-insights/junit-insights):
