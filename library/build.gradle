@@ -44,6 +44,10 @@ jar {
     exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
 }
 
+test {
+    systemProperty 'de.adesso.junitinsights.enabled', 'false'
+}
+
 task npmInstall(type: Exec) {
     inputs.files(
             'src/frontend/package-lock.json',
@@ -77,11 +81,13 @@ assemble.dependsOn fatJar
 
 dependencies {
     compile('org.jetbrains.kotlin:kotlin-reflect')
+    compile('com.google.code.gson:gson:2.7')
+
     compileOnly('org.junit.jupiter:junit-jupiter-api:5.1.0')
     compileOnly('org.junit.platform:junit-platform-launcher:1.1.0')
     compileOnly('org.springframework.boot:spring-boot-starter')
 
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+    testCompile('org.junit.jupiter:junit-jupiter-engine:5.1.0')
 
     // You can easily generate your own configuration metadata file from items annotated with
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
