@@ -73,7 +73,7 @@
                     </li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-light input-group" v-on:click="clearClicked()" style="background-color: #FFFFFF;">Clear</button>
+            <button type="button" class="btn btn-light" v-on:click="clearClicked()" style="background-color: #FFFFFF;">Clear</button>
         </div>
     </div>
 </template>
@@ -138,7 +138,7 @@
     .grid-wrapper {
         display: grid;
         grid-gap: 10px;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr) ) ;
+        grid-template-columns: repeat(auto-fill, minmax(207px, 1fr) ) ;
     }
 
     .input-group-text {
