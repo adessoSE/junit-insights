@@ -30,3 +30,4 @@ nbdist/
 .nb-gradle/
 
 insight_**.html
+JUnit_Insights_**.html
