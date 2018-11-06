@@ -33,7 +33,7 @@ object ReportCreator {
         val methods = eventsGroupedByMethods.map { methodEvents -> processMethodEvents(methodEvents) }
 
         if (methods.isEmpty())
-            return TestClass(events.last().className, events.first().timeStamp.time, methods, 0, 0, 0, 0, 0, 0, 0)
+            return TestClass(events.last().className, events[0].timeStamp.time, methods, 0, 0, 0, 0, 0, 0, 0)
 
         var between = 0L
         for (i in 1..methods.lastIndex)
@@ -41,7 +41,7 @@ object ReportCreator {
 
         return TestClass(
                 events.last().className,
-                events.first().timeStamp.time,
+                events[0].timeStamp.time,
                 methods,
                 methods[0].timestampBefore - spring,
                 methods.asSequence().map { method -> method.before }.sum(),
@@ -72,7 +72,7 @@ object ReportCreator {
         }
         return TestMethod(
                 events.last().methodName,
-                events.first().timeStamp.time,
+                events[0].timeStamp.time,
                 beforeEach,
                 afterEach,
                 beforeTestExecution - beforeEach,
