@@ -15,9 +15,19 @@ object EventLog {
     private var events: ArrayList<Event> = ArrayList()
     private var currentDate: LocalDateTime = LocalDateTime.now()
 
-    fun log(e: Event) = events.add(e)
+    fun log(e: Event) {
+        // If JUnit Insights is disabled, no events have to be logged
+        if (!InsightProperties.enabled)
+            return
+
+        events.add(e)
+    }
 
     fun writeReport() {
+        // If JUnit Insights is disabled, the report should not be created
+        if (!InsightProperties.enabled)
+            return
+
         currentDate = LocalDateTime.now() // Reset time to accommodate time between EventLog creation and writing
         val json = generateJsonFromEvents()
         val html = insertJsonInTemplate(json)
