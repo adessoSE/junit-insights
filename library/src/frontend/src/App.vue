@@ -1,6 +1,8 @@
 <template>
     <div id="app">
         <h1 style="font-size: 50px;">{{ this.report.projectName }}</h1>
+        <button type="button" class="btn btn-light help-button" v-on:click="showHelp = true"><h2>?</h2></button>
+        <HelpDialog v-if="showHelp" v-on:close="showHelp = false"></HelpDialog>
         <div class="overview-info">
             <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
             <general-information
@@ -26,6 +28,7 @@
     import OverviewChart from "./components/OverviewChart.vue";
     import ClassChart from "./components/ClassChart.vue";
     import GeneralInformation from "./components/GeneralInformation.vue";
+    import HelpDialog from "./components/HelpDialog.vue"
 
     export default {
         name: "app",
@@ -33,7 +36,8 @@
         data() {
             return {
                 sortFunction: () => -1,
-                filterFunction: () => true
+                filterFunction: () => true,
+                showHelp: false
             };
         },
         computed: {
@@ -56,7 +60,8 @@
             TestClassFilter,
             OverviewChart,
             ClassChart,
-            GeneralInformation
+            GeneralInformation,
+            HelpDialog
         }
     };
 </script>
@@ -65,8 +70,20 @@
     h1 {
         margin: 10px;
     }
+
     .overview-info {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(500px, 1fr) 350px)
+    }
+
+    .help-button {
+        float: right;
+        width: 50px;
+        height: 50px;
+        margin-top: 20px;
+        margin-right: 20px;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 </style>

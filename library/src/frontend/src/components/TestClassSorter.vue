@@ -5,6 +5,7 @@
                 Order by:
                 <select class="form-control" v-model="sortByValue" @change="updateFunc" style="display: inline-block; width: 75%">
                     <option value="name">Test class name</option>
+                    <option value="chronological">Chronological order</option>
                     <option value="totalTime">Total duration</option>
                     <option value="springTime">Spring duration</option>
                     <option value="nonSpringTime">Non-Spring duration</option>
@@ -35,6 +36,8 @@
             this.$emit("changed", this.func);
         },
         methods: {
+            // Takes the selected values from the UI and turns them into a sorting function, then
+            // emits it via the event name "changed". That function can be used to sort test classes.
             updateFunc: function () {
                 switch (this.sortByValue) {
                     case "name":
@@ -57,6 +60,13 @@
                             (this.totalTimeClass(a) - a.spring) < (this.totalTimeClass(b) - b.spring)
                                 ? -1
                                 : (this.totalTimeClass(a) - a.spring) === (this.totalTimeClass(b) - b.spring) ? 0 : 1;
+                        break;
+                    case "chronological":
+                        this.func = (a,b) => {
+                            return a.firstTimestamp < b.firstTimestamp ? -1
+                            : a.firstTimestamp == b.firstTimestamp ? 0
+                            : 1;
+                        };
                         break;
                 }
                 this.$emit(
