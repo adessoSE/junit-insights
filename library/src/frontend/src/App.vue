@@ -1,13 +1,15 @@
 <template>
     <div id="app">
-        <h1 style="font-size: 50px; display: inline-block;">{{ this.report.projectName }}</h1>
+        <h1 style="font-size: 50px;">{{ this.report.projectName }}</h1>
         <button type="button" class="btn btn-light help-button" v-on:click="showHelp = true"><h2>?</h2></button>
         <HelpDialog v-if="showHelp" v-on:close="showHelp = false"></HelpDialog>
-        <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
-        <general-information
+        <div class="overview-info">
+            <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
+            <general-information
                 :spring-contexts-created="this.report.springContextsCreated"
                 :tested-classes="this.numberOfTestedClasses"
                 :tested-methods="this.numberOfTestedMethods"/>
+        </div>
         <div>
             <h1 style="margin-top: 30px;">Time spent on individual test classes</h1>
             <test-class-filter @changed="filterFunction = $event"/>
@@ -69,11 +71,19 @@
         margin: 10px;
     }
 
+    .overview-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr) 350px)
+    }
+
     .help-button {
         float: right;
         width: 50px;
         height: 50px;
         margin-top: 20px;
         margin-right: 20px;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 </style>
