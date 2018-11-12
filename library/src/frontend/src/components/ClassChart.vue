@@ -59,15 +59,11 @@
         border: solid 1px lightgray;
         border-radius: 2px;
         padding: 10px;
-        margin: 10px;
     }
 
     .expandButton {
         display: inline;
-        margin-top: -13px;
         font-size: 20px;
         background-color: #FFFFFF;
-        width: 38px;
-        height: 38px;
     }
 </style>

@@ -131,10 +131,6 @@
 </script>
 
 <style scoped>
-    .filter {
-        margin: 10px;
-    }
-
     .grid-wrapper {
         display: grid;
         grid-gap: 10px;
