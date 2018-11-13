@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <h1 style="font-size: 50px;">{{ this.report.projectName }}</h1>
-        <button type="button" class="btn btn-light help-button" v-on:click="showHelp = true"><h2>?</h2></button>
+        <button type="button" class="btn help-button" v-on:click="showHelp = true"><h2>?</h2></button>
         <HelpDialog v-if="showHelp" v-on:close="showHelp = false"></HelpDialog>
         <div class="overview-info">
             <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
@@ -93,7 +93,12 @@
         position: absolute;
         right: 10px;
         top: 10px;
-        border-radius: 0;
+        background-color: #FFFFFF;
+        border: solid 1px lightgrey;
+    }
+
+    .help-button:hover, .help-button:focus, .help-button:active {
+        background-color: #EEEEEE;
     }
 
     #class-charts > * {

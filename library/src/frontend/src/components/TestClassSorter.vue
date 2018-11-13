@@ -12,7 +12,7 @@
                 </select>
             </label>
             <div class="col" style="display: inline;">
-                <button class="btn btn-light" style="background-color: #FFFFFF;" type="button" @click="ascending = !ascending; updateFunc();">
+                <button class="btn up-down-button" type="button" @click="ascending = !ascending; updateFunc();">
                     {{ascending ? "&darr;" : "&uarr;"}}
                 </button>
             </div>
@@ -81,5 +81,14 @@
 <style scoped>
     .sorter {
         display: inline;
+    }
+
+    .up-down-button {
+        background-color: #FFFFFF;
+        border: solid 1px lightgrey;
+    }
+
+    .up-down-button:hover, .up-down-button:focus, .up-down-button:active {
+        background-color: #EEEEEE;
     }
 </style>
