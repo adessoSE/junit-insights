@@ -62,6 +62,11 @@ object ReportCreator {
         var beforeTestExecution = 0L
         var afterEach = 0L
         var afterTestExecution = 0L
+        var firstTimestamp = events[0].timeStamp.time
+
+        if (events[0].name != "before each")
+            firstTimestamp = events[1].timeStamp.time
+
         for (event in events) {
             when (event.name) {
                 "before each" -> beforeEach = event.timeStamp.time
@@ -70,9 +75,10 @@ object ReportCreator {
                 "after each" -> afterEach = event.timeStamp.time
             }
         }
+
         return TestMethod(
                 events.last().methodName,
-                events[0].timeStamp.time,
+                firstTimestamp,
                 beforeEach,
                 afterEach,
                 beforeTestExecution - beforeEach,
