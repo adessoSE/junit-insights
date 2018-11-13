@@ -52,24 +52,17 @@
         },
         mounted: function () {
             if (this.shouldDraw()) {
-                Plotly.newPlot(this.chartId, this.chartEntries, this.layout);
-                window.addEventListener("resize", this.handleResize);
-                this.handleResize();
+                Plotly.newPlot(this.chartId, this.chartEntries, this.layout, {responsive: true});
             }
         },
         beforeDestroy: function () {
             if (this.shouldDraw()) {
-                window.removeEventListener("resize", this.handleResize);
-                // Plotly.purge(this.chartId);
             }
         },
         methods: {
             // Override in inheriting component to define specific logic
             shouldDraw: function () {
                 return true;
-            },
-            handleResize() {
-                Plotly.Plots.resize(this.chartId);
             },
             getChartEntry(data, text, color) {
                 return {
