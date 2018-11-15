@@ -29,8 +29,10 @@ class EventLogTest {
 
 
         val dir = File(InsightProperties.reportpath)
-        dir.listFiles().forEach {
-            it.delete()
+        if (dir.exists()) {
+            dir.listFiles().forEach {
+                it.delete()
+            }
         }
 
         EventLog.writeReport()
@@ -81,8 +83,10 @@ class EventLogTest {
 
 
         val dir = File(InsightProperties.reportpath)
-        dir.listFiles().forEach {
-            it.delete()
+        if (dir.exists()) {
+            dir.listFiles().forEach {
+                it.delete()
+            }
         }
 
         EventLog.writeReport()
