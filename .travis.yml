@@ -4,6 +4,11 @@ jdk:
 before_install:
   - cd library
   - chmod +x gradlew
+install:
+  - cd src/frontend
+  - npm install
+  - npm run build
+  - cd ../..
 before_deploy:
   - ./gradlew generatePomFileForMavenPublication
 deploy:
