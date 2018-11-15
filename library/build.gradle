@@ -46,6 +46,7 @@ jar {
 
 test {
     systemProperty 'de.adesso.junitinsights.enabled', 'false'
+    useJUnitPlatform()
 }
 
 task npmInstall(type: Exec) {
@@ -88,6 +89,7 @@ dependencies {
     compileOnly('org.springframework.boot:spring-boot-starter')
 
     testCompile('org.junit.jupiter:junit-jupiter-engine:5.1.0')
+    testCompile('org.junit.platform:junit-platform-launcher:1.1.0')
 
     // You can easily generate your own configuration metadata file from items annotated with
     // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
