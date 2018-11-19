@@ -35,6 +35,10 @@ object EventLog {
         LoggerFactory.getLogger(this::class.java).debug("Report created at ${reportFile.absolutePath}")
     }
 
+    fun clearEvents() {
+        events.clear();
+    }
+
     private fun generateJsonFromEvents(): String {
         val report = ReportCreator.createReport(getPageTitle(), events)
         return Gson().toJson(report)

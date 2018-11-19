@@ -2,14 +2,9 @@ package de.adesso.junitinsights.model
 
 import com.google.gson.Gson
 import de.adesso.junitinsights.tools.InsightProperties
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.io.BufferedReader
 import java.io.File
-import java.io.FileInputStream
-import java.io.InputStreamReader
 import java.util.*
 
 class EventLogTest {
@@ -19,14 +14,7 @@ class EventLogTest {
         InsightProperties.enabled = true
         InsightProperties.reportpath = "test-reports/"
 
-        EventLog.log((Event("before all", Date(0), "test-class")))
-        EventLog.log(Event("context refreshed", Date(1)))
-        EventLog.log(Event("before each", Date(3), "test-class", "test-method"))
-        EventLog.log(Event("before test execution", Date(6), "test-class", "test-method"))
-        EventLog.log(Event("after test execution", Date(10), "test-class", "test-method"))
-        EventLog.log(Event("after each", Date(15), "test-class", "test-method"))
-        EventLog.log(Event("after all", Date(21), "test-class"))
-
+        createTestEvents()
 
         val dir = File(InsightProperties.reportpath)
         if (dir.exists()) {
@@ -66,6 +54,7 @@ class EventLogTest {
         assertTrue(report.testClasses.first().methods.first().successful)
 
         InsightProperties.enabled = false
+        EventLog.clearEvents()
     }
 
     @Test
@@ -73,14 +62,7 @@ class EventLogTest {
         InsightProperties.enabled = false
         InsightProperties.reportpath = "test-reports/"
 
-        EventLog.log((Event("before all", Date(0), "test-class")))
-        EventLog.log(Event("context refreshed", Date(1)))
-        EventLog.log(Event("before each", Date(3), "test-class", "test-method"))
-        EventLog.log(Event("before test execution", Date(6), "test-class", "test-method"))
-        EventLog.log(Event("after test execution", Date(10), "test-class", "test-method"))
-        EventLog.log(Event("after each", Date(15), "test-class", "test-method"))
-        EventLog.log(Event("after all", Date(21), "test-class"))
-
+        createTestEvents()
 
         val dir = File(InsightProperties.reportpath)
         if (dir.exists()) {
@@ -92,6 +74,18 @@ class EventLogTest {
         EventLog.writeReport()
         val fileCount = dir.listFiles().size
         assertEquals(0, fileCount)
+
+        EventLog.clearEvents()
+    }
+
+    private fun createTestEvents() {
+        EventLog.log((Event("before all", Date(0), "test-class")))
+        EventLog.log(Event("context refreshed", Date(1)))
+        EventLog.log(Event("before each", Date(3), "test-class", "test-method"))
+        EventLog.log(Event("before test execution", Date(6), "test-class", "test-method"))
+        EventLog.log(Event("after test execution", Date(10), "test-class", "test-method"))
+        EventLog.log(Event("after each", Date(15), "test-class", "test-method"))
+        EventLog.log(Event("after all", Date(21), "test-class"))
     }
 
     private fun extractJsonFromFile(file: File) : String {
