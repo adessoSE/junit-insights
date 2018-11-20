@@ -41,7 +41,7 @@ object EventLog {
     }
 
     private fun insertJsonInTemplate(json: String): String {
-        val template = InputStreamReader(ClassPathResource("index.html").inputStream).readText()
+        val template = InputStreamReader(this.javaClass.getResourceAsStream("/index.html")).readText()
         return template.replace("var OVERRIDE_REPORT = {}", "var OVERRIDE_REPORT = $json")
     }
 
