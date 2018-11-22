@@ -7,14 +7,14 @@ import de.adesso.junitinsights.model.TestMethod
 import java.util.*
 import kotlin.collections.ArrayList
 
-object ReportCreator {
+object ReportCreator : IReportCreator {
 
     /**
      * Takes a list of events and turns them into a full Report object
      * @param reportName The name of the report which is included in the Report object
      * @param events The full event list for multiple test classes
      */
-    fun createReport(reportName: String, events: List<Event>): Report {
+    override fun createReport(reportName: String, events: List<Event>): Report {
         val eventsGroupedByClass = groupEventsByClass(events)
         val testClasses = eventsGroupedByClass.map { classEvents -> processClassEvents(classEvents) }
         val springContextCreated = countCreatedSpringContexts(events)

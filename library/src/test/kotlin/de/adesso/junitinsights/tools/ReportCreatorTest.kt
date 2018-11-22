@@ -64,9 +64,9 @@ class ReportCreatorTest {
         assertTrue(report.testClasses.first().methods.first().successful)
         assertFalse(report.testClasses.first().methods.last().successful)
 
-        assertEquals(2+6, report.testClasses.first().before)
-        assertEquals(3+7, report.testClasses.first().exec)
-        assertEquals(4+8, report.testClasses.first().after)
+        assertEquals(2 + 6, report.testClasses.first().before)
+        assertEquals(3 + 7, report.testClasses.first().exec)
+        assertEquals(4 + 8, report.testClasses.first().after)
         assertEquals(5, report.testClasses.first().between)
 
     }
