@@ -57,6 +57,12 @@
                     .reduce((a, b) => a + b, 0);
             }
         },
+        mounted: function() {
+            Plotly.Plots.resize("overview");
+            this.filteredAndSorted.forEach(element => {
+                Plotly.Plots.resize(element.name);
+            });
+        },
         components: {
             TestClassSorter,
             TestClassFilter,
