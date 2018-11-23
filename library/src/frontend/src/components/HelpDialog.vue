@@ -37,7 +37,7 @@
 
                 <div class="modal-footer">
                     <slot name="footer">
-                        <button class="modal-default-button btn btn-light" @click="$emit('close')">
+                        <button class="modal-default-button btn close-button" @click="$emit('close')">
                             OK
                         </button>
                     </slot>
@@ -71,5 +71,14 @@
         background-color: #fff;
         border-radius: 2px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    }
+
+    .close-button {
+        background-color: #FFFFFF;
+        border: solid 1px lightgrey;
+    }
+
+    .close-button:hover, .close-button:focus, .close-button:active {
+        background-color: #EEEEEE;
     }
 </style>

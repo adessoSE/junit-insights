@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <h1 style="font-size: 50px;">{{ this.report.projectName }}</h1>
-        <button type="button" class="btn btn-light help-button" v-on:click="showHelp = true"><h2>?</h2></button>
+        <button type="button" class="btn help-button" v-on:click="showHelp = true"><h2>?</h2></button>
         <HelpDialog v-if="showHelp" v-on:close="showHelp = false"></HelpDialog>
         <div class="overview-info">
             <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
@@ -15,10 +15,12 @@
             <test-class-filter @changed="filterFunction = $event"/>
             <test-class-sorter @changed="sortFunction = $event"/>
         </div>
-        <class-chart v-for="testClass in filteredAndSorted"
-                     :key="testClass.name"
-                     :test-class="testClass"
-                     :chartId="testClass.name"/>
+        <div id="class-charts">
+            <class-chart v-for="testClass in filteredAndSorted"
+                        :key="testClass.name"
+                        :test-class="testClass"
+                        :chartId="testClass.name"/>
+        </div>
     </div>
 </template>
 
@@ -55,6 +57,12 @@
                     .reduce((a, b) => a + b, 0);
             }
         },
+        mounted: function() {
+            Plotly.Plots.resize("overview");
+            this.filteredAndSorted.forEach(element => {
+                Plotly.Plots.resize(element.name);
+            });
+        },
         components: {
             TestClassSorter,
             TestClassFilter,
@@ -67,23 +75,40 @@
 </script>
 
 <style scoped>
-    h1 {
-        margin: 10px;
+    #app {
+        padding: 10px;
     }
 
-    .overview-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr) 350px)
+    @media only screen and (min-width: 1200px){
+        .overview-info {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: 1fr 350px;
+        }
+    }
+
+    @media only screen and (max-width: 1200px) {
+        .overview-info > * {
+            margin-top: 10px;
+        }
     }
 
     .help-button {
-        float: right;
         width: 50px;
         height: 50px;
-        margin-top: 20px;
-        margin-right: 20px;
         position: absolute;
-        right: 0;
-        top: 0;
+        right: 10px;
+        top: 10px;
+        background-color: #FFFFFF;
+        border: solid 1px lightgrey;
     }
+
+    .help-button:hover, .help-button:focus, .help-button:active {
+        background-color: #EEEEEE;
+    }
+
+    #class-charts > * {
+        margin-top: 10px;
+    }
+
 </style>

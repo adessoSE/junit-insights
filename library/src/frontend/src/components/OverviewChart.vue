@@ -50,6 +50,5 @@
         border: solid 1px lightgray;
         border-radius: 2px;
         padding: 10px;
-        margin: 10px;
     }
 </style>

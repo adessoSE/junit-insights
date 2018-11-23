@@ -33,7 +33,6 @@
     .generalInformation {
         border: solid 1px lightgray;
         border-radius: 2px;
-        margin: 10px;
         padding: 10px;
     }
 </style>

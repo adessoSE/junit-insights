@@ -27,7 +27,7 @@
             </div>
             <div class="button-group input-group" data-toggle="tooltip"
                  title="Filter tests that create their own Spring context and those that don't">
-                <button type="button" class="form-control dropdown-toggle" data-toggle="dropdown"
+                <button type="button" class="btn form-control dropdown-toggle" data-toggle="dropdown"
                         style="white-space: nowrap;">
                     Context creation<span class="caret" ></span>
                 </button>
@@ -48,7 +48,7 @@
             </div>
             <div class="button-group input-group" data-toggle="tooltip"
                  title="Filter tests based on their success">
-                <button type="button" class="form-control dropdown-toggle" data-toggle="dropdown"
+                <button type="button" class="btn form-control dropdown-toggle" data-toggle="dropdown"
                         style="white-space: nowrap;">
                     Test success<span class="caret" ></span>
                 </button>
@@ -73,7 +73,7 @@
                     </li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-light" v-on:click="clearClicked()" style="background-color: #FFFFFF;">Clear</button>
+            <button type="button" class="btn clear-button" v-on:click="clearClicked()">Clear</button>
         </div>
     </div>
 </template>
@@ -131,10 +131,6 @@
 </script>
 
 <style scoped>
-    .filter {
-        margin: 10px;
-    }
-
     .grid-wrapper {
         display: grid;
         grid-gap: 10px;
@@ -149,10 +145,12 @@
         border-right: 0;
     }
 
-    button.form-control.dropdown-toggle {
-        border-top-right-radius: 0.25rem;
-        border-bottom-right-radius: 0.25rem;
-        border-right: solid 1px lightgrey;
+    .dropdown-toggle {
+        border: solid 1px lightgrey;
+    }
+
+    .dropdown-toggle:hover, .dropdown-toggle:focus, .dropdown-toggle:active {
+        background-color: #EEEEEE;
     }
 
     .dropdown-checkbox {
@@ -161,5 +159,14 @@
 
     .dropdown-menu {
         padding: 5px;
+    }
+
+    .clear-button {
+        background-color: #FFFFFF;
+        border: solid 1px lightgrey;
+    }
+
+    .clear-button:hover, .clear-button:focus, .clear-button:active {
+        background-color: #EEEEEE;
     }
 </style>
