@@ -24,12 +24,12 @@ class EventLogTest {
                 it.delete()
             }
         }
-        val mockedReportCreator = object : IReportCreator {
+        val reportCreatorStub = object : IReportCreator {
             override fun createReport(reportName: String, events: List<Event>): Report {
                 return Report("some Name", Date(), 1, ArrayList())
             }
         }
-        EventLog.reportCreator = mockedReportCreator
+        EventLog.reportCreator = reportCreatorStub
 
         EventLog.writeReport()
         val firstFile = dir.listFiles().first()
