@@ -1,6 +1,7 @@
 package de.adesso.junitinsights.model
 
 import com.google.gson.Gson
+import de.adesso.junitinsights.tools.IReportCreator
 import de.adesso.junitinsights.tools.InsightProperties
 import de.adesso.junitinsights.tools.ReportCreator
 import org.slf4j.LoggerFactory
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter
 object EventLog {
     private var events: ArrayList<Event> = ArrayList()
     private var currentDate: LocalDateTime = LocalDateTime.now()
+    var reportCreator: IReportCreator = ReportCreator
 
     fun log(e: Event) {
         // If JUnit Insights is disabled, no events have to be logged
@@ -35,8 +37,14 @@ object EventLog {
         LoggerFactory.getLogger(this::class.java).debug("Report created at ${reportFile.absolutePath}")
     }
 
+    fun clearEvents() {
+        events.clear()
+    }
+
+    fun eventCount() = events.count()
+
     private fun generateJsonFromEvents(): String {
-        val report = ReportCreator.createReport(getPageTitle(), events)
+        val report = reportCreator.createReport(getPageTitle(), events)
         return Gson().toJson(report)
     }
 

@@ -7,14 +7,14 @@ import de.adesso.junitinsights.model.TestMethod
 import java.util.*
 import kotlin.collections.ArrayList
 
-object ReportCreator {
+object ReportCreator : IReportCreator {
 
     /**
      * Takes a list of events and turns them into a full Report object
      * @param reportName The name of the report which is included in the Report object
      * @param events The full event list for multiple test classes
      */
-    fun createReport(reportName: String, events: List<Event>): Report {
+    override fun createReport(reportName: String, events: List<Event>): Report {
         val eventsGroupedByClass = groupEventsByClass(events)
         val testClasses = eventsGroupedByClass.map { classEvents -> processClassEvents(classEvents) }
         val springContextCreated = countCreatedSpringContexts(events)
@@ -62,6 +62,11 @@ object ReportCreator {
         var beforeTestExecution = 0L
         var afterEach = 0L
         var afterTestExecution = 0L
+        var firstTimestamp = events[0].timeStamp.time
+
+        if (events[0].name != "before each")
+            firstTimestamp = events[1].timeStamp.time
+
         for (event in events) {
             when (event.name) {
                 "before each" -> beforeEach = event.timeStamp.time
@@ -70,9 +75,10 @@ object ReportCreator {
                 "after each" -> afterEach = event.timeStamp.time
             }
         }
+
         return TestMethod(
                 events.last().methodName,
-                events[0].timeStamp.time,
+                firstTimestamp,
                 beforeEach,
                 afterEach,
                 beforeTestExecution - beforeEach,
