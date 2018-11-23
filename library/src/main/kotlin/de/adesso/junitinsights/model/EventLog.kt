@@ -41,6 +41,8 @@ object EventLog {
         events.clear()
     }
 
+    fun eventCount() = events.count()
+
     private fun generateJsonFromEvents(): String {
         val report = reportCreator.createReport(getPageTitle(), events)
         return Gson().toJson(report)

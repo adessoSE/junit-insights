@@ -12,7 +12,7 @@ import java.util.*
 class EventLogTest {
 
     @Test
-    fun basicLoggingTest() {
+    fun reportCreationTest() {
         InsightProperties.enabled = true
         InsightProperties.reportpath = "test-reports/"
 
@@ -63,6 +63,17 @@ class EventLogTest {
         EventLog.writeReport()
         val fileCount = dir.listFiles().size
         assertEquals(0, fileCount)
+
+        EventLog.clearEvents()
+    }
+
+    @Test
+    fun basicLoggingTest() {
+        InsightProperties.enabled = true
+
+        createTestEvents()
+
+        assertEquals(7, EventLog.eventCount())
 
         EventLog.clearEvents()
     }
