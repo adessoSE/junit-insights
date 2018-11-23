@@ -61,8 +61,8 @@ class EventLogTest {
         }
 
         EventLog.writeReport()
-        val fileCount = dir.listFiles().size
-        assertEquals(0, fileCount)
+        if (dir.exists())
+            assertEquals(0, dir.listFiles().size)
 
         EventLog.clearEvents()
     }
