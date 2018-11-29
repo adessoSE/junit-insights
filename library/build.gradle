@@ -1,5 +1,9 @@
 apply plugin: 'maven-publish'
 
+group = 'de.adesso'
+version = '0.0.1'
+sourceCompatibility = 1.8
+
 publishing {
     publications {
         maven(MavenPublication) {
@@ -20,13 +24,9 @@ publishing {
 
 model {
     tasks.generatePomFileForMavenPublication {
-        destination = file('$buildDir/libs/junit-insights-0.0.1.pom')
+        destination = file("${buildDir}/libs/junit-insights-${version}.pom")
     }
 }
-
-group = 'de.adesso'
-version = '0.0.1'
-sourceCompatibility = 1.8
 
 task fatJar(type: Jar) {
     baseName = 'junit-insights'
