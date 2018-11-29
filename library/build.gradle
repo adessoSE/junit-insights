@@ -1,8 +1,36 @@
+// Import of plugins
+
 apply plugin: 'maven-publish'
+
+// Global variable declarations
 
 group = 'de.adesso'
 version = '0.0.1'
 sourceCompatibility = 1.8
+
+// Build tasks
+
+jar {
+    enabled = true
+    baseName = 'junit-insights'
+    from {
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
+}
+
+bootJar {
+    enabled = false
+}
+
+// Test tasks
+
+test {
+    useJUnitPlatform()
+    systemProperty 'de.adesso.junitinsights.enabled', 'false'
+}
+
+// Publishing tasks
 
 publishing {
     publications {
@@ -28,23 +56,7 @@ model {
     }
 }
 
-bootJar {
-    enabled = false
-}
-
-jar {
-    enabled = true
-    baseName = 'junit-insights'
-    from {
-        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
-}
-
-test {
-    systemProperty 'de.adesso.junitinsights.enabled', 'false'
-    useJUnitPlatform()
-}
+// npm specific tasks
 
 task npmInstall(type: Exec) {
     inputs.files(
@@ -73,8 +85,7 @@ task npmRunBuild(type: Exec) {
     }
 }
 
-build.dependsOn jar
-assemble.dependsOn jar
+// Dependency declarations
 
 dependencies {
     compile('org.jetbrains.kotlin:kotlin-reflect')
@@ -87,10 +98,4 @@ dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-engine:5.1.0')
     testCompile('org.junit.platform:junit-platform-launcher:1.1.0')
     testCompile('org.springframework.boot:spring-boot-starter')
-
-    // You can easily generate your own configuration metadata file from items annotated with
-    // @ConfigurationProperties by using the spring-boot-configuration-processor jar. The jar
-    // includes a Java annotation processor which is invoked as your project is compiled.
-    // To use the processor, include a dependency on spring-boot-configuration-processor.
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
