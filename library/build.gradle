@@ -28,19 +28,16 @@ model {
     }
 }
 
-task fatJar(type: Jar) {
-    baseName = 'junit-insights'
-    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
-}
-
 bootJar {
     enabled = false
 }
 
 jar {
     enabled = true
+    baseName = 'junit-insights'
+    from {
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    }
     exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
 }
 
@@ -77,8 +74,8 @@ task npmRunBuild(type: Exec) {
 }
 
 build.dependsOn npmRunBuild
-build.dependsOn fatJar
-assemble.dependsOn fatJar
+build.dependsOn jar
+assemble.dependsOn jar
 
 dependencies {
     compile('org.jetbrains.kotlin:kotlin-reflect')
