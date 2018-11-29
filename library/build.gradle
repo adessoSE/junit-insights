@@ -73,7 +73,6 @@ task npmRunBuild(type: Exec) {
     }
 }
 
-build.dependsOn npmRunBuild
 build.dependsOn jar
 assemble.dependsOn jar
 
