@@ -11,30 +11,19 @@ import java.util.*
 
 class ReportWriterTest {
 
-    companion object {
-        private var originalEnabledValue = InsightProperties.enabled
-        private var originalReportPath = InsightProperties.reportpath
-
-        @JvmStatic
-        fun saveOriginalProperties() {
-            originalEnabledValue = InsightProperties.enabled
-            originalReportPath = InsightProperties.reportpath
-        }
-    }
-
-    fun restoreCleanEnvironment() {
+    @AfterEach
+    private fun restoreCleanEnvironment() {
         val dir = File(InsightProperties.reportpath)
         if (dir.exists())
             dir.listFiles()
                     .forEach { it.delete() }
-        InsightProperties.enabled = originalEnabledValue
-        InsightProperties.reportpath = originalReportPath
+        InsightProperties.enabled = false
+        InsightProperties.reportpath = ""
     }
 
     @Test
     fun writtenReportEqualsOriginalReport() {
         // Arrange
-        saveOriginalProperties()
         InsightProperties.enabled = true
         InsightProperties.reportpath = "test-reports/"
         val originalReport = Report("Some Name", Date(), 1, ArrayList())
@@ -54,13 +43,11 @@ class ReportWriterTest {
         assertEquals(originalReport.springContextsCreated, extractedReport.springContextsCreated)
         assertEquals(originalReport.testClasses, extractedReport.testClasses)
         assertTrue(originalReport.created.time - extractedReport.created.time <= 999) // Rounding of 1 sec is acceptable
-        restoreCleanEnvironment()
     }
 
     @Test
     fun whenInsightsIsDisabledNoReportIsWritten() {
         // Arrange
-        saveOriginalProperties()
         InsightProperties.enabled = false
         InsightProperties.reportpath = "test-reports/"
         val originalReport = Report("Some Name", Date(), 1, ArrayList())
@@ -72,7 +59,6 @@ class ReportWriterTest {
         val dir = File(InsightProperties.reportpath)
         if (dir.exists())
             assertEquals(0, dir.listFiles().size)
-        restoreCleanEnvironment()
     }
 
     private fun extractJsonFromFile(file: File): String {
