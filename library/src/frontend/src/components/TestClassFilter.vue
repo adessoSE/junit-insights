@@ -99,16 +99,26 @@
         },
         methods: {
             updateFunc: function () {
+                var minSpringShare = parseInt(this.minSpringShare);
+                var maxSpringShare = parseInt(this.maxSpringShare);
+                var minTime = parseInt(this.minTime);
+                var maxTime = parseInt(this.maxTime);
+                var includeSpring = this.includeSpring;
+                var includeNonSpring = this.includeNonSpring;
+                var includeSuccess = this.includeSuccess;
+                var includePartial = this.includePartial;
+                var includeFailure = this.includeFailure;
+
                 this.func = testClass => {
-                    if ((this.minSpringShare !== "" && this.springShare(testClass) < this.minSpringShare/100) ||
-                    (this.maxSpringShare !== "" && this.springShare(testClass) > this.maxSpringShare/100) ||
-                    (this.minTime !== "" && this.totalTimeClass(testClass) < this.minTime) ||
-                    (this.maxTime !== "" && this.totalTimeClass(testClass) > this.maxTime) ||
-                    (testClass.spring > 0 && !this.includeSpring) ||
-                    (testClass.spring <= 0 && !this.includeNonSpring) ||
-                    (this.testStatus(testClass) === "success" && !this.includeSuccess) ||
-                    (this.testStatus(testClass) === "partial" && !this.includePartial) ||
-                    (this.testStatus(testClass) === "failure" && !this.includeFailure))
+                    if ((minSpringShare !== NaN && this.springShare(testClass) < minSpringShare/100) ||
+                    (maxSpringShare !== NaN && this.springShare(testClass) > maxSpringShare/100) ||
+                    (minTime !== NaN && this.totalTimeClass(testClass) < minTime) ||
+                    (maxTime !== NaN && this.totalTimeClass(testClass) > maxTime) ||
+                    (testClass.spring > 0 && !includeSpring) ||
+                    (testClass.spring <= 0 && !includeNonSpring) ||
+                    (this.testStatus(testClass) === "success" && !includeSuccess) ||
+                    (this.testStatus(testClass) === "partial" && !includePartial) ||
+                    (this.testStatus(testClass) === "failure" && !includeFailure))
                         return false;
                     else
                         return true;
