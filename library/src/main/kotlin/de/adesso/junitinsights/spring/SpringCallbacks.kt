@@ -11,7 +11,7 @@ import java.util.*
  * Listens to the spring-context-events to register starting and stopping of the context
  */
 @Suppress("unused", "UNUSED_PARAMETER")
-class SpringCallbacks {
+open class SpringCallbacks {
     @EventListener(ContextRefreshedEvent::class)
     fun onContextRefresh(event: ContextRefreshedEvent) = EventLog.log(Event("context refreshed", Date()))
 

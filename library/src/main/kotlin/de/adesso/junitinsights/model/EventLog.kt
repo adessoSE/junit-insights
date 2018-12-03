@@ -19,4 +19,6 @@ object EventLog {
 
     fun eventCount() = events.count()
 
+    fun containsEventWithName(str: String) = events.map { it.name }.contains(str)
+
 }

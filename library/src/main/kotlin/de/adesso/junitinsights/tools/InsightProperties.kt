@@ -3,7 +3,7 @@ package de.adesso.junitinsights.tools
 import org.junit.jupiter.api.extension.ExtensionContext
 
 object InsightProperties {
-    private var configurationSet = false
+    var configurationSet = false
     var reportpath: String = ""
     var enabled: Boolean = false
 

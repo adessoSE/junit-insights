@@ -3,10 +3,14 @@ package de.adesso.junitinsights.model
 import de.adesso.junitinsights.tools.InsightProperties
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
 
 class EventLogTest {
+
+    @BeforeEach
+    fun beforeEach() = EventLog.clearEvents()
 
     @Test
     fun basicLoggingTest() {
