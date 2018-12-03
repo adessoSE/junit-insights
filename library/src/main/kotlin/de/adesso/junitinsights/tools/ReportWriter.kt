@@ -41,8 +41,5 @@ object ReportWriter : IReportWriter {
     }
 
     private val filenameDatePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
-    private val titleDatePattern = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
-
-    private fun getPageTitle() = "JUnit Insights Report ${currentDate.format(titleDatePattern)}"
     private fun getReportFileName() = "JUnit_Insights_${currentDate.format(filenameDatePattern)}.html"
 }

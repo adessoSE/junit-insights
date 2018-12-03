@@ -3,11 +3,15 @@ package de.adesso.junitinsights.junit
 import de.adesso.junitinsights.annotations.NoJUnitInsights
 import de.adesso.junitinsights.model.Event
 import de.adesso.junitinsights.model.EventLog
+import de.adesso.junitinsights.model.Report
 import de.adesso.junitinsights.tools.*
 import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
 import org.junit.platform.launcher.TestExecutionListener
 import org.junit.platform.launcher.TestPlan
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -44,8 +48,14 @@ class JUnitCallbacks :
      * Gets called after the complete test plan has been executed, so the report can be generated.
      */
     override fun testPlanExecutionFinished(testPlan: TestPlan) {
-        val report = reportCreator.createReport("", EventLog.events)
+        val report = reportCreator.createReport(getReportPageTitle(), EventLog.events)
         reportWriter.writeReport(report)
+    }
+
+    private fun getReportPageTitle(): String {
+        val currentDate = Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+        val titleDatePattern = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
+        return "JUnit Insights Report ${currentDate.format(titleDatePattern)}"
     }
 
     private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean = false) {
