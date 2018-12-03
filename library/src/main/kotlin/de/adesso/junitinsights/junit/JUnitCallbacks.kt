@@ -24,10 +24,16 @@ class JUnitCallbacks :
     val reportWriter: IReportWriter = ReportWriter
     val reportCreator: IReportCreator = ReportCreator
 
+    /**
+     * These methods get called at certain events in the JUnit test plan execution.
+     * See the documentation of the callbacks for further information.
+     * These events are tracked to extract the information we are looking for.
+     */
     override fun beforeAll(context: ExtensionContext) {
         InsightProperties.setConfiguration(context)
         saveTimestamp("before all", context)
     }
+
     override fun afterAll(context: ExtensionContext) = saveTimestamp("after all", context)
     override fun beforeEach(context: ExtensionContext) = saveTimestamp("before each", context)
     override fun afterEach(context: ExtensionContext) = saveTimestamp("after each", context)

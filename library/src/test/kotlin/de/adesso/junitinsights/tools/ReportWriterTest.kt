@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import de.adesso.junitinsights.model.Report
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.util.*

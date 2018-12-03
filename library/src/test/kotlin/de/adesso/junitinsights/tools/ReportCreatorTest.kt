@@ -17,6 +17,15 @@ class ReportCreatorTest {
     }
 
     @Test
+    fun noMethodsInReport() {
+        val events: ArrayList<Event> = ArrayList()
+        events.add(Event("before all", Date(0), "test-class"))
+        events.add(Event("after all", Date(1), "test-class"))
+        val report = ReportCreator.createReport("test", events)
+        assertEquals(0, report.testClasses.first().methods.size)
+    }
+
+    @Test
     fun singleClassInReport() {
         val events: ArrayList<Event> = ArrayList()
         events.add(Event("before all", Date(0), "test-class"))

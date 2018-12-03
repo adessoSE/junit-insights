@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-object ReportWriter : IReportWriter{
+object ReportWriter : IReportWriter {
 
     private var currentDate: LocalDateTime = LocalDateTime.now()
 
