@@ -35,10 +35,12 @@
                     xaxis: {
                         zeroline: false,
                         showgrid: false,
-                        showticklabels: false
+                        showticklabels: false,
+                        fixedrange: true
                     },
                     yaxis: {
-                        showticklabels: false
+                        showticklabels: false,
+                        fixedrange: true
                     },
                     margin: {
                         l: 0,
@@ -52,7 +54,7 @@
         },
         mounted: function () {
             if (this.shouldDraw()) {
-                Plotly.newPlot(this.chartId, this.chartEntries, this.layout, {responsive: true});
+                Plotly.newPlot(this.chartId, this.chartEntries, this.layout, {responsive: true, displayModeBar: false});
             }
         },
         beforeDestroy: function () {
