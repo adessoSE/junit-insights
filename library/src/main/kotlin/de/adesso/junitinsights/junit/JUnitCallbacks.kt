@@ -52,12 +52,6 @@ class JUnitCallbacks :
         reportWriter.writeReport(report)
     }
 
-    private fun getReportPageTitle(): String {
-        val currentDate = Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-        val titleDatePattern = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
-        return "JUnit Insights Report ${currentDate.format(titleDatePattern)}"
-    }
-
     private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean = false) {
         if (shouldNotBeBenched(context))
             return
