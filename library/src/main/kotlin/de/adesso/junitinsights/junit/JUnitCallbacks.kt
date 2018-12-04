@@ -3,15 +3,11 @@ package de.adesso.junitinsights.junit
 import de.adesso.junitinsights.annotations.NoJUnitInsights
 import de.adesso.junitinsights.model.Event
 import de.adesso.junitinsights.model.EventLog
-import de.adesso.junitinsights.model.Report
 import de.adesso.junitinsights.tools.*
 import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
 import org.junit.platform.launcher.TestExecutionListener
 import org.junit.platform.launcher.TestPlan
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -25,8 +21,8 @@ class JUnitCallbacks :
         BeforeTestExecutionCallback, AfterTestExecutionCallback,
         TestExecutionListener {
 
-    val reportWriter: IReportWriter = ReportWriter
-    val reportCreator: IReportCreator = ReportCreator
+    private val reportWriter: IReportWriter = ReportWriter
+    private val reportCreator: IReportCreator = ReportCreator
 
     /**
      * These methods get called at certain events in the JUnit test plan execution.
