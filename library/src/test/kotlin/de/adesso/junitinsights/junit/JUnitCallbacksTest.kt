@@ -16,14 +16,6 @@ import java.util.*
 
 class JUnitCallbacksTest {
 
-    private fun mockedExtensionContext(): ExtensionContext {
-        val mockedExtensionContext: ExtensionContext = mock()
-        whenever(mockedExtensionContext.testClass).thenReturn(Optional.of(this.javaClass))
-        whenever(mockedExtensionContext.getConfigurationParameter("de.adesso.junitinsights.enabled"))
-                .thenReturn(Optional.of("true"))
-        return mockedExtensionContext
-    }
-
     @Test
     fun beforeAllSetsConfiguration() {
         // Arrange
@@ -108,5 +100,13 @@ class JUnitCallbacksTest {
 
         // Assert
         assertEquals(0, EventLog.eventCount())
+    }
+
+    private fun mockedExtensionContext(): ExtensionContext {
+        val mockedExtensionContext: ExtensionContext = mock()
+        whenever(mockedExtensionContext.testClass).thenReturn(Optional.of(this.javaClass))
+        whenever(mockedExtensionContext.getConfigurationParameter("de.adesso.junitinsights.enabled"))
+                .thenReturn(Optional.of("true"))
+        return mockedExtensionContext
     }
 }
