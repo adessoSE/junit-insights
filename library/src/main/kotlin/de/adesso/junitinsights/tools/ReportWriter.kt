@@ -18,10 +18,9 @@ object ReportWriter : IReportWriter {
         // If JUnit Insights is disabled, the report should not be created
         if (!InsightProperties.enabled)
             return
-        currentDate = report.created.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
         val json = generateJsonFromReport(report)
         val html = insertJsonInTemplate(json)
-        val reportFile = writeHtmlToFile(html)
+        val reportFile = writeHtmlToFile(html, InsightProperties.reportpath, getReportFileName(report))
         LoggerFactory.getLogger(this::class.java).debug("Report created at ${reportFile.absolutePath}")
     }
 
@@ -32,14 +31,17 @@ object ReportWriter : IReportWriter {
         return template.replace("var OVERRIDE_REPORT = {}", "var OVERRIDE_REPORT = $json")
     }
 
-    private fun writeHtmlToFile(html: String): File {
-        val htmlReportFile = File("${InsightProperties.reportpath}${getReportFileName()}")
+    private fun writeHtmlToFile(html: String, path: String, filename: String): File {
+        val htmlReportFile = File("$path$filename")
         if (htmlReportFile.parentFile != null)
             htmlReportFile.parentFile.mkdirs()
         PrintWriter(htmlReportFile).use { it.write(html) }
         return htmlReportFile
     }
 
-    private val filenameDatePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
-    private fun getReportFileName() = "JUnit_Insights_${currentDate.format(filenameDatePattern)}.html"
+    private fun getReportFileName(report: Report): String {
+        val filenameDatePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
+        currentDate = report.created.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+        return "JUnit_Insights_${currentDate.format(filenameDatePattern)}.html"
+    }
 }
