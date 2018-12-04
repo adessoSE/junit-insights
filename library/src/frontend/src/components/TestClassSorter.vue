@@ -12,8 +12,9 @@
                 </select>
             </label>
             <div class="col" style="display: inline;">
+                {{ascending ? "Ascending" : "Descending"}}
                 <button class="btn up-down-button" type="button" @click="ascending = !ascending; updateFunc();">
-                    {{ascending ? "&darr;" : "&uarr;"}}
+                    Toggle
                 </button>
             </div>
         </div>
