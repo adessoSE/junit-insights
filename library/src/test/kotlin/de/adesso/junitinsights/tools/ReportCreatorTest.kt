@@ -81,10 +81,13 @@ class ReportCreatorTest {
     }
 
     @Test
-    fun reportNameComesFromInput() {
+    fun reportNameFitsPattern() {
         val events: ArrayList<Event> = ArrayList()
         val report = ReportCreator.createReport(events)
-        assert(report.projectName == "test")
+        // "JUnit Insights Report dd.MM.yyyy HH:mm:ss"
+        // \d represents a single digit
+        val expectedPattern = """JUnit Insights Report \d\d.\d\d.\d\d\d\d \d\d:\d\d:\d\d""".toRegex()
+        assert(expectedPattern.matches(report.projectName))
     }
 
     @Test
