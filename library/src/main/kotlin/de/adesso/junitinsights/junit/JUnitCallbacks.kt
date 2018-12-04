@@ -48,7 +48,7 @@ class JUnitCallbacks :
      * Gets called after the complete test plan has been executed, so the report can be generated.
      */
     override fun testPlanExecutionFinished(testPlan: TestPlan) {
-        val report = reportCreator.createReport(getReportPageTitle(), EventLog.events)
+        val report = reportCreator.createReport(EventLog.events)
         reportWriter.writeReport(report)
     }
 
