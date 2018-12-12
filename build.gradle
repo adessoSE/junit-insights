@@ -21,13 +21,11 @@ subprojects {
 
     compileKotlin {
         kotlinOptions {
-            freeCompilerArgs = ['-Xjsr305=strict']
             jvmTarget = '1.8'
         }
     }
     compileTestKotlin {
         kotlinOptions {
-            freeCompilerArgs = ['-Xjsr305=strict']
             jvmTarget = '1.8'
         }
     }
