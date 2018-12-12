@@ -19,7 +19,8 @@ object ReportCreator : IReportCreator {
         val eventsGroupedByClass = groupEventsByClass(events)
         val testClasses = eventsGroupedByClass.map { classEvents -> processClassEvents(classEvents) }
         val springContextCreated = countCreatedSpringContexts(events)
-        return Report(getReportPageTitle(), Date(), springContextCreated, testClasses)
+        val currentDate = Date()
+        return Report(getReportPageTitle(currentDate), currentDate, springContextCreated, testClasses)
     }
 
     /**
@@ -111,9 +112,9 @@ object ReportCreator : IReportCreator {
                 .size
     }
 
-    private fun getReportPageTitle(): String {
-        val currentDate = Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+    private fun getReportPageTitle(currentDate: Date): String {
+        val currentLocalDateTime = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
         val titleDatePattern = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
-        return "JUnit Insights Report ${currentDate.format(titleDatePattern)}"
+        return "JUnit Insights Report ${currentLocalDateTime.format(titleDatePattern)}"
     }
 }

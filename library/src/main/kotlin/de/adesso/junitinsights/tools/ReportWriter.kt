@@ -6,13 +6,10 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStreamReader
 import java.io.PrintWriter
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object ReportWriter : IReportWriter {
-
-    private var currentDate: LocalDateTime = LocalDateTime.now()
 
     override fun writeReport(report: Report) {
         // If JUnit Insights is disabled, the report should not be created
@@ -41,7 +38,7 @@ object ReportWriter : IReportWriter {
 
     private fun getReportFileName(report: Report): String {
         val filenameDatePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
-        currentDate = report.created.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-        return "JUnit_Insights_${currentDate.format(filenameDatePattern)}.html"
+        val currentLocalDateTime = report.created.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+        return "JUnit_Insights_${currentLocalDateTime.format(filenameDatePattern)}.html"
     }
 }
