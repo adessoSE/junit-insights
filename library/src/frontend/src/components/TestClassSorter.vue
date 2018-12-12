@@ -12,8 +12,9 @@
                 </select>
             </label>
             <div class="col" style="display: inline;">
+                {{ascending ? "Ascending" : "Descending"}}
                 <button class="btn up-down-button" type="button" @click="ascending = !ascending; updateFunc();">
-                    {{ascending ? "&darr;" : "&uarr;"}}
+                    Toggle
                 </button>
             </div>
         </div>
@@ -27,9 +28,9 @@
         mixins: [ClassProcessing],
         data() {
             return {
-                sortByValue: "name",
-                ascending: true,
-                func: (a, b) => a.name.localeCompare(b.name)
+                sortByValue: "totalTime",
+                ascending: false,
+                func: (a, b) => -1 * this.sortByTotalTime(a, b)
             };
         },
         created: function () {
@@ -41,39 +42,49 @@
             updateFunc: function () {
                 switch (this.sortByValue) {
                     case "name":
-                        this.func = (a, b) => a.name.localeCompare(b.name);
+                        this.func = this.sortByName;
                         break;
                     case "totalTime":
-                        this.func = (a, b) =>
-                            this.totalTimeClass(a) < this.totalTimeClass(b)
-                                ? -1
-                                : this.totalTimeClass(a) === this.totalTimeClass(b) ? 0 : 1;
+                        this.func = this.sortByTotalTime;
                         break;
                     case "springTime":
-                        this.func = (a,b) =>
-                            a.spring < b.spring
-                            ? -1
-                            : a.spring === b.spring ? 0 : 1;
+                        this.func = this.sortBySpringTime;
                         break;
                     case "nonSpringTime":
-                        this.func = (a,b) =>
-                            (this.totalTimeClass(a) - a.spring) < (this.totalTimeClass(b) - b.spring)
-                                ? -1
-                                : (this.totalTimeClass(a) - a.spring) === (this.totalTimeClass(b) - b.spring) ? 0 : 1;
+                        this.func = this.sortByNonSpringTime;
                         break;
                     case "chronological":
-                        this.func = (a,b) => {
-                            return a.firstTimestamp < b.firstTimestamp ? -1
-                            : a.firstTimestamp == b.firstTimestamp ? 0
-                            : 1;
-                        };
+                        this.func = this.sortChronological;
                         break;
                 }
                 this.$emit(
                     "changed",
                     this.ascending ? this.func : (a, b) => -1 * this.func(a, b)
                 );
-            }
+            },
+            sortByName: function (a, b) {
+                return a.name.localeCompare(b.name);
+            },
+            sortByTotalTime: function (a, b) {
+                return this.totalTimeClass(a) < this.totalTimeClass(b)
+                    ? -1
+                    : this.totalTimeClass(a) === this.totalTimeClass(b) ? 0 : 1;
+            },
+            sortBySpringTime: function (a, b) {
+                return a.spring < b.spring
+                    ? -1
+                    : a.spring === b.spring ? 0 : 1;
+            },
+            sortByNonSpringTime: function (a, b) {
+                return (this.totalTimeClass(a) - a.spring) < (this.totalTimeClass(b) - b.spring)
+                    ? -1
+                    : (this.totalTimeClass(a) - a.spring) === (this.totalTimeClass(b) - b.spring) ? 0 : 1;
+            },
+            sortChronological: function (a, b) {
+                return a.firstTimestamp < b.firstTimestamp ? -1
+                    : a.firstTimestamp === b.firstTimestamp ? 0
+                        : 1;
+            },
         }
     };
 </script>
