@@ -87,7 +87,7 @@ class ReportCreatorTest {
         // "JUnit Insights Report dd.MM.yyyy HH:mm:ss"
         // \d represents a single digit
         val expectedPattern = """JUnit Insights Report \d\d.\d\d.\d\d\d\d \d\d:\d\d:\d\d""".toRegex()
-        assert(expectedPattern.matches(report.projectName))
+        assert(expectedPattern.matches(report.reportTitle))
     }
 
     @Test

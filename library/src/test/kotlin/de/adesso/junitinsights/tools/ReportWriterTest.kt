@@ -38,7 +38,7 @@ class ReportWriterTest {
         assertNotEquals("", json)
 
         val extractedReport = Gson().fromJson<Report>(json, Report::class.java)
-        assertEquals(originalReport.projectName, extractedReport.projectName)
+        assertEquals(originalReport.reportTitle, extractedReport.reportTitle)
         assertEquals(originalReport.springContextsCreated, extractedReport.springContextsCreated)
         assertEquals(originalReport.testClasses, extractedReport.testClasses)
         assertTrue(originalReport.created.time - extractedReport.created.time <= 999) // Rounding of 1 sec is acceptable

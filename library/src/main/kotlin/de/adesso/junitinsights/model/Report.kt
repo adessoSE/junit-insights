@@ -7,7 +7,7 @@ import java.util.*
  * Contains general information and branches off into specific test classes.
  */
 data class Report(
-        var projectName: String,
+        var reportTitle: String,
         var created: Date,
         var springContextsCreated: Int,
         var testClasses: List<TestClass>

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <h1 style="font-size: 50px;">{{ this.report.projectName }}</h1>
+        <h1 style="font-size: 50px;">{{ this.report.reportTitle }}</h1>
         <button type="button" class="btn help-button" v-on:click="showHelp = true"><h2>?</h2></button>
         <HelpDialog v-if="showHelp" v-on:close="showHelp = false"></HelpDialog>
         <div class="overview-info">
