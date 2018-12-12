@@ -51,7 +51,7 @@
                         this.func = this.sortBySpringTime;
                         break;
                     case "nonSpringTime":
-                        this.func = sortByNonSpringTime;
+                        this.func = this.sortByNonSpringTime;
                         break;
                     case "chronological":
                         this.func = this.sortChronological;
