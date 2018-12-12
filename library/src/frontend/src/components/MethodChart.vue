@@ -18,6 +18,7 @@
             this.layout.height = 30;
             this.layout.xaxis.range = [0,this.totalTimeMethod(this.testMethod)];
             this.chartEntries = [
+                // See ChartBase.vue
                 this.getChartEntry(this.testMethod.before, "Before", this.BEFORE_COLOR),
                 this.getChartEntry(this.testMethod.exec, "Execution", this.EXEC_COLOR),
                 this.getChartEntry(this.testMethod.after, "After", this.AFTER_COLOR)

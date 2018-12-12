@@ -2,6 +2,11 @@ package de.adesso.junitinsights.tools
 
 import org.junit.jupiter.api.extension.ExtensionContext
 
+/**
+ * Global properties for JUnit Insights.
+ * Properties are read from the Gradle or Maven build files at runtime by JUnitCallbacks
+ * @see de.adesso.junitinsights.junit.JUnitCallbacks.beforeAll
+ */
 object InsightProperties {
     internal var configurationSet = false
     var reportpath: String = "build/reports/"

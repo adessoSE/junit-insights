@@ -1,3 +1,4 @@
+<!-- Top-Level Vue component for a report page -->
 <template>
     <div id="app">
         <h1 style="font-size: 50px;">{{ this.report.reportTitle }}</h1>
@@ -12,6 +13,10 @@
         </div>
         <div>
             <h1 style="margin-top: 30px;">Time spent on individual test classes</h1>
+            <!--
+                These components emit events with functions for filtering and sorting
+                The functions are then used by the filteredAndSorted computed value
+            -->
             <test-class-filter @changed="filterFunction = $event"/>
             <test-class-sorter @changed="sortFunction = $event"/>
         </div>
@@ -58,6 +63,8 @@
             }
         },
         mounted: function() {
+            // Resize all plots after the whole page has loaded to avoid a bug:
+            // https://github.com/adessoAG/junit-insights/issues/92
             Plotly.Plots.resize("overview");
             this.filteredAndSorted.forEach(element => {
                 Plotly.Plots.resize(element.name);

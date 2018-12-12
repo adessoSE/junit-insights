@@ -33,6 +33,7 @@
         },
         created: function () {
             this.chartEntries = [
+                // See ChartBase.vue
                 this.getChartEntry(this.testClass.spring, "Spring", this.SPRING_COLOR),
                 this.getChartEntry(this.testClass.beforeAll, "Before All", this.BEFORE_ALL_COLOR),
                 this.getChartEntry(this.testClass.before, "Before", this.BEFORE_COLOR),

@@ -11,6 +11,9 @@ import java.time.format.DateTimeFormatter
 
 object ReportWriter : IReportWriter {
 
+    /**
+     * Takes a Report object, inserts the date as JSON in a template file and writes it to disk under a specific file name.
+     */
     override fun writeReport(report: Report) {
         // If JUnit Insights is disabled, the report should not be created
         if (!InsightProperties.enabled)

@@ -3,6 +3,8 @@ package de.adesso.junitinsights.model
 /**
  * Data class for a test class.
  * Includes summarized time-spans and a collection of TestMethod objects associated with this test class.
+ * Used in Report class
+ * @see Report
  */
 data class TestClass(
         var name: String,
