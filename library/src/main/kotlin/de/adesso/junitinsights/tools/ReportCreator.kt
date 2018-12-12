@@ -4,6 +4,8 @@ import de.adesso.junitinsights.model.Event
 import de.adesso.junitinsights.model.Report
 import de.adesso.junitinsights.model.TestClass
 import de.adesso.junitinsights.model.TestMethod
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -11,14 +13,14 @@ object ReportCreator : IReportCreator {
 
     /**
      * Takes a list of events and turns them into a full Report object
-     * @param reportName The name of the report which is included in the Report object
      * @param events The full event list for multiple test classes
      */
-    override fun createReport(reportName: String, events: List<Event>): Report {
+    override fun createReport(events: List<Event>): Report {
         val eventsGroupedByClass = groupEventsByClass(events)
         val testClasses = eventsGroupedByClass.map { classEvents -> processClassEvents(classEvents) }
         val springContextCreated = countCreatedSpringContexts(events)
-        return Report(reportName, Date(), springContextCreated, testClasses)
+        val currentDate = Date()
+        return Report(getReportPageTitle(currentDate), currentDate, springContextCreated, testClasses)
     }
 
     /**
@@ -108,5 +110,11 @@ object ReportCreator : IReportCreator {
         return events
                 .filter { it.name == "context refreshed" }
                 .size
+    }
+
+    private fun getReportPageTitle(currentDate: Date): String {
+        val currentLocalDateTime = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+        val titleDatePattern = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
+        return "JUnit Insights Report ${currentLocalDateTime.format(titleDatePattern)}"
     }
 }

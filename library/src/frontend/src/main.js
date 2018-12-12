@@ -3,7 +3,7 @@ import Vue from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 var report = {
-    "projectName": "JUnit Insights Report 25.10.2018 11:39:08",
+    "reportTitle": "JUnit Insights Report 25.10.2018 11:39:08",
     "created": "Oct 25, 2018 11:39:08 AM",
     "springContextsCreated": 2,
     "testClasses": [

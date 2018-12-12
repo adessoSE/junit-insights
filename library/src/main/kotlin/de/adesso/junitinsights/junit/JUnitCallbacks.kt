@@ -3,7 +3,7 @@ package de.adesso.junitinsights.junit
 import de.adesso.junitinsights.annotations.NoJUnitInsights
 import de.adesso.junitinsights.model.Event
 import de.adesso.junitinsights.model.EventLog
-import de.adesso.junitinsights.tools.InsightProperties
+import de.adesso.junitinsights.tools.*
 import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
 import org.junit.platform.launcher.TestExecutionListener
@@ -21,6 +21,9 @@ class JUnitCallbacks :
         BeforeTestExecutionCallback, AfterTestExecutionCallback,
         TestExecutionListener {
 
+    private val reportWriter: IReportWriter = ReportWriter
+    private val reportCreator: IReportCreator = ReportCreator
+
     /**
      * These methods get called at certain events in the JUnit test plan execution.
      * See the documentation of the callbacks for further information.
@@ -30,6 +33,7 @@ class JUnitCallbacks :
         InsightProperties.setConfiguration(context)
         saveTimestamp("before all", context)
     }
+
     override fun afterAll(context: ExtensionContext) = saveTimestamp("after all", context)
     override fun beforeEach(context: ExtensionContext) = saveTimestamp("before each", context)
     override fun afterEach(context: ExtensionContext) = saveTimestamp("after each", context)
@@ -39,7 +43,10 @@ class JUnitCallbacks :
     /**
      * Gets called after the complete test plan has been executed, so the report can be generated.
      */
-    override fun testPlanExecutionFinished(testPlan: TestPlan) = EventLog.writeReport()
+    override fun testPlanExecutionFinished(testPlan: TestPlan) {
+        val report = reportCreator.createReport(EventLog.events)
+        reportWriter.writeReport(report)
+    }
 
     private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean = false) {
         if (shouldNotBeBenched(context))

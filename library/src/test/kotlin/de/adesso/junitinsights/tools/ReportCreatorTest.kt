@@ -10,10 +10,19 @@ class ReportCreatorTest {
     @Test
     fun noEventsProduceEmptyReport() {
         val events: ArrayList<Event> = ArrayList()
-        val report = ReportCreator.createReport("test", events)
+        val report = ReportCreator.createReport(events)
         assertTrue(report.testClasses.isEmpty())
         assertTrue(report.springContextsCreated == 0)
         assertTrue(report.created == Date() || report.created.before(Date()))
+    }
+
+    @Test
+    fun noMethodsInReport() {
+        val events: ArrayList<Event> = ArrayList()
+        events.add(Event("before all", Date(0), "test-class"))
+        events.add(Event("after all", Date(1), "test-class"))
+        val report = ReportCreator.createReport(events)
+        assertEquals(0, report.testClasses.first().methods.size)
     }
 
     @Test
@@ -26,7 +35,7 @@ class ReportCreatorTest {
         events.add(Event("after test execution", Date(10), "test-class", "test-method"))
         events.add(Event("after each", Date(15), "test-class", "test-method"))
         events.add(Event("after all", Date(21), "test-class"))
-        val report = ReportCreator.createReport("test", events)
+        val report = ReportCreator.createReport(events)
 
         assertTrue(report.created == Date() || report.created.before(Date()))
         assertEquals(1, report.testClasses.size)
@@ -53,7 +62,7 @@ class ReportCreatorTest {
         events.add(Event("after test execution", Date(28), "test-class", "another-method", false))
         events.add(Event("after each", Date(36), "test-class", "another-method", false))
         events.add(Event("after all", Date(45), "test-class"))
-        val report = ReportCreator.createReport("test", events)
+        val report = ReportCreator.createReport(events)
 
         assertEquals(1, report.testClasses.size)
         assertEquals(2, report.testClasses.first().methods.size)
@@ -72,10 +81,13 @@ class ReportCreatorTest {
     }
 
     @Test
-    fun reportNameComesFromInput() {
+    fun reportNameFitsPattern() {
         val events: ArrayList<Event> = ArrayList()
-        val report = ReportCreator.createReport("test", events)
-        assert(report.projectName == "test")
+        val report = ReportCreator.createReport(events)
+        // "JUnit Insights Report dd.MM.yyyy HH:mm:ss"
+        // \d represents a single digit
+        val expectedPattern = """JUnit Insights Report \d\d.\d\d.\d\d\d\d \d\d:\d\d:\d\d""".toRegex()
+        assert(expectedPattern.matches(report.reportTitle))
     }
 
     @Test
@@ -83,7 +95,7 @@ class ReportCreatorTest {
         val events: ArrayList<Event> = ArrayList()
         events.add(Event("context refreshed", Date()))
         events.add(Event("context refreshed", Date()))
-        val report = ReportCreator.createReport("test", events)
+        val report = ReportCreator.createReport(events)
         assertEquals(2, report.springContextsCreated)
     }
 }
