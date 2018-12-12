@@ -1,6 +1,10 @@
+// Global variable declarations
+
 group = 'de.adesso.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
+// Test tasks
 
 test {
     // Enable JUnit 5 (Gradle 4.6+).
@@ -9,6 +13,8 @@ test {
     systemProperty 'de.adesso.junitinsights.enabled', 'true'
     systemProperty 'de.adesso.junitinsights.reportpath', 'reports/'
 }
+
+// Dependency declarations
 
 dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-api:5.1.0')

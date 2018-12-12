@@ -108,7 +108,7 @@ object ReportCreator : IReportCreator {
 
     private fun countCreatedSpringContexts(events: List<Event>): Int {
         return events
-                .filter { it.name == "context created" || it.name == "context refreshed" }
+                .filter { it.name == "context refreshed" }
                 .size
     }
 

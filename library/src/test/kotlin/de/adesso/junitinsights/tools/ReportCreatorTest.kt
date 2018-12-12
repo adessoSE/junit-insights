@@ -93,10 +93,9 @@ class ReportCreatorTest {
     @Test
     fun countsSpringContexts() {
         val events: ArrayList<Event> = ArrayList()
-        events.add(Event("context created", Date()))
         events.add(Event("context refreshed", Date()))
         events.add(Event("context refreshed", Date()))
         val report = ReportCreator.createReport(events)
-        assertEquals(3, report.springContextsCreated)
+        assertEquals(2, report.springContextsCreated)
     }
 }
