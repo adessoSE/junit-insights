@@ -4,7 +4,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 
 object InsightProperties {
     private var configurationSet = false
-    var reportpath: String = ""
+    var reportpath: String = "build/reports/"
     var enabled: Boolean = false
 
     fun setConfiguration(context: ExtensionContext) {
@@ -12,7 +12,7 @@ object InsightProperties {
             return
 
         reportpath = context.getConfigurationParameter("de.adesso.junitinsights.reportpath")
-                .orElse("")
+                .orElse("build/reports/")
 
         enabled = context.getConfigurationParameter("de.adesso.junitinsights.enabled")
                 .orElse("false")!!
