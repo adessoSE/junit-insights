@@ -5,7 +5,7 @@ apply plugin: 'maven-publish'
 // Global variable declarations
 
 group = 'de.adesso'
-version = '0.0.1'
+version = '0.0.1' + (Boolean.valueOf(System.getenv("snapshot")) ? "-SNAPSHOT" : "")
 sourceCompatibility = 1.8
 
 // Build tasks

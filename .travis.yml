@@ -8,6 +8,7 @@ before_install:
   - npm install
   - npm run build
   - cd ../..
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then eval export snapshot=true; fi
 before_deploy:
   - ./gradlew generatePomFileForMavenPublication
 deploy:
