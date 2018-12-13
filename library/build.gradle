@@ -19,7 +19,7 @@ jar {
     from {
         configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
+    exclude("main.js")
 }
 
 bootJar {
