@@ -22,6 +22,15 @@ jar {
     exclude("main.js")
 }
 
+task sourcesJar(type: Jar) {
+    group = 'build'
+    baseName = 'junit-insights'
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+jar.dependsOn sourcesJar
+
 bootJar {
     enabled = false
 }
