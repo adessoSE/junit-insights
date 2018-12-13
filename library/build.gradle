@@ -1,6 +1,9 @@
 // Import of plugins
 
-apply plugin: 'maven-publish'
+plugins {
+    id "org.jetbrains.dokka" version "0.9.17"
+    id "maven-publish"
+}
 
 // Global variable declarations
 
@@ -28,6 +31,13 @@ bootJar {
 test {
     useJUnitPlatform()
     systemProperty 'de.adesso.junitinsights.enabled', 'false'
+}
+
+// JavaDoc tasks
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
 }
 
 // Publishing tasks
