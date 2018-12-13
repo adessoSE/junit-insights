@@ -9,8 +9,8 @@ plugins {
 // Global variable declarations
 
 ext{
-    bintrayUser = System.getenv("BINTRAY_USER")
-    bintrayKey = System.getenv("BINTRAY_KEY")
+    bintrayUser = System.getenv("BINTRAY_API_USER")
+    bintrayKey = System.getenv("BINTRAY_API_KEY")
     buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
     snapshot = Boolean.valueOf(System.getenv("SNAPSHOT"))
 }
