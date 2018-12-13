@@ -8,10 +8,16 @@ before_install:
   - npm install
   - npm run build
   - cd ../..
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then eval export SNAPSHOT=true; fi
 deploy:
-  provider: script
-  script: ./gradlew bintrayUpload
-  skip_cleanup: true
-  on:
-    branch: ci_snapshot_release
+  -
+    provider: script
+    script: ./gradlew bintrayUpload
+    skip_cleanup: true
+    on:
+      branch: release
+  -
+    provider: script
+    script: ./gradlew artifactoryPublish -Dsnapshot=true
+    skip_cleanup: true
+    on:
+      branch: ci_snapshot_release

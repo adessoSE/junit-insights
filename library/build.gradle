@@ -3,6 +3,7 @@
 plugins {
     id "org.jetbrains.dokka" version "0.9.17"
     id "com.jfrog.bintray" version "1.7.3"
+    id "com.jfrog.artifactory" version "4.5.4"
     id "maven-publish"
 }
 
@@ -12,7 +13,7 @@ ext{
     bintrayUser = System.getenv("BINTRAY_API_USER")
     bintrayKey = System.getenv("BINTRAY_API_KEY")
     buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-    snapshot = Boolean.valueOf(System.getenv("SNAPSHOT"))
+    snapshot = Boolean.valueOf(System.getProperty("snapshot"))
 }
 
 group = 'de.adesso'
@@ -124,6 +125,31 @@ bintray {
     }
 
     publish = true
+}
+
+artifactory {
+    contextUrl = 'http://oss.jfrog.org'
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = bintrayUser
+            password = bintrayKey
+        }
+        defaults {
+            publications('mavenPublication')
+            publishArtifacts = true
+            publishPom = true
+            properties = [
+                    'build.number': buildNumber,
+                    'build.name': 'junit-insights'
+            ]
+        }
+    }
+    resolve {
+        repoKey = 'jcenter'
+    }
+    clientConfig.info.setBuildNumber(buildNumber)
+    clientConfig.info.setBuildName('junit-insights')
 }
 
 // npm specific tasks
