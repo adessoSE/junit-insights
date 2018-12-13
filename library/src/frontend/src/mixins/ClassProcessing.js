@@ -1,3 +1,4 @@
+// Globally important methods
 var ClassProcessing = {
     methods: {
         testStatus(testClass) {

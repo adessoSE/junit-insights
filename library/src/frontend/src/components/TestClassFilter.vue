@@ -99,6 +99,8 @@
         },
         methods: {
             updateFunc: function () {
+                // Copy over the values from the form elements and emit a "changed" event with a filtering function
+                // Used in App.vue
                 var minSpringShare = parseInt(this.minSpringShare);
                 var maxSpringShare = parseInt(this.maxSpringShare);
                 var minTime = parseInt(this.minTime);

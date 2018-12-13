@@ -36,6 +36,7 @@
             this.layout.xaxis.range = [0,this.preparationTime + this.executionTime + this.tearDownTime + this.springTime];
 
             this.chartEntries = [
+                // See ChartBase.vue
                 this.getChartEntry(this.springTime, "Spring", this.SPRING_COLOR),
                 this.getChartEntry(this.preparationTime, "Preparation", this.BEFORE_COLOR),
                 this.getChartEntry(this.executionTime, "Execution", this.EXEC_COLOR),

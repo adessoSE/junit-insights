@@ -5,13 +5,15 @@
 <script>
     import Plotly from "plotly.js";
 
-    const colors = ["rgb(220, 82, 74)",
-        "rgb(238, 223, 123)",
-        "rgb(60, 125, 160)",
-        "rgb(109, 179, 63)",
-        "rgb(180, 180, 180)",
-        "rgb(234, 201, 80)",
-        "rgb(130, 180, 208)"];
+    const colors = [
+        "rgb(220, 82, 74)", // EXEC
+        "rgb(238, 223, 123)", // BEFORE
+        "rgb(60, 125, 160)", // BEFORE ALL
+        "rgb(109, 179, 63)", // SPRING
+        "rgb(180, 180, 180)", // BETWEEN
+        "rgb(234, 201, 80)", // AFTER
+        "rgb(130, 180, 208)" // AFTER ALL
+    ];
 
     export default {
         props: ["chartId"],

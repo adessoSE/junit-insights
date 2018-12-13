@@ -39,6 +39,7 @@
         methods: {
             // Takes the selected values from the UI and turns them into a sorting function, then
             // emits it via the event name "changed". That function can be used to sort test classes.
+            // Used in App.vue
             updateFunc: function () {
                 switch (this.sortByValue) {
                     case "name":

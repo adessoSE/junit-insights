@@ -2,11 +2,20 @@ package de.adesso.junitinsights.tools
 
 import org.junit.jupiter.api.extension.ExtensionContext
 
+/**
+ * Global properties for JUnit Insights.
+ * Properties are read from the Gradle or Maven build files at runtime by JUnitCallbacks
+ * @see de.adesso.junitinsights.junit.JUnitCallbacks.beforeAll
+ */
 object InsightProperties {
     internal var configurationSet = false
     var reportpath: String = "build/reports/"
     var enabled: Boolean = false
 
+    /**
+     * Initialize the object with data retrieved from an extension context.
+     * @param context Test extension context containing the necessary information
+     */
     fun setConfiguration(context: ExtensionContext) {
         if (configurationSet)
             return

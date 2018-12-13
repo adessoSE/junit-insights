@@ -1,5 +1,10 @@
 package de.adesso.junitinsights.model
 
+/**
+ * Represents a test method invocation.
+ * Used by TestClass
+ * @see TestClass
+ */
 data class TestMethod(
         var name: String,
         var firstTimestamp: Long,
