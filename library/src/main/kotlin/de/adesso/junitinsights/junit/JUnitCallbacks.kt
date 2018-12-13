@@ -28,16 +28,47 @@ class JUnitCallbacks :
      * These methods get called at certain events in the JUnit test plan execution.
      * See the documentation of the callbacks for further information.
      * These events are tracked to extract the information we are looking for.
+     *
+     * @see <a href="https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/package-summary.html">JUnit Jupiter API extension</a>
+     */
+
+    /**
+     * "Callback that is invoked once before all tests in the current container." (from documentation)
+     * @see <a href="https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/BeforeAllCallback.html">Documentation</a>
      */
     override fun beforeAll(context: ExtensionContext) {
         InsightProperties.setConfiguration(context)
         saveTimestamp("before all", context)
     }
 
+    /**
+     * "Callback that is invoked once after all tests in the current container." (from documentation)
+     * @see <a href="https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/AfterAllCallback.html">Documentation</a>
+     */
     override fun afterAll(context: ExtensionContext) = saveTimestamp("after all", context)
+
+    /**
+     * "Callback that is invoked before each test is invoked." (from documentation)
+     * @see <a href="https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/BeforeEachCallback.html">Documentation</a>
+     */
     override fun beforeEach(context: ExtensionContext) = saveTimestamp("before each", context)
+
+    /**
+     * "Callback that is invoked after each test has been invoked." (from documentation)
+     * @see <a href="https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/AfterEachCallback.html">Documentation</a>
+     */
     override fun afterEach(context: ExtensionContext) = saveTimestamp("after each", context)
+
+    /**
+     * "Callback that is invoked immediately before each test is executed." (from documentation)
+     * @see <a href="https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/BeforeTestExecutionCallback.html">Documentation</a>
+     */
     override fun beforeTestExecution(context: ExtensionContext) = saveTimestamp("before test execution", context)
+
+    /**
+     * "Callback that is invoked immediately after each test has been executed." (from documentation)
+     * @see <a href="https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/AfterTestExecutionCallback.html">Documentation</a>
+     */
     override fun afterTestExecution(context: ExtensionContext) = saveTimestamp("after test execution", context, context.executionException.isPresent)
 
     /**

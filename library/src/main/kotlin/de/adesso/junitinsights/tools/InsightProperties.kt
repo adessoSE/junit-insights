@@ -12,6 +12,10 @@ object InsightProperties {
     var reportpath: String = "build/reports/"
     var enabled: Boolean = false
 
+    /**
+     * Initialize the object with data retrieved from an extension context.
+     * @param context Test extension context containing the necessary information
+     */
     fun setConfiguration(context: ExtensionContext) {
         if (configurationSet)
             return

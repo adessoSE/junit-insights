@@ -13,6 +13,7 @@ object ReportWriter : IReportWriter {
 
     /**
      * Takes a Report object, inserts the date as JSON in a template file and writes it to disk under a specific file name.
+     * @param report The Report object containing all the information
      */
     override fun writeReport(report: Report) {
         // If JUnit Insights is disabled, the report should not be created

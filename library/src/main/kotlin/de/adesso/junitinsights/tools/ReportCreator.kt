@@ -14,6 +14,7 @@ object ReportCreator : IReportCreator {
     /**
      * Takes a list of events and turns them into a full Report object
      * @param events The full event list for multiple test classes
+     * @return The report object which contains all the interesting information about the test execution
      */
     override fun createReport(events: List<Event>): Report {
         val eventsGroupedByClass = groupEventsByClass(events)
