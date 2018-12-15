@@ -20,4 +20,4 @@ deploy:
     script: ./gradlew artifactoryPublish -Dsnapshot=true
     skip_cleanup: true
     on:
-      branch: ci_snapshot_release
+      branch: master
