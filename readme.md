@@ -119,11 +119,11 @@ Gradle:
 
 ```gradle
 repositories {
-	jcenter()
+    jcenter()
 }
 
 dependencies {
-	testCompile ('de.adesso:junit-insights:0.0.1')
+    testCompile ('de.adesso:junit-insights:0.0.1')
 }
 ```
 
@@ -131,18 +131,18 @@ Maven:
 
 ```xml
 <repositories>
-	<repository>
-		<id>jcenter</id>
-		<url>https://jcenter.bintray.com/</url>
-	</repository>
+    <repository>
+        <id>jcenter</id>
+        <url>https://jcenter.bintray.com/</url>
+    </repository>
 </repositories>
 
 <dependencies>
-	<dependency>
-		<groupId>de.adesso</groupId>
-		<artifactId>junit-insights</artifactId>
-		<version>0.0.1</version>
-	</dependency>
+    <dependency>
+        <groupId>de.adesso</groupId>
+        <artifactId>junit-insights</artifactId>
+        <version>0.0.1</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -160,7 +160,7 @@ repositories {
 }
 
 dependencies {
-	testCompile ('de.adesso:junit-insights:0.0.1')
+    testCompile ('de.adesso:junit-insights:0.0.1')
 }
 ```
 
@@ -168,18 +168,18 @@ Maven:
 
 ```xml
 <repositories>
-	<repository>
-		<id>bintray.com</id>
-		<url>https://dl.bintray.com/adesso/junit-insights</url>
-	</repository>
+    <repository>
+        <id>bintray.com</id>
+        <url>https://dl.bintray.com/adesso/junit-insights</url>
+    </repository>
 </repositories>
 
 <dependencies>
-	<dependency>
-		<groupId>de.adesso</groupId>
-		<artifactId>junit-insights</artifactId>
-		<version>0.0.1</version>
-	</dependency>
+    <dependency>
+        <groupId>de.adesso</groupId>
+        <artifactId>junit-insights</artifactId>
+        <version>0.0.1</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -191,13 +191,13 @@ Gradle:
 
 ```gradle
 repositories {
-	maven {
+    maven {
         url  "https://oss.jfrog.org/artifactory/oss-snapshot-local"
     }
 }
 
 dependencies {
-	testCompile ('de.adesso:junit-insights:0.0.1-SNAPSHOT')
+    testCompile ('de.adesso:junit-insights:0.0.1-SNAPSHOT')
 }
 ```
 
@@ -205,18 +205,18 @@ Maven:
 
 ```xml
 <repositories>
-	<repository>
-		<id>oss-snapshot-local</id>
-		<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-	</repository>
+    <repository>
+        <id>oss-snapshot-local</id>
+        <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+    </repository>
 </repositories>
 
 <dependencies>
-	<dependency>
-		<groupId>de.adesso</groupId>
-		<artifactId>junit-insights</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
+    <dependency>
+        <groupId>de.adesso</groupId>
+        <artifactId>junit-insights</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
 </dependencies>
 ```
 
