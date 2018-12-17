@@ -1,11 +1,23 @@
 // Import of plugins
 
-apply plugin: 'maven-publish'
+plugins {
+    id "org.jetbrains.dokka" version "0.9.17"
+    id "com.jfrog.bintray" version "1.7.3"
+    id "com.jfrog.artifactory" version "4.5.4"
+    id "maven-publish"
+}
 
 // Global variable declarations
 
+ext{
+    bintrayUser = System.getenv("BINTRAY_API_USER")
+    bintrayKey = System.getenv("BINTRAY_API_KEY")
+    buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
+    snapshot = Boolean.valueOf(System.getProperty("snapshot"))
+}
+
 group = 'de.adesso'
-version = '0.0.1'
+version = '0.0.1' + (snapshot ? "-SNAPSHOT" : "")
 sourceCompatibility = 1.8
 
 // Build tasks
@@ -16,8 +28,17 @@ jar {
     from {
         configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    exclude("node_modules", "src", "package.json", "package-lock.json", "webpack.config.js", "main.js")
+    exclude("main.js")
 }
+
+task sourcesJar(type: Jar) {
+    group = 'build'
+    baseName = 'junit-insights'
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+jar.dependsOn sourcesJar
 
 bootJar {
     enabled = false
@@ -30,30 +51,105 @@ test {
     systemProperty 'de.adesso.junitinsights.enabled', 'false'
 }
 
+// JavaDoc tasks
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+}
+
 // Publishing tasks
+
+artifacts {
+    archives sourcesJar
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "MIT License"
+            url "https://opensource.org/licenses/MIT"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "thombergs"
+            name "Tom Hombergs"
+            email "tom.hombergs@gmail.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/adessoAG/junit-insights"
+    }
+}
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenPublication(MavenPublication) {
             from components.java
-            pom.withXml {
-                asNode().dependencies.'*'.findAll() {
-                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-                        dep.name == it.artifactId.text()
-                    }
-                }.each() {
-                    it.scope*.value = 'compile'
-                }
+            artifact sourcesJar {
+                classifier "sources"
             }
-            artifactId = 'junit-insights'
+            groupId 'de.adesso'
+            artifactId 'junit-insights'
+            version version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Analyze and optimize your JUnit tests')
+                root.appendNode('name', 'JUnit Insights')
+                root.appendNode('url', 'https://github.com/adessoAG/junit-insights')
+                root.children().last() + pomConfig
+            }
         }
     }
 }
 
-model {
-    tasks.generatePomFileForMavenPublication {
-        destination = file("${buildDir}/libs/junit-insights-${version}.pom")
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['mavenPublication']
+
+    pkg {
+        repo = 'junit-insights'
+        name = 'junit-insights'
+        userOrg = 'adesso'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/adessoAG/junit-insights'
+        version {
+            name = version
+            desc = "build ${buildNumber}"
+            released  = new Date()
+        }
     }
+
+    publish = true
+}
+
+artifactory {
+    contextUrl = 'http://oss.jfrog.org'
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = bintrayUser
+            password = bintrayKey
+        }
+        defaults {
+            publications('mavenPublication')
+            publishArtifacts = true
+            publishPom = true
+            properties = [
+                    'build.number': buildNumber,
+                    'build.name': 'junit-insights'
+            ]
+        }
+    }
+    resolve {
+        repoKey = 'jcenter'
+    }
+    clientConfig.info.setBuildNumber(buildNumber)
+    clientConfig.info.setBuildName('junit-insights')
 }
 
 // npm specific tasks

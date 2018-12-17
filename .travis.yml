@@ -8,12 +8,16 @@ before_install:
   - npm install
   - npm run build
   - cd ../..
-before_deploy:
-  - ./gradlew generatePomFileForMavenPublication
 deploy:
-  provider: bintray
-  file: "descriptor.json"
-  user: $BINTRAY_API_USER
-  key: $BINTRAY_API_KEY
-  dry-run: false
-  skip_cleanup: true
+  -
+    provider: script
+    script: ./gradlew bintrayUpload
+    skip_cleanup: true
+    on:
+      branch: release
+  -
+    provider: script
+    script: ./gradlew artifactoryPublish -Dsnapshot=true
+    skip_cleanup: true
+    on:
+      branch: master
