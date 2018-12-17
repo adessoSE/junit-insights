@@ -17,7 +17,8 @@ ext{
 }
 
 group = 'de.adesso'
-version = '0.0.1' + (snapshot ? "-SNAPSHOT" : "")
+def junitInsightsVersion = '0.0.1' + (snapshot ? "-SNAPSHOT" : "")
+version = junitInsightsVersion
 sourceCompatibility = 1.8
 
 // Build tasks
@@ -118,7 +119,7 @@ bintray {
         licenses = ['MIT']
         vcsUrl = 'https://github.com/adessoAG/junit-insights'
         version {
-            name = version
+            name = junitInsightsVersion
             desc = "build ${buildNumber}"
             released  = new Date()
         }
