@@ -221,9 +221,27 @@ Maven:
 ```
 
 # How time is measured
-The extension captures certain events in during the test plan execution to measure the time for each phase:
+The extension captures certain events in during the test plan execution to measure the time for each phase. Specifically the timestamps provided by the [JUnit Jupiter extension API](https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/package-summary.html) as well as the [Spring ContextRefreshedEvent](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/event/ContextRefreshedEvent.html) are captured. The following diagram gives an overview of the order of the events on the left and the time intervals that are captured on the right.
 
-TODO explain how
+![Overview of the captured timestamps](./images/timestamps.svg)
+
+To further explain the meaning of the timestamps, following is an extract from the help dialog on the top right of the report site.
+
+The **Overview** chart breaks down the total test time into the following components:
+- ![](https://placehold.it/15/6db33f/000000?text=+) **Spring**: startup time for all Spring application contexts
+- ![](https://placehold.it/15/eedf7b/000000?text=+) **Preparation**: sum of all time that passed before the BeforeAll and BeforeEach callbacks
+- ![](https://placehold.it/15/dc524a/000000?text=+) **Execution**: sum of all time that passed between the BeforeEach and AfterEach callbacks
+- ![](https://placehold.it/15/eac950/000000?text=+) **Tear-Down**: like preparation but after the execution
+
+The list down below shows an overview of the **individual tested classes** and the time spent on different tasks:
+- ![](https://placehold.it/15/6db33f/000000?text=+) **Spring**: startup time of the possibly created Spring application context
+- ![](https://placehold.it/15/3c7da0/000000?text=+) **Before All**: tasks executed before any of the test methods are executed
+- ![](https://placehold.it/15/eedf7b/000000?text=+) **Before**: sum of the time used before each individual test method
+- ![](https://placehold.it/15/dc524a/000000?text=+) **Exec**: sum of the execution time of all test methods
+- ![](https://placehold.it/15/eac950/000000?text=+) **After**: like before but after the execution
+- ![](https://placehold.it/15/82b4d0/000000?text=+) **After All**: like before all but after the execution
+
+You can also expand the test classes and get the information about ![](https://placehold.it/15/eedf7b/000000?text=+) **Before**, ![](https://placehold.it/15/dc524a/000000?text=+) **Execution** and ![](https://placehold.it/15/eac950/000000?text=+) **After** for the individual test methods.
 
 # Troubleshooting
 
