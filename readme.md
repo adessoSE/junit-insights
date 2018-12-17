@@ -24,7 +24,22 @@ test {
 }
 ```
 
-Maven: TODO
+Maven:
+```xml
+<plugins>
+...
+    <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+            <systemPropertyVariables>
+                <de.adesso.junitinsights.enabled>true</de.adesso.junitinsights.enabled>
+            </systemPropertyVariables>
+        </configuration>
+    </plugin>
+...
+</plugins>
+```
 
 ## Adding individual classes to the benchmark
 
@@ -43,7 +58,23 @@ test {
 }
 ```
 
-Maven: TODO 
+Maven:
+```xml
+<plugins>
+...
+    <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+            <systemPropertyVariables>
+                <de.adesso.junitinsights.enabled>true</de.adesso.junitinsights.enabled>
+                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+            </systemPropertyVariables>
+        </configuration>
+    </plugin>
+...
+</plugins>
+```
 
 Further information can be found [here](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic)
 
@@ -56,6 +87,24 @@ Gradle:
 test {
     systemProperty 'de.adesso.junitinsights.reportpath', 'custom/report/directory/'
 }
+```
+Maven:
+```xml
+<plugins>
+...
+    <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+            <systemPropertyVariables>
+                <de.adesso.junitinsights.enabled>true</de.adesso.junitinsights.enabled>
+                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                <de.adesso.junitinsights.reportpath>reports/</de.adesso.junitinsights.reportpath>
+            </systemPropertyVariables>
+        </configuration>
+    </plugin>
+...
+</plugins>
 ```
 
 # Dependency
