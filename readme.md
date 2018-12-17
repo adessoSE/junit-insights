@@ -18,18 +18,18 @@ You can add the extension via the provided [bintray package](https://bintray.com
 Maven:
 ```xml
 <repositories>
-	<repository>
-		<id>bintray.com</id>
-		<url>https://dl.bintray.com/adesso/junit-insights</url>
-	</repository>
+    <repository>
+        <id>bintray.com</id>
+        <url>https://dl.bintray.com/adesso/junit-insights</url>
+    </repository>
 </repositories>
 
 <dependencies>
-	<dependency>
-		<groupId>de.adesso</groupId>
-		<artifactId>junit-insights</artifactId>
-		<version>0.0.1</version>
-	</dependency>
+    <dependency>
+        <groupId>de.adesso</groupId>
+        <artifactId>junit-insights</artifactId>
+        <version>0.0.1</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -42,7 +42,7 @@ repositories {
 }
 
 dependencies {
-	testCompile ('de.adesso:junit-insights:0.0.1')
+    testCompile ('de.adesso:junit-insights:0.0.1')
 }
 ```
 
@@ -77,7 +77,7 @@ Maven: TODO not tested!!!!!!!!!
 Gradle:
 ```gradle
 test {
-	systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 ```
 Further information can be found [here](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic)
