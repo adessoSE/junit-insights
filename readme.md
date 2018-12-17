@@ -255,4 +255,4 @@ you need to add the dependency for the [appropriate package](https://mvnreposito
 If you have any other issues, feel free to open an issue in our issue tracker.
 
 # Screenshot
-![Screenshot 1](./screenshots/screen1.png)
+![Screenshot 1](./images/screen1.png)
