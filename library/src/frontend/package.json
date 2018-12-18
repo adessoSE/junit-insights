@@ -2,21 +2,29 @@
   "name": "junit-insights",
   "version": "1.0.0",
   "description": "Extension for JUnit which provides insights for the runtime of contexts, classes and methods",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adessoAG/junit-insights"
+  },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "webpack"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.27",
     "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^7.1.5",
     "css-loader": "^1.0.0",
     "html-webpack-inline-source-plugin": "0.0.10",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.6.0",
     "style-loader": "^0.21.0",
+    "vue-jest": "^3.0.2",
     "vue-loader": "^15.2.6",
     "vue-style-loader": "^4.1.1",
     "vue-template-compiler": "^2.5.16",
@@ -28,5 +36,19 @@
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3",
     "vue": "^2.5.16"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
   }
 }
