@@ -6,6 +6,7 @@ before_install:
   - chmod +x gradlew
   - cd src/frontend
   - npm install
+  - npm test
   - npm run build
   - cd ../..
 deploy:
