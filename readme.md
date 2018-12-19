@@ -123,7 +123,7 @@ repositories {
 }
 
 dependencies {
-    testCompile ('de.adesso:junit-insights:0.0.1')
+    testCompile ('de.adesso:junit-insights:1.0.0')
 }
 ```
 
@@ -141,7 +141,7 @@ Maven:
     <dependency>
         <groupId>de.adesso</groupId>
         <artifactId>junit-insights</artifactId>
-        <version>0.0.1</version>
+        <version>1.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -160,7 +160,7 @@ repositories {
 }
 
 dependencies {
-    testCompile ('de.adesso:junit-insights:0.0.1')
+    testCompile ('de.adesso:junit-insights:1.0.0')
 }
 ```
 
@@ -178,7 +178,7 @@ Maven:
     <dependency>
         <groupId>de.adesso</groupId>
         <artifactId>junit-insights</artifactId>
-        <version>0.0.1</version>
+        <version>1.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -197,7 +197,7 @@ repositories {
 }
 
 dependencies {
-    testCompile ('de.adesso:junit-insights:0.0.1-SNAPSHOT')
+    testCompile ('de.adesso:junit-insights:1.0.0-SNAPSHOT')
 }
 ```
 
@@ -215,7 +215,7 @@ Maven:
     <dependency>
         <groupId>de.adesso</groupId>
         <artifactId>junit-insights</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
