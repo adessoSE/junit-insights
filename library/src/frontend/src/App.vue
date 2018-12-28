@@ -36,10 +36,12 @@
     import ClassChart from "./components/ClassChart.vue";
     import GeneralInformation from "./components/GeneralInformation.vue";
     import HelpDialog from "./components/HelpDialog.vue"
+    import PlotlyMixin from "./mixins/PlotlyMixin.js";
 
     export default {
         name: "app",
         props: ["report"],
+        mixins: [PlotlyMixin],
         data() {
             return {
                 sortFunction: () => -1,
@@ -65,10 +67,7 @@
         mounted: function() {
             // Resize all plots after the whole page has loaded to avoid a bug:
             // https://github.com/adessoAG/junit-insights/issues/92
-            Plotly.Plots.resize("overview");
-            this.filteredAndSorted.forEach(element => {
-                Plotly.Plots.resize(element.name);
-            });
+            this.resizeAllPlots(this.filteredAndSorted.map(el => el.name));
         },
         components: {
             TestClassSorter,
