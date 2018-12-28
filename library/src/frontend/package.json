@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "cross-env NODE_ENV=test jest",
     "build": "webpack"
   },
   "keywords": [],
@@ -20,6 +20,7 @@
     "babel-jest": "^23.6.0",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "html-webpack-inline-source-plugin": "0.0.10",
     "html-webpack-plugin": "^3.2.0",
