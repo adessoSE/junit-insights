@@ -5,8 +5,8 @@
         <button type="button" class="btn help-button" v-on:click="showHelp = true"><h2>?</h2></button>
         <HelpDialog v-if="showHelp" v-on:close="showHelp = false"></HelpDialog>
         <div class="overview-info">
-            <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
-            <general-information
+            <OverviewChart :chartId="'overview'" :test-classes="report.testClasses"/>
+            <GeneralInformation
                 :spring-contexts-created="this.report.springContextsCreated"
                 :tested-classes="this.numberOfTestedClasses"
                 :tested-methods="this.numberOfTestedMethods"/>
@@ -17,8 +17,8 @@
                 These components emit events with functions for filtering and sorting
                 The functions are then used by the filteredAndSorted computed value
             -->
-            <test-class-filter @changed="filterFunction = $event"/>
-            <test-class-sorter @changed="sortFunction = $event"/>
+            <TestClassFilter @changed="filterFunction = $event"/>
+            <TestClassSorter @changed="sortFunction = $event"/>
         </div>
         <div id="class-charts">
             <class-chart v-for="testClass in filteredAndSorted"
