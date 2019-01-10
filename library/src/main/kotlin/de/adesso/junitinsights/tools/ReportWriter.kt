@@ -22,7 +22,7 @@ object ReportWriter : IReportWriter {
         val json = generateJsonFromReport(report)
         val html = insertJsonInTemplate(json)
         val reportFile = writeHtmlToFile(html, InsightProperties.reportpath, getReportFileName(report))
-        LoggerFactory.getLogger(this::class.java).debug("Report created at ${reportFile.absolutePath}")
+        LoggerFactory.getLogger(this::class.java).info("Report created at ${reportFile.absolutePath}")
     }
 
     private fun generateJsonFromReport(report: Report): String = Gson().toJson(report)

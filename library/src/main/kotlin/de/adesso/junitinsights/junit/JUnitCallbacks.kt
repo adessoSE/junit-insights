@@ -8,8 +8,9 @@ import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.isAnnotated
 import org.junit.platform.launcher.TestExecutionListener
 import org.junit.platform.launcher.TestPlan
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
-
 
 /**
  * Extension that measures the execution time of each test class and method.
@@ -23,6 +24,8 @@ class JUnitCallbacks :
 
     private val reportWriter: IReportWriter = ReportWriter
     private val reportCreator: IReportCreator = ReportCreator
+
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     /**
      * These methods get called at certain events in the JUnit test plan execution.
@@ -75,11 +78,14 @@ class JUnitCallbacks :
      * Gets called after the complete test plan has been executed, so the report can be generated.
      */
     override fun testPlanExecutionFinished(testPlan: TestPlan) {
+        logger.debug("Test plan execution finished, commencing JUnit Insights report creation...")
         val report = reportCreator.createReport(EventLog.events)
+        logger.debug("Writing report to file...")
         reportWriter.writeReport(report)
     }
 
     private fun saveTimestamp(event: String, context: ExtensionContext, testFailing: Boolean = false) {
+        logger.debug("Saving event to log: $event")
         if (shouldNotBeBenched(context))
             return
 

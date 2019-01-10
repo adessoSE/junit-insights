@@ -190,7 +190,13 @@ dependencies {
 
     compileOnly('org.junit.jupiter:junit-jupiter-api:5.1.0')
     compileOnly('org.junit.platform:junit-platform-launcher:1.1.0')
-    compileOnly('org.springframework.boot:spring-boot-starter')
+
+    // Remove Logging implementation from spring-boot-starter and only import the slf4j API.
+    // This lets the client application choose a logging solution.
+    compileOnly('org.springframework.boot:spring-boot-starter') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
     testCompile('org.junit.jupiter:junit-jupiter-engine:5.1.0')
     testCompile('org.junit.platform:junit-platform-launcher:1.1.0')
