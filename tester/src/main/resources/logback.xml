@@ -8,6 +8,8 @@
         </encoder>
     </appender>
 
+    <logger name="de.adesso.junitinsights" level="debug"/>
+
     <root level="debug">
         <appender-ref ref="STDOUT" />
     </root>
