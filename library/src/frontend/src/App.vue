@@ -5,8 +5,8 @@
         <button type="button" class="btn help-button" v-on:click="showHelp = true"><h2>?</h2></button>
         <HelpDialog v-if="showHelp" v-on:close="showHelp = false"></HelpDialog>
         <div class="overview-info">
-            <overview-chart :chartId="'overview'" :test-classes="report.testClasses"/>
-            <general-information
+            <OverviewChart :chartId="'overview'" :test-classes="report.testClasses"/>
+            <GeneralInformation
                 :spring-contexts-created="this.report.springContextsCreated"
                 :tested-classes="this.numberOfTestedClasses"
                 :tested-methods="this.numberOfTestedMethods"/>
@@ -17,8 +17,8 @@
                 These components emit events with functions for filtering and sorting
                 The functions are then used by the filteredAndSorted computed value
             -->
-            <test-class-filter @changed="filterFunction = $event"/>
-            <test-class-sorter @changed="sortFunction = $event"/>
+            <TestClassFilter @changed="filterFunction = $event"/>
+            <TestClassSorter @changed="sortFunction = $event"/>
         </div>
         <div id="class-charts">
             <class-chart v-for="testClass in filteredAndSorted"
@@ -36,10 +36,12 @@
     import ClassChart from "./components/ClassChart.vue";
     import GeneralInformation from "./components/GeneralInformation.vue";
     import HelpDialog from "./components/HelpDialog.vue"
+    import PlotlyMixin from "./mixins/PlotlyMixin.js";
 
     export default {
         name: "app",
         props: ["report"],
+        mixins: [PlotlyMixin],
         data() {
             return {
                 sortFunction: () => -1,
@@ -65,10 +67,7 @@
         mounted: function() {
             // Resize all plots after the whole page has loaded to avoid a bug:
             // https://github.com/adessoAG/junit-insights/issues/92
-            Plotly.Plots.resize("overview");
-            this.filteredAndSorted.forEach(element => {
-                Plotly.Plots.resize(element.name);
-            });
+            this.resizeAllPlots(this.filteredAndSorted.map(el => el.name));
         },
         components: {
             TestClassSorter,

@@ -82,6 +82,7 @@
     import ClassProcessing from "../mixins/ClassProcessing"
 
     export default {
+        name: "TestClassFilter",
         mixins: [ClassProcessing],
         data() {
             return {
