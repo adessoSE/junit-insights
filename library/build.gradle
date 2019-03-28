@@ -191,6 +191,7 @@ dependencies {
     compileOnly('org.junit.jupiter:junit-jupiter-api:5.1.0')
     compileOnly('org.junit.platform:junit-platform-launcher:1.1.0')
     compileOnly('org.springframework.boot:spring-boot-starter')
+    compileOnly('org.springframework:spring-test')
 
     testCompile('org.junit.jupiter:junit-jupiter-engine:5.1.0')
     testCompile('org.junit.platform:junit-platform-launcher:1.1.0')
