@@ -6,7 +6,8 @@ import de.adesso.junitinsights.tools.InsightProperties
  * Central object for storing Events during testing
  * @see Event
  * @see de.adesso.junitinsights.junit.JUnitCallbacks
- * @see de.adesso.junitinsights.spring.SpringCallbacks
+ * @see de.adesso.junitinsights.spring.ContextRefreshedListener
+ * @see de.adesso.junitinsights.spring.ContextClosedListener
  */
 object EventLog {
     internal var events: ArrayList<Event> = ArrayList()
