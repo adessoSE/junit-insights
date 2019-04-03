@@ -1,6 +1,5 @@
 package de.adesso.junitinsightstester.spring
 
-import de.adesso.junitinsights.annotations.JUnitInsights
 import de.adesso.junitinsights.annotations.NoJUnitInsights
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

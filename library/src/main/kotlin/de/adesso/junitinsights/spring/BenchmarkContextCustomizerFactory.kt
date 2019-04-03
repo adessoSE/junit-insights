@@ -17,7 +17,7 @@ class BenchmarkContextCustomizerFactory : ContextCustomizerFactory {
      * @see ContextClosedListener
      */
     override fun createContextCustomizer(testClass: Class<*>, configAttributes: MutableList<ContextConfigurationAttributes>): ContextCustomizer? {
-        return ContextCustomizer { context, mergedConfig ->
+        return ContextCustomizer { context, _ ->
             context.addApplicationListener(ContextRefreshedListener())
             context.addApplicationListener(ContextClosedListener())
         }
