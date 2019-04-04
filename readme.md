@@ -221,13 +221,13 @@ Maven:
 ```
 
 ## For local development
-If you want to develop for this project and which to test it on a different project than the `tester/` project, you need to include the JAR in the project under test like so:
+If you want to test a local version of this project in a different project than the `tester/`, build the jar and include it in your project like so:
 
 Gradle:
 
 ```gradle
 dependencies {
-    testCompile files('../../junit-insights/library/build/libs/junit-insights-1.0.0.jar')
+    testCompile files('../junit-insights/library/build/libs/junit-insights-1.0.0.jar')
 }
 ```
 Maven:
@@ -238,7 +238,7 @@ Maven:
     <artifactId>junit-insights</artifactId>
     <version>1.0.0</version>
     <scope>system</scope>
-    <systemPath>../../junit-insights/library/build/libs/junit-insights-1.0.0.jar</systemPath>
+    <systemPath>${basedir}/../junit-insights/library/build/libs/junit-insights-1.0.0.jar</systemPath>
 </dependency>
 ```
 
