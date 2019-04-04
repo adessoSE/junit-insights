@@ -220,6 +220,28 @@ Maven:
 </dependencies>
 ```
 
+## For local development
+If you want to test a local version of this project in a different project than the `tester/`, build the jar and include it in your project like so:
+
+Gradle:
+
+```gradle
+dependencies {
+    testCompile files('../junit-insights/library/build/libs/junit-insights-1.0.0.jar')
+}
+```
+Maven:
+
+```xml
+<dependency>
+    <groupId>de.adesso</groupId>
+    <artifactId>junit-insights</artifactId>
+    <version>1.0.0</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/../junit-insights/library/build/libs/junit-insights-1.0.0.jar</systemPath>
+</dependency>
+```
+
 # How time is measured
 The extension captures certain events in during the test plan execution to measure the time for each phase. Specifically the timestamps provided by the [JUnit Jupiter extension API](https://junit.org/junit5/docs/5.0.2/api/org/junit/jupiter/api/extension/package-summary.html) as well as the [Spring ContextRefreshedEvent](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/event/ContextRefreshedEvent.html) are captured. The following diagram gives an overview of the order of the events on the left and the time intervals that are captured on the right.
 
