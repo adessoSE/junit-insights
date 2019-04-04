@@ -123,7 +123,7 @@ repositories {
 }
 
 dependencies {
-    testCompile ('de.adesso:junit-insights:1.0.0')
+    testCompile ('de.adesso:junit-insights:1.1.0')
 }
 ```
 
@@ -141,7 +141,7 @@ Maven:
     <dependency>
         <groupId>de.adesso</groupId>
         <artifactId>junit-insights</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -160,7 +160,7 @@ repositories {
 }
 
 dependencies {
-    testCompile ('de.adesso:junit-insights:1.0.0')
+    testCompile ('de.adesso:junit-insights:1.1.0')
 }
 ```
 
@@ -178,7 +178,7 @@ Maven:
     <dependency>
         <groupId>de.adesso</groupId>
         <artifactId>junit-insights</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </dependency>
 </dependencies>
 ```
@@ -197,7 +197,7 @@ repositories {
 }
 
 dependencies {
-    testCompile ('de.adesso:junit-insights:1.0.0-SNAPSHOT')
+    testCompile ('de.adesso:junit-insights:1.1.0-SNAPSHOT')
 }
 ```
 
@@ -215,9 +215,31 @@ Maven:
     <dependency>
         <groupId>de.adesso</groupId>
         <artifactId>junit-insights</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
+```
+
+## For local development
+If you want to test a local version of this project in a different project than the `tester/`, build the jar and include it in your project like so:
+
+Gradle:
+
+```gradle
+dependencies {
+    testCompile files('../junit-insights/library/build/libs/junit-insights-1.1.0.jar')
+}
+```
+Maven:
+
+```xml
+<dependency>
+    <groupId>de.adesso</groupId>
+    <artifactId>junit-insights</artifactId>
+    <version>1.1.0</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/../junit-insights/library/build/libs/junit-insights-1.1.0.jar</systemPath>
+</dependency>
 ```
 
 # How time is measured

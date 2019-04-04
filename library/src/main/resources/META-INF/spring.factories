@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 de.adesso.junitinsights.spring.InsightConfiguration
+org.springframework.test.context.ContextCustomizerFactory=de.adesso.junitinsights.spring.BenchmarkContextCustomizerFactory

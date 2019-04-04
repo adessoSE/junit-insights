@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import Plotly from "plotly.js";
+    import PlotlyMixin from "../mixins/PlotlyMixin";
 
     const colors = [
         "rgb(220, 82, 74)", // EXEC
@@ -17,6 +17,7 @@
 
     export default {
         props: ["chartId"],
+        mixins: [PlotlyMixin],
         data() {
             return {
                 BEFORE_ALL_COLOR: colors[2],
@@ -56,7 +57,7 @@
         },
         mounted: function () {
             if (this.shouldDraw()) {
-                Plotly.newPlot(this.chartId, this.chartEntries, this.layout, {responsive: true, displayModeBar: false});
+                this.createNewPlot(this.chartId, this.chartEntries, this.layout);
             }
         },
         beforeDestroy: function () {

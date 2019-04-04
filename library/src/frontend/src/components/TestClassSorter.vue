@@ -25,6 +25,7 @@
     import ClassProcessing from "../mixins/ClassProcessing"
 
     export default {
+        name: "TestClassSorter",
         mixins: [ClassProcessing],
         data() {
             return {
