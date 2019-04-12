@@ -29,31 +29,31 @@ object ReportCreator : IReportCreator {
      * This also includes the processing of TestMethod objects.
      */
     private fun processClassEvents(events: List<Event>): TestClass {
-        val beforeAll = events[0].timeStamp.time
-        val spring = if (events[1].name == "context refreshed") events[1].timeStamp.time else events[0].timeStamp.time
-        val afterAll = events.last().timeStamp.time
+        var beforeAll = 0L
+        var spring = 0L
+        var afterAll = 0L
+
         val eventsGroupedByMethods = groupEventsByMethod(events)
         val methods = eventsGroupedByMethods.map { methodEvents -> processMethodEvents(methodEvents) }
 
         if (methods.isEmpty())
             return TestClass(events.last().className, events[0].timeStamp.time, methods, 0, 0, 0, 0, 0, 0, 0)
 
-        var between = 0L
-        for (i in 1..methods.lastIndex)
-            between += methods[i].timestampBefore - methods[i - 1].timestampAfter
+        for (i in 1 until events.size) {
+            when(events[i].name) {
+                "before each" -> beforeAll += events[i].timeStamp.time - events[i-1].timeStamp.time
+                "context refreshed" -> spring += events[i].timeStamp.time - events[i-1].timeStamp.time
+                "after all" -> afterAll += events[i].timeStamp.time - events[i-1].timeStamp.time
+            }
+        }
 
-        return TestClass(
-                events.last().className,
-                events[0].timeStamp.time,
-                methods,
-                methods[0].timestampBefore - spring,
-                methods.asSequence().map { method -> method.before }.sum(),
-                methods.asSequence().map { method -> method.exec }.sum(),
-                methods.asSequence().map { method -> method.after }.sum(),
-                afterAll - methods.last().timestampAfter,
-                between,
-                spring - beforeAll
-        )
+        val before = methods.asSequence().map { method -> method.before }.sum()
+        val exec = methods.asSequence().map { method -> method.exec }.sum()
+        val after = methods.asSequence().map { method -> method.after }.sum()
+
+        val between = events.last().timeStamp.time - events.first().timeStamp.time - beforeAll - spring - afterAll - before - exec - after
+
+        return TestClass(events.last().className, events[0].timeStamp.time, methods, beforeAll, before, exec, after, afterAll, between, spring)
     }
 
     /**
@@ -91,7 +91,29 @@ object ReportCreator : IReportCreator {
         )
     }
 
-    private fun groupEventsByClass(events: List<Event>) = groupEventsAfterKeyword(events, "after all")
+    private fun groupEventsByClass(events: List<Event>): List<List<Event>> {
+        val eventGroups = groupEventsAfterKeyword(events, "after all")
+        val trimmedEventGroups = ArrayList<ArrayList<Event>>()
+
+        trimmedEventGroups.add(ArrayList(eventGroups[0]))
+        for (i in (1 until eventGroups.size)) {
+            if (getClassNameFromGroup(trimmedEventGroups.last()) == getClassNameFromGroup(eventGroups[i]))
+                trimmedEventGroups.last().addAll(eventGroups[i])
+            else
+                trimmedEventGroups.add(ArrayList(eventGroups[i]))
+        }
+
+        return trimmedEventGroups
+    }
+
+    private fun getClassNameFromGroup(eventGroup: List<Event>): String {
+        for (event in eventGroup) {
+            if (event.className != "")
+                return event.className.split("$")[0]
+        }
+        return ""
+    }
+
     private fun groupEventsByMethod(events: List<Event>) = groupEventsAfterKeyword(events, "after each")
 
     private fun groupEventsAfterKeyword(events: List<Event>, keyword: String): List<List<Event>> {
