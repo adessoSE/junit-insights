@@ -16,5 +16,6 @@ data class TestClass(
         var after: Long,
         var afterAll: Long,
         var between: Long,
-        var spring: Long
+        var spring: Long,
+        var springContextCount: Int
 )

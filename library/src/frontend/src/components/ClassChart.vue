@@ -32,9 +32,16 @@
             };
         },
         created: function () {
+            let contextCount = this.testClass.springContextCount;
+            let springContextText;
+            if (contextCount < 2)
+                springContextText = "1 Spring Context";
+            else
+                springContextText = contextCount + " Spring Contexts";
+
             this.chartEntries = [
                 // See ChartBase.vue
-                this.getChartEntry(this.testClass.spring, "Spring", this.SPRING_COLOR),
+                this.getChartEntry(this.testClass.spring, springContextText, this.SPRING_COLOR),
                 this.getChartEntry(this.testClass.beforeAll, "Before All", this.BEFORE_ALL_COLOR),
                 this.getChartEntry(this.testClass.before, "Before", this.BEFORE_COLOR),
                 this.getChartEntry(this.testClass.exec, "Exec", this.EXEC_COLOR),

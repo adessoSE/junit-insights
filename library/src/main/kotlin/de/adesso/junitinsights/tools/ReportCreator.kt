@@ -19,7 +19,7 @@ object ReportCreator : IReportCreator {
     override fun createReport(events: List<Event>): Report {
         val eventsGroupedByClass = groupEventsByClass(events)
         val testClasses = eventsGroupedByClass.map { classEvents -> processClassEvents(classEvents) }
-        val springContextCreated = countCreatedSpringContexts(events)
+        val springContextCreated = testClasses.fold(0) { acc, e -> acc + e.springContextCount }
         val currentDate = Date()
         return Report(getReportPageTitle(currentDate), currentDate, springContextCreated, testClasses)
     }
@@ -32,18 +32,22 @@ object ReportCreator : IReportCreator {
         var beforeAll = 0L
         var spring = 0L
         var afterAll = 0L
+        var contextCount = 0
 
         val eventsGroupedByMethods = groupEventsByMethod(events)
         val methods = eventsGroupedByMethods.map { methodEvents -> processMethodEvents(methodEvents) }
 
         if (methods.isEmpty())
-            return TestClass(events.last().className, events[0].timeStamp.time, methods, 0, 0, 0, 0, 0, 0, 0)
+            return TestClass(events.last().className, events[0].timeStamp.time, methods, 0, 0, 0, 0, 0, 0, 0, 0)
 
         for (i in 1 until events.size) {
-            when(events[i].name) {
-                "before each" -> beforeAll += events[i].timeStamp.time - events[i-1].timeStamp.time
-                "context refreshed" -> spring += events[i].timeStamp.time - events[i-1].timeStamp.time
-                "after all" -> afterAll += events[i].timeStamp.time - events[i-1].timeStamp.time
+            when {
+                events[i].name == "before each" -> beforeAll += events[i].timeStamp.time - events[i-1].timeStamp.time
+                events[i].name == "context refreshed" -> {
+                    spring += events[i].timeStamp.time - events[i-1].timeStamp.time
+                    contextCount++
+                }
+                events[i].name == "after all" -> afterAll += events[i].timeStamp.time - events[i-1].timeStamp.time
             }
         }
 
@@ -53,7 +57,7 @@ object ReportCreator : IReportCreator {
 
         val between = events.last().timeStamp.time - events.first().timeStamp.time - beforeAll - spring - afterAll - before - exec - after
 
-        return TestClass(events.last().className, events[0].timeStamp.time, methods, beforeAll, before, exec, after, afterAll, between, spring)
+        return TestClass(events.last().className, events[0].timeStamp.time, methods, beforeAll, before, exec, after, afterAll, between, spring, contextCount)
     }
 
     /**
@@ -127,12 +131,6 @@ object ReportCreator : IReportCreator {
             }
         }
         return result
-    }
-
-    private fun countCreatedSpringContexts(events: List<Event>): Int {
-        return events
-                .filter { it.name == "context refreshed" }
-                .size
     }
 
     private fun getReportPageTitle(currentDate: Date): String {
