@@ -37,13 +37,13 @@ object ReportCreator : IReportCreator {
         val eventsGroupedByMethods = groupEventsByMethod(events)
         val methods = eventsGroupedByMethods.map { methodEvents -> processMethodEvents(methodEvents) }
 
-        if (methods.isEmpty())
-            return TestClass(events.last().className, events[0].timeStamp.time, methods, 0, 0, 0, 0, 0, 0, 0, 0)
-
         for (i in 1 until events.size) {
             when {
-                events[i].name == "before each" -> beforeAll += events[i].timeStamp.time - events[i - 1].timeStamp.time
                 events[i].name == "after all" -> afterAll += events[i].timeStamp.time - events[i - 1].timeStamp.time
+                events[i].name == "before each" -> {
+                    if (events[i - 1].name == "context refreshed" || events[i - 1].name == "before all")
+                        beforeAll += events[i].timeStamp.time - events[i - 1].timeStamp.time
+                }
                 events[i].name == "context refreshed" -> {
                     spring += events[i].timeStamp.time - events[i - 1].timeStamp.time
                     contextCount++
@@ -97,6 +97,10 @@ object ReportCreator : IReportCreator {
 
     private fun groupEventsByClass(events: List<Event>): List<List<Event>> {
         val eventGroups = groupEventsAfterKeyword(events, "after all")
+
+        if (eventGroups.isEmpty())
+            return eventGroups
+
         val trimmedEventGroups = ArrayList<ArrayList<Event>>()
 
         trimmedEventGroups.add(ArrayList(eventGroups[0]))
