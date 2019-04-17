@@ -7,6 +7,6 @@ class CalculatorTest {
 
     @Test
     fun basicArithmetic() {
-        assertEquals(1+1, 2)
+        assertEquals(1 + 1, 2)
     }
 }
