@@ -42,12 +42,12 @@ object ReportCreator : IReportCreator {
 
         for (i in 1 until events.size) {
             when {
-                events[i].name == "before each" -> beforeAll += events[i].timeStamp.time - events[i-1].timeStamp.time
+                events[i].name == "before each" -> beforeAll += events[i].timeStamp.time - events[i - 1].timeStamp.time
+                events[i].name == "after all" -> afterAll += events[i].timeStamp.time - events[i - 1].timeStamp.time
                 events[i].name == "context refreshed" -> {
-                    spring += events[i].timeStamp.time - events[i-1].timeStamp.time
+                    spring += events[i].timeStamp.time - events[i - 1].timeStamp.time
                     contextCount++
                 }
-                events[i].name == "after all" -> afterAll += events[i].timeStamp.time - events[i-1].timeStamp.time
             }
         }
 
