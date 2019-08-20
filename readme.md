@@ -11,6 +11,8 @@ JUnit Insights is an extension for JUnit 5 (optionally in combination with the S
 For the user of the test classes, it looks like some tests take a long time to execute, although the actual test runs fairly quickly.
 To make this behavior transparent, a report is created.
 
+If you want to learn more about when a new Application Context is created, have a look at [this article](https://www.adesso.de/de/news/blog/identify-bottlenecks-in-your-spring-tests-with-junit-insights.jsp) explaining the topic.
+
 # Usage
 
 ## Activating the extension
