@@ -2,7 +2,6 @@
 
 plugins {
     id "org.jetbrains.dokka" version "0.9.17"
-    id "com.jfrog.bintray" version "1.7.3"
     id "com.jfrog.artifactory" version "4.5.4"
     id "maven-publish"
 }
@@ -105,27 +104,6 @@ publishing {
             }
         }
     }
-}
-
-bintray {
-    user = bintrayUser
-    key = bintrayKey
-    publications = ['mavenPublication']
-
-    pkg {
-        repo = 'junit-insights'
-        name = 'junit-insights'
-        userOrg = 'adesso'
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/adessoAG/junit-insights'
-        version {
-            name = junitInsightsVersion
-            desc = "build ${buildNumber}"
-            released  = new Date()
-        }
-    }
-
-    publish = true
 }
 
 artifactory {

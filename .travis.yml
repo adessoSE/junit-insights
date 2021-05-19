@@ -12,12 +12,6 @@ before_install:
 deploy:
   -
     provider: script
-    script: ./gradlew bintrayUpload
-    skip_cleanup: true
-    on:
-      branch: release
-  -
-    provider: script
     script: ./gradlew artifactoryPublish -Dsnapshot=true
     skip_cleanup: true
     on:

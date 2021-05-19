@@ -1,5 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/adesso/junit-insights/junit-insights/images/download.svg) ](https://bintray.com/adesso/junit-insights/junit-insights)
-[![Build Status](https://travis-ci.org/adessoAG/junit-insights.svg?branch=master)](https://travis-ci.org/adessoAG/junit-insights)
+[![Build Status](https://www.travis-ci.com/adessoAG/junit-insights.svg?branch=master)](https://travis-ci.org/adessoAG/junit-insights)
 [![codebeat badge](https://codebeat.co/badges/bac44e06-3560-4c28-814c-b5495bfa3c28)](https://codebeat.co/projects/github-com-adessoag-junit-insights-master)
 # JUnit Insights
 JUnit Insights is an extension for JUnit 5 (optionally in combination with the Spring framework), which
@@ -111,83 +110,7 @@ Maven:
 
 # Dependency
 
-For your convenience, JUnit Insights is available through different maven repositories. Just add the necessary repository and the dependency to your build file.
-
-## Release version from [JCenter](https://bintray.com/adesso/junit-insights/junit-insights)
-
-You can get the most recent version of JUnit Insights via the official JCenter repository. 
-
-Gradle:
-
-```gradle
-repositories {
-    jcenter()
-}
-
-dependencies {
-    testCompile ('de.adesso:junit-insights:1.1.0')
-}
-```
-
-Maven:
-
-```xml
-<repositories>
-    <repository>
-        <id>jcenter</id>
-        <url>https://jcenter.bintray.com/</url>
-    </repository>
-</repositories>
-
-<dependencies>
-    <dependency>
-        <groupId>de.adesso</groupId>
-        <artifactId>junit-insights</artifactId>
-        <version>1.1.0</version>
-    </dependency>
-</dependencies>
-```
-
-## Release version from [Bintray](https://bintray.com/adesso/junit-insights/junit-insights)
-
-If the JCenter repository does not work for some reason, or you are not satisfied with using it, you can use the Bintray repository dicrectly, too.
-
-Gradle:
-
-```gradle
-repositories {
-    maven {
-        url  "https://dl.bintray.com/adesso/junit-insights"
-    }
-}
-
-dependencies {
-    testCompile ('de.adesso:junit-insights:1.1.0')
-}
-```
-
-Maven:
-
-```xml
-<repositories>
-    <repository>
-        <id>bintray.com</id>
-        <url>https://dl.bintray.com/adesso/junit-insights</url>
-    </repository>
-</repositories>
-
-<dependencies>
-    <dependency>
-        <groupId>de.adesso</groupId>
-        <artifactId>junit-insights</artifactId>
-        <version>1.1.0</version>
-    </dependency>
-</dependencies>
-```
-
-## SNAPSHOT version from [oss.jfrog.org](https://oss.jfrog.org/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/de/adesso/junit-insights)
-
-For the most recent SNAPSHOT version of JUnit Insights, you can also use the artifactory repository oss.jfrog.org.
+For your convenience, JUnit Insights is available as a SNAPSHOT version from [oss.jfrog.org](https://oss.jfrog.org/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/de/adesso/junit-insights). Just add the necessary repository and the dependency to your build file.
 
 Gradle:
 
