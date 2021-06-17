@@ -17,6 +17,7 @@ test {
 // Dependency declarations
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
     testCompile('org.junit.jupiter:junit-jupiter-api:5.1.0')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.boot:spring-boot-starter-web')

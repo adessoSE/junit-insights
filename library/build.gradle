@@ -163,7 +163,7 @@ task npmRunBuild(type: Exec) {
 // Dependency declarations
 
 dependencies {
-    compile('org.jetbrains.kotlin:kotlin-reflect')
+    implementation('org.jetbrains.kotlin:kotlin-reflect')
     compile('com.google.code.gson:gson:2.7')
 
     compileOnly('org.junit.jupiter:junit-jupiter-api:5.1.0')
